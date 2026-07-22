@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OrientExpress.Application/OrientExpress.Application.csproj" />
+    <Project Path="src/OrientExpress.Cli/OrientExpress.Cli.csproj" />
+    <Project Path="src/OrientExpress.Contracts/OrientExpress.Contracts.csproj" />
+    <Project Path="src/OrientExpress.Domain/OrientExpress.Domain.csproj" />
+    <Project Path="src/OrientExpress.Infrastructure.Imaging/OrientExpress.Infrastructure.Imaging.csproj" />
+    <Project Path="src/OrientExpress.Infrastructure.Inference/OrientExpress.Infrastructure.Inference.csproj" />
+    <Project Path="src/OrientExpress.Infrastructure.Metadata.ExifTool/OrientExpress.Infrastructure.Metadata.ExifTool.csproj" />
+    <Project Path="src/OrientExpress.Infrastructure.Sqlite/OrientExpress.Infrastructure.Sqlite.csproj" />
+    <Project Path="src/OrientExpress.Infrastructure.Windows/OrientExpress.Infrastructure.Windows.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OrientExpress.ArchitectureTests/OrientExpress.ArchitectureTests.csproj" />
+    <Project Path="tests/OrientExpress.UnitTests/OrientExpress.UnitTests.csproj" />
+  </Folder>
+</Solution>

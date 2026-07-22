@@ -1,5 +1,5 @@
 ﻿id,milestone,title,depends_on,outputs,requirements,components,status
-WP-001,M0,Repository and engineering baseline,,Solution layout; analyzers; formatting; deterministic builds; CI skeleton; documentation validator,NFR-MAINT-001;NFR-SEC-002,,planned
+WP-001,M0,Repository and engineering baseline,,Solution layout; analyzers; formatting; deterministic builds; CI skeleton; documentation validator,NFR-MAINT-001;NFR-SEC-002,,in-progress
 WP-002,M1,CLI host and contracts,SPIKE-009;WP-001,Command tree; help; cancellation; exit codes; JSON/JSONL and human renderers; completion,PRD-FR-002;PRD-FR-017;PRD-FR-018;PRD-FR-027,COMP-CLI;COMP-REPORTING,planned
 WP-003,M1,Configuration and schemas,WP-001,Configuration precedence; profiles; validation; effective config; schemas,PRD-FR-019;NFR-MAINT-002,COMP-CONFIG,planned
 WP-004,M1,Filesystem and identity foundation,SPIKE-006;WP-001,Path canonicalization; file IDs; fingerprinting; locks; temp placement; atomic primitives; placeholder/reparse policy,PRD-FR-001;PRD-FR-010;NFR-COMP-001;NFR-COMP-002,COMP-FILESYSTEM;COMP-NATIVE,planned

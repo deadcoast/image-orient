@@ -1,0 +1,31 @@
+# .NET build outputs
+bin/
+obj/
+*.binlog
+*.user
+
+# Test and coverage results
+TestResults/
+coverage/
+*.trx
+
+# Generated evidence packs (retained in CI/release storage, not the repo)
+orient-express/artifacts/
+
+# Python tooling
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+
+# Editors and OS
+.vs/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+
+# Local agent workspace
+.claude/*
+!.claude/settings.json

@@ -1,9 +1,9 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.0
+version: 0.1.1
 status: baseline
-as_of: 2026-07-21
+as_of: 2026-07-22
 owner: Program
 depends_on: [DOC-DEVPLAN, DOC-SPIKES, DOC-WBS]
 traces_to: []
@@ -13,7 +13,7 @@ traces_to: []
 
 ## Current state
 
-The project is at **design baseline / pre-implementation**. Product intent, requirements, architecture, risk model, technical spikes, work packages, milestones, draft schemas, and traceability structure are defined. No production source code or measured accuracy claim is represented as complete.
+The project is at **engineering baseline / pre-implementation**. Product intent, requirements, architecture, risk model, technical spikes, work packages, milestones, draft schemas, and traceability structure are defined. WP-001 is implemented pending CI verification and review: the `OrientExpress` solution and project boundaries exist with architecture conformance tests (NFR-MAINT-001), analyzers/formatting/warnings-as-errors, deterministic pinned builds with locked packages, and a CI pipeline that gates documentation, build, style, and tests. No production feature code or measured accuracy claim is represented as complete.
 
 ## Approved to begin
 
@@ -39,7 +39,7 @@ The project is at **design baseline / pre-implementation**. Product intent, requ
 
 ## Next controlled execution sequence
 
-1. Complete WP-001 and establish CI documentation/architecture checks.
+1. Keep WP-001 CI documentation/architecture checks green (baseline established 2026-07-22).
 2. Run SPIKE-001, SPIKE-004, SPIKE-005, SPIKE-006, and SPIKE-009 in parallel where ownership permits.
 3. Use the first corpus tranche from SPIKE-001 to run SPIKE-002 and SPIKE-003.
 4. Run codec/package spikes before selecting final native distribution.

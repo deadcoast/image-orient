@@ -1,9 +1,9 @@
 ---
 document_id: DOC-ARCH
 title: System Architecture
-version: 0.1.0
+version: 0.1.1
 status: baseline
-as_of: 2026-07-21
+as_of: 2026-07-22
 owner: Architecture
 depends_on: [DOC-SRS, DOC-TECH, ADR-0001, ADR-0002]
 traces_to: [COMP-CLI, COMP-CONFIG, COMP-CAPABILITIES, COMP-DISCOVERY, COMP-METADATA, COMP-CODEC, COMP-TRANSFORM, COMP-INFERENCE, COMP-MODELS, COMP-FEATURES, COMP-CALIBRATION, COMP-POLICY, COMP-ORIENTATION, COMP-PLANNER, COMP-PIPELINE, COMP-EXECUTOR, COMP-VERIFY, COMP-FILESYSTEM, COMP-JOURNAL, COMP-JOBSTORE, COMP-REVIEW, COMP-REPORTING, COMP-BENCHMARK, COMP-NATIVE]
@@ -116,28 +116,31 @@ System.CommandLine command tree, human renderer, JSON/JSONL serializer, PowerShe
 8. Model/runtime/provider upgrades are data/configuration changes only after compatibility tests pass.
 9. No third-party runtime type appears in external job/event schemas.
 
-## Proposed solution layout
+## Solution layout
+
+Projects use the namespace-safe `OrientExpress.*` form of the product name because C# namespaces cannot contain hyphens; the CLI still builds as the provisional executable `upright`. Test projects beyond unit and architecture tests are added by the work package that first needs them, not up front.
 
 ```text
+OrientExpress.slnx
 src/
-  orient-express.Cli/
-  orient-express.Application/
-  orient-express.Domain/
-  orient-express.Contracts/
-  orient-express.Infrastructure.Windows/
-  orient-express.Infrastructure.Sqlite/
-  orient-express.Infrastructure.Metadata.ExifTool/
-  orient-express.Infrastructure.Imaging/
-  orient-express.Infrastructure.Inference/
+  OrientExpress.Cli/                      # executable `upright`; composition root
+  OrientExpress.Application/
+  OrientExpress.Domain/
+  OrientExpress.Contracts/
+  OrientExpress.Infrastructure.Windows/
+  OrientExpress.Infrastructure.Sqlite/
+  OrientExpress.Infrastructure.Metadata.ExifTool/
+  OrientExpress.Infrastructure.Imaging/
+  OrientExpress.Infrastructure.Inference/
 tests/
-  orient-express.UnitTests/
-  orient-express.ContractTests/
-  orient-express.IntegrationTests/
-  orient-express.MediaGoldenTests/
-  orient-express.FilesystemFaultTests/
-  orient-express.CliGoldenTests/
-  orient-express.ArchitectureTests/
-  orient-express.EndToEndTests/
+  OrientExpress.UnitTests/                # exists (WP-001)
+  OrientExpress.ArchitectureTests/        # exists (WP-001); enforces the dependency rules
+  OrientExpress.ContractTests/            # WP-002/WP-003
+  OrientExpress.IntegrationTests/         # WP-004+
+  OrientExpress.MediaGoldenTests/         # WP-005/WP-010
+  OrientExpress.FilesystemFaultTests/     # WP-004/WP-012
+  OrientExpress.CliGoldenTests/           # WP-002
+  OrientExpress.EndToEndTests/            # WP-014+
 tools/
   corpus/
   evaluation/
@@ -146,7 +149,7 @@ tools/
 models/
   manifests/                 # no unverified binary committed by default
 docs/
-artifacts/
+artifacts/                   # generated evidence; not committed
 ```
 
 ## Process model

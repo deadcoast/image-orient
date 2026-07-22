@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Domain holds pure policy types (NFR-MAINT-001). It must keep zero project
+       and package references; OrientExpress.ArchitectureTests enforces this. -->
+
+</Project>
