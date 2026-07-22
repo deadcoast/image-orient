@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\OrientExpress.Application\OrientExpress.Application.csproj" />
+    <ProjectReference Include="..\OrientExpress.Domain\OrientExpress.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

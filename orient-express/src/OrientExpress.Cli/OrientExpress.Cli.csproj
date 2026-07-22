@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- Provisional executable name per DOC-INDEX / product charter. -->
+    <AssemblyName>upright</AssemblyName>
+    <RootNamespace>OrientExpress.Cli</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Composition root: the only src project allowed to see infrastructure. -->
+  <ItemGroup>
+    <ProjectReference Include="..\OrientExpress.Application\OrientExpress.Application.csproj" />
+    <ProjectReference Include="..\OrientExpress.Contracts\OrientExpress.Contracts.csproj" />
+    <ProjectReference Include="..\OrientExpress.Infrastructure.Windows\OrientExpress.Infrastructure.Windows.csproj" />
+    <ProjectReference Include="..\OrientExpress.Infrastructure.Sqlite\OrientExpress.Infrastructure.Sqlite.csproj" />
+    <ProjectReference Include="..\OrientExpress.Infrastructure.Metadata.ExifTool\OrientExpress.Infrastructure.Metadata.ExifTool.csproj" />
+    <ProjectReference Include="..\OrientExpress.Infrastructure.Imaging\OrientExpress.Infrastructure.Imaging.csproj" />
+    <ProjectReference Include="..\OrientExpress.Infrastructure.Inference\OrientExpress.Infrastructure.Inference.csproj" />
+  </ItemGroup>
+
+</Project>

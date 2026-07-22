@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Contracts holds versioned external contract types (ADR-0010). No project
+       references and no third-party runtime types (DOC-ARCH dependency rule 9). -->
+
+</Project>

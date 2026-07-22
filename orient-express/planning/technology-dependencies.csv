@@ -10,6 +10,9 @@ DEP-008,libjpeg-turbo/jpegtran,native-tool/library,Exact qualified release; snap
 DEP-009,Windows Imaging Component,os-api,Supported Windows platform capability,Codec/metadata probe and possible raster adapter,SRC-014,Windows SDK/product terms,Candidate,ADR-0001,Magick.NET adapter
 DEP-010,Magick.NET/ImageMagick,managed/native-package,Exact architecture-specific package/delegate set,General raster and optional formats,SRC-015,Apache-2.0/ImageMagick/delegates,Candidate pending SPIKE-007,ADR-0001,WIC/other codec adapter
 DEP-011,Microsoft.Data.Sqlite,managed/native-package,Current .NET 10-aligned stable; snapshot 10.0.10,Durable job store,SRC-016;SRC-017,MIT/SQLite public domain notices,Selected pending scale spike,ADR-0008,Alternate embedded store behind IJobStore
-DEP-012,xUnit.net v3,development-package,Current stable at implementation lock,Unit/integration/contract tests,SRC-018,Apache-2.0,Selected,ADR-0001,Other .NET test framework
+DEP-012,xUnit.net v3,development-package,3.2.2 pinned via Directory.Packages.props and NuGet lock files,Unit/integration/contract tests,SRC-018,Apache-2.0,Selected,ADR-0001,Other .NET test framework
 DEP-013,BenchmarkDotNet,development-package,Current stable at implementation lock,Microbenchmarks,SRC-019,MIT,Selected for microbenchmarks,ADR-0012,Custom benchmark harness
 DEP-014,Microsoft SBOM Tool or equivalent,build-tool,Pinned release/digest,SPDX SBOM generation,SRC-026,MIT,Candidate,ADR-0012,Syft/other approved SBOM generator
+DEP-015,Microsoft.NET.Test.Sdk,development-package,17.14.1 pinned via Directory.Packages.props and lock files,VSTest host for dotnet test,SRC-029,MIT,Selected,ADR-0001,Microsoft.Testing.Platform native runner
+DEP-016,xunit.runner.visualstudio,development-package,3.1.5 pinned via Directory.Packages.props and lock files,VSTest adapter for xUnit v3,SRC-018,Apache-2.0,Selected,ADR-0001,Microsoft.Testing.Platform runner mode
+DEP-017,coverlet.collector,development-package,6.0.4 pinned via Directory.Packages.props and lock files,Diagnostic code coverage collector,SRC-030,MIT,Selected,ADR-0012,Built-in dotnet coverage tooling
