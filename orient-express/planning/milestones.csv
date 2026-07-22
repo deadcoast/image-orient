@@ -1,0 +1,9 @@
+﻿id,name,entry_criteria,exit_gate,deliverables,status
+M0,Evidence foundation,Approved charter and dev-spec baseline,"SPIKE-001 through SPIKE-010 have owners, harnesses, and pass/fail gates; WP-001 complete",Research baseline; corpus protocol; spike reports; repository/CI baseline,planned
+M1,Operational foundations,Blocking spikes for selected work packages pass,"CLI, config, filesystem identity, metadata/codecs, model/runtime contracts work in diagnostic mode",doctor/inspect alpha; capability matrix; runtime/model/metadata prototypes,planned
+M2,Read-only orientation planner,M1 complete and corpus available,"Scan-only workflow produces immutable, explainable plans and meets pilot precision gate",orientation engine; calibration; SQLite jobs; scan command,planned
+M3,Safe-copy processing,Planner stable and transform/recovery spikes passed,End-to-end safe-copy scan/apply/verify resumes safely and passes JPEG/metadata gates,transform; verify; bounded executor; safe-copy beta,planned
+M4,Professional operations,Safe-copy beta stable,"Review, in-place backup/undo, job integrity, reporting, and support diagnostics pass fault tests",review workflow; guarded in-place; undo; operational CLI,planned
+M5,Quality and hardening,Feature-complete beta,"ML, security, privacy, performance, soak, compatibility, and recovery release thresholds pass",evaluation report; threat review; benchmark report; compatibility matrix,planned
+M6,Distribution candidate,M5 gates passed,"Signed portable and installer candidates pass clean-VM/offline install, update, rollback, and SBOM checks",signed artifacts; installer; SBOM; checksums; provenance,planned
+M7,Release candidate,Distribution candidate approved,All Must requirements and release ACs traced to passing evidence; no unaccepted critical risk,RC; release notes; support runbook; traceability evidence pack,planned

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.photoupright.local/v1/plan-row.schema.json",
+  "title": "PhotoUpright Sealed Plan Row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "jobId",
+    "fileId",
+    "source",
+    "assessment",
+    "effectiveAction",
+    "transform",
+    "output",
+    "verification",
+    "rowDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "jobId": {
+      "type": "string"
+    },
+    "fileId": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pathToken",
+        "size",
+        "fingerprint"
+      ],
+      "properties": {
+        "pathToken": {
+          "type": "string"
+        },
+        "displayPath": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fingerprint": {
+          "type": "string"
+        },
+        "fileSystemClass": {
+          "type": "string"
+        }
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "exifOrientation",
+        "selectedAction",
+        "confidence",
+        "margin",
+        "reasonCodes",
+        "provenance"
+      ],
+      "properties": {
+        "exifOrientation": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 8
+        },
+        "selectedAction": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "margin": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "reasonCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "provenance": {
+          "type": "object"
+        }
+      }
+    },
+    "effectiveAction": {
+      "type": "string",
+      "enum": [
+        "KEEP",
+        "NORMALIZE_METADATA",
+        "ROTATE_90_CW",
+        "ROTATE_180",
+        "ROTATE_270_CW",
+        "REVIEW",
+        "UNSUPPORTED",
+        "ERROR"
+      ]
+    },
+    "transform": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "output": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "verification": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "rowDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

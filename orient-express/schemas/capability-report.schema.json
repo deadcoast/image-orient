@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.photoupright.local/v1/capability-report.schema.json",
+  "title": "PhotoUpright Capability Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "generatedUtc",
+    "tool",
+    "platform",
+    "components",
+    "formats"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "generatedUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "platform": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "available",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string"
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "digest": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "details": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "formats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "format",
+          "read",
+          "metadataRead",
+          "transform",
+          "metadataWrite",
+          "verify"
+        ],
+        "properties": {
+          "format": {
+            "type": "string"
+          },
+          "read": {
+            "type": "boolean"
+          },
+          "metadataRead": {
+            "type": "boolean"
+          },
+          "transform": {
+            "type": "boolean"
+          },
+          "metadataWrite": {
+            "type": "boolean"
+          },
+          "verify": {
+            "type": "boolean"
+          },
+          "losslessQuarterTurn": {
+            "type": "boolean"
+          },
+          "reasonCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

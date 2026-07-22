@@ -1,0 +1,25 @@
+﻿id,name,responsibility,depends_on,status
+COMP-CLI,CLI Host,"Command parsing, help, completion, exit codes, cancellation, stdout/stderr discipline.",COMP-CONFIG;COMP-CAPABILITIES;COMP-PLANNER;COMP-EXECUTOR;COMP-REVIEW;COMP-REPORTING,baseline
+COMP-CONFIG,Configuration,"Layered configuration, schema validation, profiles, redaction, effective-config reporting.",,baseline
+COMP-CAPABILITIES,Capability Probe,"Detect OS, filesystem, codecs, runtimes, models, native tools, and operation-specific support.",COMP-CODEC;COMP-METADATA;COMP-INFERENCE;COMP-FILESYSTEM,baseline
+COMP-DISCOVERY,Input Discovery,"Deterministic traversal, filters, response files, identities, aliases, reparse and cloud-file policy.",COMP-FILESYSTEM;COMP-CONFIG,baseline
+COMP-METADATA,Metadata Service,Read/write governed metadata through ExifTool adapter; orientation semantics; metadata diff and policy.,COMP-NATIVE,baseline
+COMP-CODEC,Codec Service,"Bounded decode, thumbnails, format capability matrix, safe encode, image property inspection.",COMP-NATIVE,baseline
+COMP-TRANSFORM,Transform Service,Compose EXIF and inferred transforms; JPEG DCT transforms; raster transforms; output normalization.,COMP-CODEC;COMP-METADATA;COMP-NATIVE,baseline
+COMP-INFERENCE,Inference Runtime,Run pinned ONNX models through a provider-agnostic interface and expose deterministic tensors/results.,COMP-MODELS,baseline
+COMP-MODELS,Model Registry,"Manifest, digests, compatibility, install, quarantine, activation, rollback, provenance.",COMP-FILESYSTEM,baseline
+COMP-FEATURES,Orientation Feature Extractor,Convert detections/landmarks into interpretable rotation evidence and multi-face summaries.,COMP-INFERENCE,baseline
+COMP-CALIBRATION,Confidence Calibration,Map evidence to calibrated probabilities and uncertainty diagnostics for a policy version.,COMP-FEATURES,baseline
+COMP-POLICY,Decision Policy,"Apply thresholds, margins, evidence rules, metadata priors, sequence tie-breakers, and abstention.",COMP-CALIBRATION,baseline
+COMP-ORIENTATION,Orientation Engine,"Generate candidates, orchestrate inference/features/policy, and emit explainable decisions.",COMP-METADATA;COMP-CODEC;COMP-INFERENCE;COMP-FEATURES;COMP-CALIBRATION;COMP-POLICY,baseline
+COMP-PLANNER,Planner,"Create immutable plans, resolve destinations, detect unsupported operations, and seal provenance.",COMP-DISCOVERY;COMP-ORIENTATION;COMP-JOBSTORE;COMP-FILESYSTEM;COMP-CAPABILITIES,baseline
+COMP-PIPELINE,Pipeline Coordinator,"Bounded channels, work scheduling, resource classes, cancellation, retries, and stage metrics.",COMP-JOBSTORE;COMP-REPORTING,baseline
+COMP-EXECUTOR,Apply Executor,"Preflight, transform, metadata update, verify, commit, retry, resume, and undo orchestration.",COMP-TRANSFORM;COMP-VERIFY;COMP-FILESYSTEM;COMP-JOURNAL;COMP-JOBSTORE;COMP-PIPELINE,baseline
+COMP-VERIFY,Independent Verifier,"Reopen outputs, compare expected geometry/orientation/metadata/digests, and classify verification failures.",COMP-CODEC;COMP-METADATA,baseline
+COMP-FILESYSTEM,Filesystem Safety Layer,"Canonical paths, handles/identity, temp placement, flush, atomic replace, backups, locks, aliases, placeholders.",COMP-NATIVE,baseline
+COMP-JOURNAL,Recovery Journal,"Write-ahead intents, state transitions, commit records, recovery reconciliation, and undo provenance.",COMP-JOBSTORE;COMP-FILESYSTEM,baseline
+COMP-JOBSTORE,Job Store,"SQLite-backed jobs, manifests, plans, events, decisions, checkpoints, schema migrations, integrity.",COMP-FILESYSTEM,baseline
+COMP-REVIEW,Review Workflow,"Queue uncertain items, render evidence/thumbnail references, validate imported decisions, append overrides.",COMP-JOBSTORE;COMP-ORIENTATION;COMP-REPORTING,baseline
+COMP-REPORTING,Events and Reporting,"Structured events, human rendering, JSON/JSONL, summaries, diagnostics bundles, redaction.",,baseline
+COMP-BENCHMARK,Benchmark Harness,"Micro, pipeline, corpus, and environment-aware benchmarks with comparable result manifests.",COMP-CODEC;COMP-INFERENCE;COMP-METADATA;COMP-EXECUTOR,baseline
+COMP-NATIVE,Native Tool Adapter,"Hardened process/native-library invocation, version probes, stderr capture, timeouts, cancellation, sandbox policy.",,baseline

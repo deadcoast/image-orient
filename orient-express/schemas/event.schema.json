@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.photoupright.local/v1/event.schema.json",
+  "title": "PhotoUpright Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "eventType",
+    "eventId",
+    "timestampUtc",
+    "result"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "eventType": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9.]{2,80}$"
+    },
+    "eventId": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 80
+    },
+    "timestampUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "jobId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fileId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlationId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 128
+    },
+    "command": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "action": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        null,
+        "KEEP",
+        "NORMALIZE_METADATA",
+        "ROTATE_90_CW",
+        "ROTATE_180",
+        "ROTATE_270_CW",
+        "REVIEW",
+        "UNSUPPORTED",
+        "ERROR"
+      ]
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "started",
+        "succeeded",
+        "review",
+        "skipped",
+        "unsupported",
+        "failed",
+        "cancelled",
+        "conflict",
+        "recovered"
+      ]
+    },
+    "reasonCodes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_]{2,80}$"
+      },
+      "uniqueItems": true
+    },
+    "durationMs": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "pathToken": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "category",
+        "retryable",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{2,80}$"
+        },
+        "category": {
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "provenance": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "toolBuild": {
+          "type": "string"
+        },
+        "modelDigest": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "policyId": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

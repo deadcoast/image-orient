@@ -1,0 +1,29 @@
+digraph TraceabilityOverview {
+  graph [rankdir=LR, bgcolor="white", pad="0.3", nodesep="0.4", ranksep="0.8"];
+  node [shape=box, style="rounded,filled", fontname="Arial", color="#475569"];
+  Goal [label="GOAL\nProduct outcome", fillcolor="#dcfce7"];
+  FR [label="PRD-FR\nFunctional requirement", fillcolor="#ede9fe"];
+  NFR [label="NFR\nQuality constraint", fillcolor="#ede9fe"];
+  AC [label="AC\nAcceptance criterion", fillcolor="#fce7f3"];
+  ADR [label="ADR\nDecision", fillcolor="#f5f5f4"];
+  Component [label="COMP\nArchitecture component", fillcolor="#dbeafe"];
+  Spike [label="SPIKE\nProof gate", fillcolor="#fef3c7"];
+  WP [label="WP\nImplementation package", fillcolor="#ffedd5"];
+  Test [label="TEST\nVerification evidence", fillcolor="#ccfbf1"];
+  Milestone [label="M\nRelease milestone", fillcolor="#e2e8f0", shape=oval];
+
+  Goal -> FR [label="drives"];
+  Goal -> NFR [label="constrains"];
+  FR -> AC [label="accepted by"];
+  FR -> ADR [label="governed by"];
+  NFR -> ADR [label="governed by"];
+  FR -> Component [label="realized by"];
+  NFR -> Component [style=dashed, label="constrains"];
+  Spike -> WP [label="gates"];
+  FR -> WP [label="implemented by"];
+  NFR -> WP [label="implemented by"];
+  AC -> Test [label="verified by"];
+  NFR -> Test [label="verified by"];
+  Component -> WP [style=dashed, label="built in"];
+  WP -> Milestone [label="delivered in"];
+}

@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.photoupright.local/v1/job-manifest.schema.json",
+  "title": "PhotoUpright Job Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "jobId",
+    "createdUtc",
+    "tool",
+    "mode",
+    "roots",
+    "configurationDigest",
+    "state"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "jobId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,64}$"
+    },
+    "createdUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sealedUtc": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "buildId"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "buildId": {
+          "type": "string"
+        },
+        "commit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runtime": {
+          "type": "string"
+        }
+      }
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "safe-copy",
+        "in-place"
+      ]
+    },
+    "roots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputs"
+      ],
+      "properties": {
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "output": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "backup": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "configurationDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "capabilityDigest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "planDigest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "created",
+        "scanning",
+        "sealed",
+        "applying",
+        "recovery-required",
+        "verified",
+        "completed",
+        "cancelled",
+        "failed"
+      ]
+    },
+    "model": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "modelId": {
+          "type": "string"
+        },
+        "modelDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "calibrationId": {
+          "type": "string"
+        },
+        "policyId": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "modelId",
+        "modelDigest",
+        "calibrationId",
+        "policyId",
+        "runtime",
+        "provider"
+      ]
+    },
+    "contractVersions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "undoAvailable": {
+          "type": "boolean"
+        },
+        "backupRetainUntilUtc": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "reviewThumbnails": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

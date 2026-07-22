@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.photoupright.local/v1/config.schema.json",
+  "title": "PhotoUpright Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "jobRoot": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modelRoot": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cacheRoot": {
+          "type": "string",
+          "minLength": 1
+        },
+        "backupRoot": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    },
+    "discovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "recurse": {
+          "type": "boolean",
+          "default": true
+        },
+        "followReparsePoints": {
+          "type": "boolean",
+          "default": false
+        },
+        "include": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "maxFiles": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "maxBytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "type": "string",
+          "enum": [
+            "conservative",
+            "balanced",
+            "expert"
+          ]
+        },
+        "maxThumbnailLongEdge": {
+          "type": "integer",
+          "minimum": 320,
+          "maximum": 4096,
+          "default": 1280
+        },
+        "faceModel": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "sceneFallback": {
+          "type": "boolean",
+          "default": false
+        },
+        "sequenceConsensus": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "safe-copy",
+            "in-place"
+          ],
+          "default": "safe-copy"
+        },
+        "collision": {
+          "type": "string",
+          "enum": [
+            "error",
+            "skip",
+            "rename"
+          ],
+          "default": "error"
+        },
+        "jpegEdge": {
+          "type": "string",
+          "enum": [
+            "abort",
+            "preserve-partial",
+            "trim",
+            "reencode"
+          ],
+          "default": "abort"
+        },
+        "metadataProfile": {
+          "type": "string",
+          "enum": [
+            "preserve-personal",
+            "preserve-minimal",
+            "privacy-strip"
+          ]
+        },
+        "preserveFilesystemTimes": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "memoryMiB": {
+          "type": "integer",
+          "minimum": 256,
+          "maximum": 65536,
+          "default": 1536
+        },
+        "metadataWorkers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16,
+          "default": 2
+        },
+        "decodeWorkers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32
+        },
+        "inferenceWorkers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16,
+          "default": 1
+        },
+        "transformWorkers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32,
+          "default": 2
+        },
+        "verificationWorkers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32
+        },
+        "queueCapacity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "telemetry": {
+          "const": false
+        },
+        "reviewThumbnails": {
+          "type": "boolean",
+          "default": false
+        },
+        "redactPathsInDiagnostics": {
+          "type": "boolean",
+          "default": true
+        },
+        "diagnosticRetentionDays": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3650
+        }
+      }
+    },
+    "advanced": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inferenceProvider": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "cpu",
+            "directml",
+            "windows-ml"
+          ]
+        },
+        "allowNetworkFilesystem": {
+          "type": "boolean",
+          "default": false
+        },
+        "allowUnknownConfig": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}

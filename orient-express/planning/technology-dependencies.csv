@@ -1,0 +1,15 @@
+﻿id,name,type,version_policy,role,source,license,status,decision,replacement
+DEP-001,.NET Runtime/SDK,managed-runtime,Supported .NET 10 LTS patch pinned by global.json/release manifest,Application runtime/build,SRC-001,Microsoft .NET license/notices,Selected; revalidate patch,ADR-0002,Future supported .NET LTS migration
+DEP-002,System.CommandLine,managed-package,Stable 2.x; snapshot 2.0.10 as of baseline,CLI parser/completion,SRC-002,MIT,Selected; contract isolated,ADR-0010,Alternate parser behind CLI contract tests
+DEP-003,Spectre.Console,managed-package,Current stable at implementation lock,Optional human terminal renderer,SRC-025,MIT,Candidate,ADR-0001,Plain renderer
+DEP-004,Windows ML,managed/native-runtime,Current supported self-contained package after SPIKE-003,Preferred local ONNX adapter,SRC-003;SRC-004,Microsoft terms and bundled component notices,Provisional,ADR-0004,Direct ONNX Runtime CPU
+DEP-005,ONNX Runtime,managed/native-runtime,Runtime/API version pinned with model/provider compatibility,Inference runtime/fallback,SRC-005,MIT; execution providers separate,Required abstraction candidate,ADR-0004,Windows ML adapter/other qualified runtime
+DEP-006,YuNet ONNX model,model,Exact approved artifact digest and manifest; no mutable latest,Face detection and five landmarks,SRC-006;SRC-007;SRC-008,Model-specific review required,Provisional,ADR-0005,Qualified MediaPipe/other compact detector
+DEP-007,ExifTool,native-tool,Exact Windows executable/files digest; snapshot 13.59 during baseline research,Metadata read/write/diff,SRC-009;SRC-010,Artistic/GPL option; redistribution review,Provisional,ADR-0006,Managed/WIC metadata adapter
+DEP-008,libjpeg-turbo/jpegtran,native-tool/library,Exact qualified release; snapshot 3.1.4.1 during baseline research,Lossless JPEG transform,SRC-011;SRC-012,BSD-style notices,Provisional pending edge spike,ADR-0007,TurboJPEG API/equivalent DCT implementation
+DEP-009,Windows Imaging Component,os-api,Supported Windows platform capability,Codec/metadata probe and possible raster adapter,SRC-014,Windows SDK/product terms,Candidate,ADR-0001,Magick.NET adapter
+DEP-010,Magick.NET/ImageMagick,managed/native-package,Exact architecture-specific package/delegate set,General raster and optional formats,SRC-015,Apache-2.0/ImageMagick/delegates,Candidate pending SPIKE-007,ADR-0001,WIC/other codec adapter
+DEP-011,Microsoft.Data.Sqlite,managed/native-package,Current .NET 10-aligned stable; snapshot 10.0.10,Durable job store,SRC-016;SRC-017,MIT/SQLite public domain notices,Selected pending scale spike,ADR-0008,Alternate embedded store behind IJobStore
+DEP-012,xUnit.net v3,development-package,Current stable at implementation lock,Unit/integration/contract tests,SRC-018,Apache-2.0,Selected,ADR-0001,Other .NET test framework
+DEP-013,BenchmarkDotNet,development-package,Current stable at implementation lock,Microbenchmarks,SRC-019,MIT,Selected for microbenchmarks,ADR-0012,Custom benchmark harness
+DEP-014,Microsoft SBOM Tool or equivalent,build-tool,Pinned release/digest,SPDX SBOM generation,SRC-026,MIT,Candidate,ADR-0012,Syft/other approved SBOM generator

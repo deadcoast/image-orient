@@ -1,0 +1,164 @@
+﻿edge_type,from_id,to_id,meaning
+implementation,COMP-CONFIG,COMP-CLI,COMP-CLI depends on COMP-CONFIG
+implementation,COMP-CAPABILITIES,COMP-CLI,COMP-CLI depends on COMP-CAPABILITIES
+implementation,COMP-PLANNER,COMP-CLI,COMP-CLI depends on COMP-PLANNER
+implementation,COMP-EXECUTOR,COMP-CLI,COMP-CLI depends on COMP-EXECUTOR
+implementation,COMP-REVIEW,COMP-CLI,COMP-CLI depends on COMP-REVIEW
+implementation,COMP-REPORTING,COMP-CLI,COMP-CLI depends on COMP-REPORTING
+implementation,COMP-CODEC,COMP-CAPABILITIES,COMP-CAPABILITIES depends on COMP-CODEC
+implementation,COMP-METADATA,COMP-CAPABILITIES,COMP-CAPABILITIES depends on COMP-METADATA
+implementation,COMP-INFERENCE,COMP-CAPABILITIES,COMP-CAPABILITIES depends on COMP-INFERENCE
+implementation,COMP-FILESYSTEM,COMP-CAPABILITIES,COMP-CAPABILITIES depends on COMP-FILESYSTEM
+implementation,COMP-FILESYSTEM,COMP-DISCOVERY,COMP-DISCOVERY depends on COMP-FILESYSTEM
+implementation,COMP-CONFIG,COMP-DISCOVERY,COMP-DISCOVERY depends on COMP-CONFIG
+implementation,COMP-NATIVE,COMP-METADATA,COMP-METADATA depends on COMP-NATIVE
+implementation,COMP-NATIVE,COMP-CODEC,COMP-CODEC depends on COMP-NATIVE
+implementation,COMP-CODEC,COMP-TRANSFORM,COMP-TRANSFORM depends on COMP-CODEC
+implementation,COMP-METADATA,COMP-TRANSFORM,COMP-TRANSFORM depends on COMP-METADATA
+implementation,COMP-NATIVE,COMP-TRANSFORM,COMP-TRANSFORM depends on COMP-NATIVE
+implementation,COMP-MODELS,COMP-INFERENCE,COMP-INFERENCE depends on COMP-MODELS
+implementation,COMP-FILESYSTEM,COMP-MODELS,COMP-MODELS depends on COMP-FILESYSTEM
+implementation,COMP-INFERENCE,COMP-FEATURES,COMP-FEATURES depends on COMP-INFERENCE
+implementation,COMP-FEATURES,COMP-CALIBRATION,COMP-CALIBRATION depends on COMP-FEATURES
+implementation,COMP-CALIBRATION,COMP-POLICY,COMP-POLICY depends on COMP-CALIBRATION
+implementation,COMP-METADATA,COMP-ORIENTATION,COMP-ORIENTATION depends on COMP-METADATA
+implementation,COMP-CODEC,COMP-ORIENTATION,COMP-ORIENTATION depends on COMP-CODEC
+implementation,COMP-INFERENCE,COMP-ORIENTATION,COMP-ORIENTATION depends on COMP-INFERENCE
+implementation,COMP-FEATURES,COMP-ORIENTATION,COMP-ORIENTATION depends on COMP-FEATURES
+implementation,COMP-CALIBRATION,COMP-ORIENTATION,COMP-ORIENTATION depends on COMP-CALIBRATION
+implementation,COMP-POLICY,COMP-ORIENTATION,COMP-ORIENTATION depends on COMP-POLICY
+implementation,COMP-DISCOVERY,COMP-PLANNER,COMP-PLANNER depends on COMP-DISCOVERY
+implementation,COMP-ORIENTATION,COMP-PLANNER,COMP-PLANNER depends on COMP-ORIENTATION
+implementation,COMP-JOBSTORE,COMP-PLANNER,COMP-PLANNER depends on COMP-JOBSTORE
+implementation,COMP-FILESYSTEM,COMP-PLANNER,COMP-PLANNER depends on COMP-FILESYSTEM
+implementation,COMP-CAPABILITIES,COMP-PLANNER,COMP-PLANNER depends on COMP-CAPABILITIES
+implementation,COMP-JOBSTORE,COMP-PIPELINE,COMP-PIPELINE depends on COMP-JOBSTORE
+implementation,COMP-REPORTING,COMP-PIPELINE,COMP-PIPELINE depends on COMP-REPORTING
+implementation,COMP-TRANSFORM,COMP-EXECUTOR,COMP-EXECUTOR depends on COMP-TRANSFORM
+implementation,COMP-VERIFY,COMP-EXECUTOR,COMP-EXECUTOR depends on COMP-VERIFY
+implementation,COMP-FILESYSTEM,COMP-EXECUTOR,COMP-EXECUTOR depends on COMP-FILESYSTEM
+implementation,COMP-JOURNAL,COMP-EXECUTOR,COMP-EXECUTOR depends on COMP-JOURNAL
+implementation,COMP-JOBSTORE,COMP-EXECUTOR,COMP-EXECUTOR depends on COMP-JOBSTORE
+implementation,COMP-PIPELINE,COMP-EXECUTOR,COMP-EXECUTOR depends on COMP-PIPELINE
+implementation,COMP-CODEC,COMP-VERIFY,COMP-VERIFY depends on COMP-CODEC
+implementation,COMP-METADATA,COMP-VERIFY,COMP-VERIFY depends on COMP-METADATA
+implementation,COMP-NATIVE,COMP-FILESYSTEM,COMP-FILESYSTEM depends on COMP-NATIVE
+implementation,COMP-JOBSTORE,COMP-JOURNAL,COMP-JOURNAL depends on COMP-JOBSTORE
+implementation,COMP-FILESYSTEM,COMP-JOURNAL,COMP-JOURNAL depends on COMP-FILESYSTEM
+implementation,COMP-FILESYSTEM,COMP-JOBSTORE,COMP-JOBSTORE depends on COMP-FILESYSTEM
+implementation,COMP-JOBSTORE,COMP-REVIEW,COMP-REVIEW depends on COMP-JOBSTORE
+implementation,COMP-ORIENTATION,COMP-REVIEW,COMP-REVIEW depends on COMP-ORIENTATION
+implementation,COMP-REPORTING,COMP-REVIEW,COMP-REVIEW depends on COMP-REPORTING
+implementation,COMP-CODEC,COMP-BENCHMARK,COMP-BENCHMARK depends on COMP-CODEC
+implementation,COMP-INFERENCE,COMP-BENCHMARK,COMP-BENCHMARK depends on COMP-INFERENCE
+implementation,COMP-METADATA,COMP-BENCHMARK,COMP-BENCHMARK depends on COMP-METADATA
+implementation,COMP-EXECUTOR,COMP-BENCHMARK,COMP-BENCHMARK depends on COMP-EXECUTOR
+delivery,SPIKE-009,WP-002,WP-002 blocked by SPIKE-009
+delivery,WP-001,WP-002,WP-002 blocked by WP-001
+delivery,WP-001,WP-003,WP-003 blocked by WP-001
+delivery,SPIKE-006,WP-004,WP-004 blocked by SPIKE-006
+delivery,WP-001,WP-004,WP-004 blocked by WP-001
+delivery,SPIKE-004,WP-005,WP-005 blocked by SPIKE-004
+delivery,SPIKE-007,WP-005,WP-005 blocked by SPIKE-007
+delivery,WP-004,WP-005,WP-005 blocked by WP-004
+delivery,SPIKE-003,WP-006,WP-006 blocked by SPIKE-003
+delivery,WP-001,WP-006,WP-006 blocked by WP-001
+delivery,WP-004,WP-006,WP-006 blocked by WP-004
+delivery,SPIKE-001,WP-007,WP-007 blocked by SPIKE-001
+delivery,SPIKE-002,WP-007,WP-007 blocked by SPIKE-002
+delivery,WP-005,WP-007,WP-007 blocked by WP-005
+delivery,WP-006,WP-007,WP-007 blocked by WP-006
+delivery,SPIKE-001,WP-008,WP-008 blocked by SPIKE-001
+delivery,SPIKE-002,WP-008,WP-008 blocked by SPIKE-002
+delivery,WP-007,WP-008,WP-008 blocked by WP-007
+delivery,SPIKE-008,WP-009,WP-009 blocked by SPIKE-008
+delivery,WP-003,WP-009,WP-009 blocked by WP-003
+delivery,WP-004,WP-009,WP-009 blocked by WP-004
+delivery,WP-007,WP-009,WP-009 blocked by WP-007
+delivery,WP-008,WP-009,WP-009 blocked by WP-008
+delivery,SPIKE-004,WP-010,WP-010 blocked by SPIKE-004
+delivery,SPIKE-005,WP-010,WP-010 blocked by SPIKE-005
+delivery,SPIKE-007,WP-010,WP-010 blocked by SPIKE-007
+delivery,WP-005,WP-010,WP-010 blocked by WP-005
+delivery,SPIKE-006,WP-011,WP-011 blocked by SPIKE-006
+delivery,SPIKE-008,WP-011,WP-011 blocked by SPIKE-008
+delivery,WP-009,WP-011,WP-011 blocked by WP-009
+delivery,WP-010,WP-011,WP-011 blocked by WP-010
+delivery,SPIKE-006,WP-012,WP-012 blocked by SPIKE-006
+delivery,WP-004,WP-012,WP-012 blocked by WP-004
+delivery,WP-009,WP-012,WP-012 blocked by WP-009
+delivery,WP-011,WP-012,WP-012 blocked by WP-011
+delivery,WP-005,WP-013,WP-013 blocked by WP-005
+delivery,WP-009,WP-013,WP-013 blocked by WP-009
+delivery,WP-010,WP-013,WP-013 blocked by WP-010
+delivery,WP-009,WP-014,WP-014 blocked by WP-009
+delivery,WP-010,WP-014,WP-014 blocked by WP-010
+delivery,WP-011,WP-014,WP-014 blocked by WP-011
+delivery,WP-013,WP-014,WP-014 blocked by WP-013
+delivery,WP-012,WP-015,WP-015 blocked by WP-012
+delivery,WP-013,WP-015,WP-015 blocked by WP-013
+delivery,WP-014,WP-015,WP-015 blocked by WP-014
+delivery,WP-002,WP-016,WP-016 blocked by WP-002
+delivery,WP-007,WP-016,WP-016 blocked by WP-007
+delivery,WP-008,WP-016,WP-016 blocked by WP-008
+delivery,WP-009,WP-016,WP-016 blocked by WP-009
+delivery,WP-002,WP-017,WP-017 blocked by WP-002
+delivery,WP-009,WP-017,WP-017 blocked by WP-009
+delivery,WP-012,WP-017,WP-017 blocked by WP-012
+delivery,WP-002,WP-018,WP-018 blocked by WP-002
+delivery,WP-014,WP-018,WP-018 blocked by WP-014
+delivery,WP-016,WP-018,WP-018 blocked by WP-016
+delivery,WP-017,WP-018,WP-018 blocked by WP-017
+delivery,WP-004,WP-019,WP-019 blocked by WP-004
+delivery,WP-005,WP-019,WP-019 blocked by WP-005
+delivery,WP-006,WP-019,WP-019 blocked by WP-006
+delivery,WP-009,WP-019,WP-019 blocked by WP-009
+delivery,WP-010,WP-019,WP-019 blocked by WP-010
+delivery,SPIKE-001,WP-020,WP-020 blocked by SPIKE-001
+delivery,WP-008,WP-020,WP-020 blocked by WP-008
+delivery,WP-014,WP-020,WP-020 blocked by WP-014
+delivery,WP-015,WP-020,WP-020 blocked by WP-015
+delivery,WP-011,WP-021,WP-021 blocked by WP-011
+delivery,WP-014,WP-021,WP-021 blocked by WP-014
+delivery,WP-017,WP-021,WP-021 blocked by WP-017
+delivery,SPIKE-003,WP-022,WP-022 blocked by SPIKE-003
+delivery,SPIKE-007,WP-022,WP-022 blocked by SPIKE-007
+delivery,SPIKE-010,WP-022,WP-022 blocked by SPIKE-010
+delivery,WP-018,WP-022,WP-022 blocked by WP-018
+delivery,WP-019,WP-022,WP-022 blocked by WP-019
+delivery,WP-021,WP-022,WP-022 blocked by WP-021
+delivery,SPIKE-010,WP-023,WP-023 blocked by SPIKE-010
+delivery,WP-022,WP-023,WP-023 blocked by WP-022
+delivery,WP-018,WP-024,WP-024 blocked by WP-018
+delivery,WP-019,WP-024,WP-024 blocked by WP-019
+delivery,WP-020,WP-024,WP-024 blocked by WP-020
+delivery,WP-021,WP-024,WP-024 blocked by WP-021
+delivery,WP-023,WP-024,WP-024 blocked by WP-023
+spike-gate,SPIKE-001,WP-007,SPIKE-001 must pass before WP-007
+spike-gate,SPIKE-001,WP-008,SPIKE-001 must pass before WP-008
+spike-gate,SPIKE-001,WP-020,SPIKE-001 must pass before WP-020
+spike-gate,SPIKE-002,WP-007,SPIKE-002 must pass before WP-007
+spike-gate,SPIKE-002,WP-008,SPIKE-002 must pass before WP-008
+spike-gate,SPIKE-003,WP-006,SPIKE-003 must pass before WP-006
+spike-gate,SPIKE-003,WP-022,SPIKE-003 must pass before WP-022
+spike-gate,SPIKE-004,WP-005,SPIKE-004 must pass before WP-005
+spike-gate,SPIKE-004,WP-010,SPIKE-004 must pass before WP-010
+spike-gate,SPIKE-004,WP-014,SPIKE-004 must pass before WP-014
+spike-gate,SPIKE-005,WP-010,SPIKE-005 must pass before WP-010
+spike-gate,SPIKE-005,WP-014,SPIKE-005 must pass before WP-014
+spike-gate,SPIKE-006,WP-004,SPIKE-006 must pass before WP-004
+spike-gate,SPIKE-006,WP-011,SPIKE-006 must pass before WP-011
+spike-gate,SPIKE-006,WP-012,SPIKE-006 must pass before WP-012
+spike-gate,SPIKE-006,WP-015,SPIKE-006 must pass before WP-015
+spike-gate,SPIKE-007,WP-005,SPIKE-007 must pass before WP-005
+spike-gate,SPIKE-007,WP-010,SPIKE-007 must pass before WP-010
+spike-gate,SPIKE-007,WP-022,SPIKE-007 must pass before WP-022
+spike-gate,SPIKE-008,WP-004,SPIKE-008 must pass before WP-004
+spike-gate,SPIKE-008,WP-009,SPIKE-008 must pass before WP-009
+spike-gate,SPIKE-008,WP-011,SPIKE-008 must pass before WP-011
+spike-gate,SPIKE-008,WP-017,SPIKE-008 must pass before WP-017
+spike-gate,SPIKE-009,WP-002,SPIKE-009 must pass before WP-002
+spike-gate,SPIKE-009,WP-018,SPIKE-009 must pass before WP-018
+spike-gate,SPIKE-010,WP-022,SPIKE-010 must pass before WP-022
+spike-gate,SPIKE-010,WP-023,SPIKE-010 must pass before WP-023
+spike-gate,SPIKE-010,WP-024,SPIKE-010 must pass before WP-024

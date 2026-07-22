@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.photoupright.local/v1/review-decision.schema.json",
+  "title": "PhotoUpright Review Decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "jobId",
+    "fileId",
+    "planRowDigest",
+    "decision",
+    "decidedUtc",
+    "source"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "jobId": {
+      "type": "string"
+    },
+    "fileId": {
+      "type": "string"
+    },
+    "planRowDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "KEEP",
+        "NORMALIZE_METADATA",
+        "ROTATE_90_CW",
+        "ROTATE_180",
+        "ROTATE_270_CW",
+        "SKIP"
+      ]
+    },
+    "decidedUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "interactive",
+        "csv-import",
+        "json-import"
+      ]
+    },
+    "actor": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200
+    },
+    "comment": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 2000
+    },
+    "supersedesDecisionId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

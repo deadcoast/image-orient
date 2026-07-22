@@ -1,0 +1,1472 @@
+{
+  "schema_version": "1.0",
+  "package": "PhotoUpright dev-spec",
+  "version": "0.1.0",
+  "as_of": "2026-07-21",
+  "document_count": 59,
+  "documents": [
+    {
+      "document_id": "DOC-CHANGELOG",
+      "title": "Development Specification Changelog",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [],
+      "traces_to": [],
+      "path": "CHANGELOG.md"
+    },
+    {
+      "document_id": "DOC-CONTRIB",
+      "title": "Contributing to the Development Specification",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-GOVMODEL",
+        "DOC-TRACEGUIDE"
+      ],
+      "traces_to": [],
+      "path": "CONTRIBUTING-DOCS.md"
+    },
+    {
+      "document_id": "DOC-LICENSE",
+      "title": "Licensing and Third-Party Notice Plan",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Release",
+      "depends_on": [
+        "DOC-SOURCES",
+        "DOC-CICD"
+      ],
+      "traces_to": [],
+      "path": "LICENSE-NOTICE.md"
+    },
+    {
+      "document_id": "DOC-MASTER",
+      "title": "PhotoUpright Master Development Specification",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-CHARTER",
+        "DOC-PRD",
+        "DOC-SRS",
+        "DOC-ARCH",
+        "DOC-ML",
+        "DOC-FSSAFE",
+        "DOC-DEVPLAN",
+        "DOC-TEST"
+      ],
+      "traces_to": [
+        "GOAL-001",
+        "GOAL-002",
+        "GOAL-003",
+        "GOAL-004",
+        "GOAL-005",
+        "GOAL-006",
+        "GOAL-007",
+        "GOAL-008"
+      ],
+      "path": "MASTER-SPEC.md"
+    },
+    {
+      "document_id": "DOC-INDEX",
+      "title": "PhotoUpright Development Specification Index",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [],
+      "traces_to": [
+        "GOAL-001",
+        "GOAL-002",
+        "GOAL-003",
+        "GOAL-004",
+        "GOAL-005",
+        "GOAL-006",
+        "GOAL-007",
+        "GOAL-008"
+      ],
+      "path": "README.md"
+    },
+    {
+      "document_id": "DOC-STATUS",
+      "title": "PhotoUpright Planning Status",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Program",
+      "depends_on": [
+        "DOC-DEVPLAN",
+        "DOC-SPIKES",
+        "DOC-WBS"
+      ],
+      "traces_to": [],
+      "path": "STATUS.md"
+    },
+    {
+      "document_id": "DOC-ASSUMPTIONS",
+      "title": "Assumptions and Open Questions",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-RISKS"
+      ],
+      "traces_to": [],
+      "path": "docs/00-governance/assumptions-and-open-questions.md"
+    },
+    {
+      "document_id": "DOC-DECISIONS",
+      "title": "Architecture Decision Log",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-ARCH"
+      ],
+      "traces_to": [
+        "ADR-0001",
+        "ADR-0002",
+        "ADR-0003",
+        "ADR-0004",
+        "ADR-0005",
+        "ADR-0006",
+        "ADR-0007",
+        "ADR-0008",
+        "ADR-0009",
+        "ADR-0010",
+        "ADR-0011",
+        "ADR-0012"
+      ],
+      "path": "docs/00-governance/decision-log.md"
+    },
+    {
+      "document_id": "DOC-GOVMODEL",
+      "title": "Documentation Model and Governance",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [],
+      "traces_to": [
+        "GOAL-004",
+        "GOAL-007"
+      ],
+      "path": "docs/00-governance/documentation-model.md"
+    },
+    {
+      "document_id": "DOC-GLOSSARY",
+      "title": "Glossary",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [],
+      "traces_to": [],
+      "path": "docs/00-governance/glossary.md"
+    },
+    {
+      "document_id": "DOC-WORKFLOWS",
+      "title": "Personas and Operational Workflows",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Product",
+      "depends_on": [
+        "DOC-CHARTER"
+      ],
+      "traces_to": [
+        "PRD-FR-002",
+        "PRD-FR-007",
+        "PRD-FR-008",
+        "PRD-FR-009",
+        "PRD-FR-010",
+        "PRD-FR-014",
+        "PRD-FR-015",
+        "PRD-FR-016",
+        "PRD-FR-017"
+      ],
+      "path": "docs/01-product/personas-and-workflows.md"
+    },
+    {
+      "document_id": "DOC-CHARTER",
+      "title": "Product Charter",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Product",
+      "depends_on": [
+        "DOC-RESEARCH"
+      ],
+      "traces_to": [
+        "GOAL-001",
+        "GOAL-002",
+        "GOAL-003",
+        "GOAL-004",
+        "GOAL-005",
+        "GOAL-006",
+        "GOAL-007",
+        "GOAL-008"
+      ],
+      "path": "docs/01-product/product-charter.md"
+    },
+    {
+      "document_id": "DOC-PRD",
+      "title": "Product Requirements",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Product",
+      "depends_on": [
+        "DOC-CHARTER",
+        "DOC-WORKFLOWS",
+        "DOC-SCOPE"
+      ],
+      "traces_to": [
+        "PRD-FR-001",
+        "PRD-FR-002",
+        "PRD-FR-003",
+        "PRD-FR-004",
+        "PRD-FR-005",
+        "PRD-FR-006",
+        "PRD-FR-007",
+        "PRD-FR-008",
+        "PRD-FR-009",
+        "PRD-FR-010",
+        "PRD-FR-011",
+        "PRD-FR-012",
+        "PRD-FR-013",
+        "PRD-FR-014",
+        "PRD-FR-015",
+        "PRD-FR-016",
+        "PRD-FR-017",
+        "PRD-FR-018",
+        "PRD-FR-019",
+        "PRD-FR-020",
+        "PRD-FR-021",
+        "PRD-FR-022",
+        "PRD-FR-023",
+        "PRD-FR-024",
+        "PRD-FR-025",
+        "PRD-FR-026",
+        "PRD-FR-027",
+        "PRD-FR-028"
+      ],
+      "path": "docs/01-product/product-requirements.md"
+    },
+    {
+      "document_id": "DOC-SCOPE",
+      "title": "Scope and Release Policy",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Product",
+      "depends_on": [
+        "DOC-CHARTER",
+        "DOC-RESEARCH"
+      ],
+      "traces_to": [
+        "PRD-FR-021",
+        "NFR-COMP-001",
+        "NFR-COMP-002"
+      ],
+      "path": "docs/01-product/scope-and-release-policy.md"
+    },
+    {
+      "document_id": "DOC-RESEARCH",
+      "title": "Research Summary",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Research",
+      "depends_on": [],
+      "traces_to": [
+        "SPIKE-001",
+        "SPIKE-002",
+        "SPIKE-003",
+        "SPIKE-004",
+        "SPIKE-005",
+        "SPIKE-006",
+        "SPIKE-007",
+        "SPIKE-008",
+        "SPIKE-009",
+        "SPIKE-010"
+      ],
+      "path": "docs/02-research/research-summary.md"
+    },
+    {
+      "document_id": "DOC-LANDSCAPE",
+      "title": "Solution Landscape and Fit Assessment",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Research",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SOURCES"
+      ],
+      "traces_to": [
+        "ADR-0004",
+        "ADR-0005",
+        "ADR-0006",
+        "ADR-0007",
+        "ADR-0008"
+      ],
+      "path": "docs/02-research/solution-landscape-and-fit.md"
+    },
+    {
+      "document_id": "DOC-SOURCES",
+      "title": "Research Sources and Evidence Register",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Research",
+      "depends_on": [],
+      "traces_to": [
+        "SRC-001",
+        "SRC-002",
+        "SRC-003",
+        "SRC-004",
+        "SRC-005",
+        "SRC-006",
+        "SRC-007",
+        "SRC-008",
+        "SRC-009",
+        "SRC-010",
+        "SRC-011",
+        "SRC-012",
+        "SRC-013",
+        "SRC-014",
+        "SRC-015",
+        "SRC-016",
+        "SRC-017",
+        "SRC-018",
+        "SRC-019",
+        "SRC-020",
+        "SRC-021",
+        "SRC-022",
+        "SRC-023",
+        "SRC-024",
+        "SRC-025",
+        "SRC-026",
+        "SRC-027",
+        "SRC-028"
+      ],
+      "path": "docs/02-research/sources.md"
+    },
+    {
+      "document_id": "DOC-TECH",
+      "title": "Technology Evaluation and Baseline Stack",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-LANDSCAPE",
+        "DOC-SOURCES"
+      ],
+      "traces_to": [
+        "ADR-0002",
+        "ADR-0004",
+        "ADR-0006",
+        "ADR-0007",
+        "ADR-0008"
+      ],
+      "path": "docs/02-research/technology-evaluation.md"
+    },
+    {
+      "document_id": "DOC-AC",
+      "title": "Acceptance Criteria",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Quality",
+      "depends_on": [
+        "DOC-PRD",
+        "DOC-NFR"
+      ],
+      "traces_to": [
+        "AC-001",
+        "AC-002",
+        "AC-003",
+        "AC-004",
+        "AC-005",
+        "AC-006",
+        "AC-007",
+        "AC-008",
+        "AC-009",
+        "AC-010",
+        "AC-011",
+        "AC-012",
+        "AC-013",
+        "AC-014",
+        "AC-015",
+        "AC-016",
+        "AC-017",
+        "AC-018",
+        "AC-019",
+        "AC-020",
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024",
+        "AC-025",
+        "AC-026",
+        "AC-027",
+        "AC-028",
+        "AC-029",
+        "AC-030",
+        "AC-031",
+        "AC-032",
+        "AC-033",
+        "AC-034",
+        "AC-035",
+        "AC-036",
+        "AC-037",
+        "AC-038",
+        "AC-039",
+        "AC-040",
+        "AC-041",
+        "AC-042",
+        "AC-043",
+        "AC-044",
+        "AC-045",
+        "AC-046",
+        "AC-047",
+        "AC-048",
+        "AC-049",
+        "AC-050"
+      ],
+      "path": "docs/03-requirements/acceptance-criteria.md"
+    },
+    {
+      "document_id": "DOC-NFR",
+      "title": "Non-Functional Requirements",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-CHARTER",
+        "DOC-RESEARCH"
+      ],
+      "traces_to": [
+        "NFR-REL-001",
+        "NFR-REL-002",
+        "NFR-REL-003",
+        "NFR-REL-004",
+        "NFR-ML-001",
+        "NFR-ML-002",
+        "NFR-ML-003",
+        "NFR-ML-004",
+        "NFR-PERF-001",
+        "NFR-PERF-002",
+        "NFR-PERF-003",
+        "NFR-PERF-004",
+        "NFR-SEC-001",
+        "NFR-SEC-002",
+        "NFR-SEC-003",
+        "NFR-PRIV-001",
+        "NFR-PRIV-002",
+        "NFR-PRIV-003",
+        "NFR-UX-001",
+        "NFR-UX-002",
+        "NFR-COMP-001",
+        "NFR-COMP-002",
+        "NFR-FID-001",
+        "NFR-FID-002",
+        "NFR-MAINT-001",
+        "NFR-MAINT-002",
+        "NFR-OBS-001",
+        "NFR-OBS-002"
+      ],
+      "path": "docs/03-requirements/non-functional-requirements.md"
+    },
+    {
+      "document_id": "DOC-SRS",
+      "title": "System Requirements Specification",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-PRD",
+        "DOC-NFR",
+        "DOC-AC"
+      ],
+      "traces_to": [
+        "PRD-FR-001",
+        "PRD-FR-002",
+        "PRD-FR-003",
+        "PRD-FR-004",
+        "PRD-FR-005",
+        "PRD-FR-006",
+        "PRD-FR-007",
+        "PRD-FR-008",
+        "PRD-FR-009",
+        "PRD-FR-010",
+        "PRD-FR-011",
+        "PRD-FR-012",
+        "PRD-FR-013",
+        "PRD-FR-014",
+        "PRD-FR-015",
+        "PRD-FR-016",
+        "PRD-FR-017",
+        "PRD-FR-018",
+        "PRD-FR-019",
+        "PRD-FR-020",
+        "PRD-FR-021",
+        "PRD-FR-022",
+        "PRD-FR-023",
+        "PRD-FR-024",
+        "PRD-FR-025",
+        "PRD-FR-026",
+        "PRD-FR-027",
+        "PRD-FR-028"
+      ],
+      "path": "docs/03-requirements/system-requirements.md"
+    },
+    {
+      "document_id": "DOC-CLI",
+      "title": "CLI User Experience and Command Contract",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Product",
+      "depends_on": [
+        "DOC-WORKFLOWS",
+        "DOC-ARCH",
+        "DOC-CONFIG"
+      ],
+      "traces_to": [
+        "PRD-FR-002",
+        "PRD-FR-016",
+        "PRD-FR-017",
+        "PRD-FR-018",
+        "PRD-FR-019",
+        "PRD-FR-027",
+        "NFR-UX-001",
+        "NFR-UX-002"
+      ],
+      "path": "docs/04-architecture/cli-ux-spec.md"
+    },
+    {
+      "document_id": "DOC-CONTRACTS",
+      "title": "Component Contracts",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-ARCH",
+        "DOC-DATAMODEL",
+        "DOC-CONFIG"
+      ],
+      "traces_to": [
+        "COMP-CLI",
+        "COMP-CONFIG",
+        "COMP-CAPABILITIES",
+        "COMP-DISCOVERY",
+        "COMP-METADATA",
+        "COMP-CODEC",
+        "COMP-TRANSFORM",
+        "COMP-INFERENCE",
+        "COMP-MODELS",
+        "COMP-FEATURES",
+        "COMP-CALIBRATION",
+        "COMP-POLICY",
+        "COMP-ORIENTATION",
+        "COMP-PLANNER",
+        "COMP-PIPELINE",
+        "COMP-EXECUTOR",
+        "COMP-VERIFY",
+        "COMP-FILESYSTEM",
+        "COMP-JOURNAL",
+        "COMP-JOBSTORE",
+        "COMP-REVIEW",
+        "COMP-REPORTING",
+        "COMP-BENCHMARK",
+        "COMP-NATIVE"
+      ],
+      "path": "docs/04-architecture/component-contracts.md"
+    },
+    {
+      "document_id": "DOC-CONFIG",
+      "title": "Configuration, Schemas, Events, and Compatibility",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-ARCH",
+        "ADR-0010"
+      ],
+      "traces_to": [
+        "PRD-FR-017",
+        "PRD-FR-018",
+        "PRD-FR-019",
+        "PRD-FR-020",
+        "PRD-FR-023",
+        "NFR-MAINT-002"
+      ],
+      "path": "docs/04-architecture/configuration-and-output-contracts.md"
+    },
+    {
+      "document_id": "DOC-DATAMODEL",
+      "title": "Job, Event, and Persistence Data Model",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-ARCH",
+        "ADR-0003",
+        "ADR-0008"
+      ],
+      "traces_to": [
+        "PRD-FR-007",
+        "PRD-FR-008",
+        "PRD-FR-014",
+        "PRD-FR-028"
+      ],
+      "path": "docs/04-architecture/data-model.md"
+    },
+    {
+      "document_id": "DOC-FSSAFE",
+      "title": "Filesystem Safety, Atomicity, Recovery, and Undo",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Core",
+      "depends_on": [
+        "DOC-ARCH",
+        "ADR-0003",
+        "ADR-0009"
+      ],
+      "traces_to": [
+        "PRD-FR-009",
+        "PRD-FR-010",
+        "PRD-FR-013",
+        "PRD-FR-014",
+        "PRD-FR-015",
+        "NFR-REL-001",
+        "NFR-REL-002",
+        "NFR-REL-003",
+        "NFR-REL-004"
+      ],
+      "path": "docs/04-architecture/filesystem-safety.md"
+    },
+    {
+      "document_id": "DOC-METADATA",
+      "title": "Metadata, Orientation Semantics, Codecs, and Fidelity",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Media I/O",
+      "depends_on": [
+        "DOC-ARCH",
+        "DOC-FSSAFE",
+        "ADR-0006",
+        "ADR-0007"
+      ],
+      "traces_to": [
+        "PRD-FR-003",
+        "PRD-FR-011",
+        "PRD-FR-012",
+        "PRD-FR-013",
+        "PRD-FR-021",
+        "NFR-FID-001",
+        "NFR-FID-002"
+      ],
+      "path": "docs/04-architecture/metadata-and-codecs.md"
+    },
+    {
+      "document_id": "DOC-ML",
+      "title": "ML Orientation Engine",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "ML",
+      "depends_on": [
+        "DOC-ARCH",
+        "DOC-RESEARCH",
+        "ADR-0004",
+        "ADR-0005"
+      ],
+      "traces_to": [
+        "PRD-FR-004",
+        "PRD-FR-005",
+        "PRD-FR-006",
+        "PRD-FR-020",
+        "PRD-FR-024",
+        "PRD-FR-025",
+        "NFR-ML-001",
+        "NFR-ML-002",
+        "NFR-ML-003",
+        "NFR-ML-004"
+      ],
+      "path": "docs/04-architecture/ml-orientation-engine.md"
+    },
+    {
+      "document_id": "DOC-PLUGIN",
+      "title": "Plugin and Extension Model",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-ARCH",
+        "ADR-0011"
+      ],
+      "traces_to": [
+        "NFR-SEC-003",
+        "NFR-MAINT-001"
+      ],
+      "path": "docs/04-architecture/plugin-and-extension-model.md"
+    },
+    {
+      "document_id": "DOC-PIPELINE",
+      "title": "Processing Pipeline and State Machines",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-ARCH",
+        "DOC-DATAMODEL",
+        "DOC-FSSAFE"
+      ],
+      "traces_to": [
+        "PRD-FR-007",
+        "PRD-FR-008",
+        "PRD-FR-013",
+        "PRD-FR-014",
+        "PRD-FR-022"
+      ],
+      "path": "docs/04-architecture/processing-pipeline.md"
+    },
+    {
+      "document_id": "DOC-ARCH",
+      "title": "System Architecture",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-SRS",
+        "DOC-TECH",
+        "ADR-0001",
+        "ADR-0002"
+      ],
+      "traces_to": [
+        "COMP-CLI",
+        "COMP-CONFIG",
+        "COMP-CAPABILITIES",
+        "COMP-DISCOVERY",
+        "COMP-METADATA",
+        "COMP-CODEC",
+        "COMP-TRANSFORM",
+        "COMP-INFERENCE",
+        "COMP-MODELS",
+        "COMP-FEATURES",
+        "COMP-CALIBRATION",
+        "COMP-POLICY",
+        "COMP-ORIENTATION",
+        "COMP-PLANNER",
+        "COMP-PIPELINE",
+        "COMP-EXECUTOR",
+        "COMP-VERIFY",
+        "COMP-FILESYSTEM",
+        "COMP-JOURNAL",
+        "COMP-JOBSTORE",
+        "COMP-REVIEW",
+        "COMP-REPORTING",
+        "COMP-BENCHMARK",
+        "COMP-NATIVE"
+      ],
+      "path": "docs/04-architecture/system-architecture.md"
+    },
+    {
+      "document_id": "DOC-COMPAT",
+      "title": "Compatibility and Qualification Matrix",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Quality",
+      "depends_on": [
+        "DOC-SCOPE",
+        "DOC-FSSAFE",
+        "DOC-METADATA",
+        "DOC-TEST"
+      ],
+      "traces_to": [
+        "PRD-FR-021",
+        "NFR-COMP-001",
+        "NFR-COMP-002"
+      ],
+      "path": "docs/05-quality/compatibility-matrix.md"
+    },
+    {
+      "document_id": "DOC-EVAL",
+      "title": "Corpus, Ground Truth, Calibration, and ML Evaluation Plan",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "ML Quality",
+      "depends_on": [
+        "DOC-TEST",
+        "DOC-ML",
+        "DOC-SEC"
+      ],
+      "traces_to": [
+        "SPIKE-001",
+        "SPIKE-002",
+        "NFR-ML-001",
+        "NFR-ML-002",
+        "NFR-ML-003",
+        "NFR-ML-004"
+      ],
+      "path": "docs/05-quality/corpus-and-evaluation-plan.md"
+    },
+    {
+      "document_id": "DOC-OBS",
+      "title": "Observability, Diagnostics, and Supportability",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Operations",
+      "depends_on": [
+        "DOC-CONFIG",
+        "DOC-DATAMODEL",
+        "DOC-SEC"
+      ],
+      "traces_to": [
+        "PRD-FR-023",
+        "PRD-FR-028",
+        "NFR-OBS-001",
+        "NFR-OBS-002"
+      ],
+      "path": "docs/05-quality/observability-and-supportability.md"
+    },
+    {
+      "document_id": "DOC-PERF",
+      "title": "Performance, Capacity, and Benchmark Plan",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Performance",
+      "depends_on": [
+        "DOC-TEST",
+        "DOC-PIPELINE"
+      ],
+      "traces_to": [
+        "PRD-FR-022",
+        "PRD-FR-026",
+        "NFR-PERF-001",
+        "NFR-PERF-002",
+        "NFR-PERF-003",
+        "NFR-PERF-004"
+      ],
+      "path": "docs/05-quality/performance-and-benchmark-plan.md"
+    },
+    {
+      "document_id": "DOC-SEC",
+      "title": "Security, Privacy, and Threat Model",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Security",
+      "depends_on": [
+        "DOC-ARCH",
+        "DOC-FSSAFE",
+        "DOC-ML"
+      ],
+      "traces_to": [
+        "NFR-SEC-001",
+        "NFR-SEC-002",
+        "NFR-SEC-003",
+        "NFR-PRIV-001",
+        "NFR-PRIV-002",
+        "NFR-PRIV-003"
+      ],
+      "path": "docs/05-quality/security-and-privacy.md"
+    },
+    {
+      "document_id": "DOC-TEST",
+      "title": "Test Strategy and Verification Architecture",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Quality",
+      "depends_on": [
+        "DOC-SRS",
+        "DOC-ARCH",
+        "DOC-AC"
+      ],
+      "traces_to": [
+        "TEST-AC-001",
+        "TEST-AC-002",
+        "TEST-AC-003",
+        "TEST-AC-004",
+        "TEST-AC-005",
+        "TEST-AC-006",
+        "TEST-AC-007",
+        "TEST-AC-008",
+        "TEST-AC-009",
+        "TEST-AC-010",
+        "TEST-AC-011",
+        "TEST-AC-012",
+        "TEST-AC-013",
+        "TEST-AC-014",
+        "TEST-AC-015",
+        "TEST-AC-016",
+        "TEST-AC-017",
+        "TEST-AC-018",
+        "TEST-AC-019",
+        "TEST-AC-020",
+        "TEST-AC-021",
+        "TEST-AC-022",
+        "TEST-AC-023",
+        "TEST-AC-024",
+        "TEST-AC-025",
+        "TEST-AC-026",
+        "TEST-AC-027",
+        "TEST-AC-028",
+        "TEST-AC-029",
+        "TEST-AC-030",
+        "TEST-AC-031",
+        "TEST-AC-032",
+        "TEST-AC-033",
+        "TEST-AC-034",
+        "TEST-AC-035",
+        "TEST-AC-036",
+        "TEST-AC-037",
+        "TEST-AC-038",
+        "TEST-AC-039",
+        "TEST-AC-040",
+        "TEST-AC-041",
+        "TEST-AC-042",
+        "TEST-AC-043",
+        "TEST-AC-044",
+        "TEST-AC-045",
+        "TEST-AC-046",
+        "TEST-AC-047",
+        "TEST-AC-048",
+        "TEST-AC-049",
+        "TEST-AC-050",
+        "TEST-NFR-001",
+        "TEST-NFR-002",
+        "TEST-NFR-003",
+        "TEST-NFR-004",
+        "TEST-NFR-005",
+        "TEST-NFR-006",
+        "TEST-NFR-007",
+        "TEST-NFR-008",
+        "TEST-NFR-009",
+        "TEST-NFR-010",
+        "TEST-NFR-011",
+        "TEST-NFR-012",
+        "TEST-NFR-013",
+        "TEST-NFR-014",
+        "TEST-NFR-015",
+        "TEST-NFR-016",
+        "TEST-NFR-017",
+        "TEST-NFR-018",
+        "TEST-NFR-019",
+        "TEST-NFR-020",
+        "TEST-NFR-021",
+        "TEST-NFR-022",
+        "TEST-NFR-023",
+        "TEST-NFR-024",
+        "TEST-NFR-025",
+        "TEST-NFR-026",
+        "TEST-NFR-027",
+        "TEST-NFR-028"
+      ],
+      "path": "docs/05-quality/test-strategy.md"
+    },
+    {
+      "document_id": "DOC-CICD",
+      "title": "CI/CD, Reproducibility, and Software Supply Chain",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Release",
+      "depends_on": [
+        "DOC-SEC",
+        "DOC-TEST",
+        "DOC-GOVMODEL"
+      ],
+      "traces_to": [
+        "NFR-SEC-002",
+        "WP-001",
+        "WP-019",
+        "WP-022",
+        "WP-023"
+      ],
+      "path": "docs/06-delivery/ci-cd-and-supply-chain.md"
+    },
+    {
+      "document_id": "DOC-DOD",
+      "title": "Definition of Done and Release Gate Checklist",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Program",
+      "depends_on": [
+        "DOC-DEVPLAN",
+        "DOC-TEST",
+        "DOC-RELEASE"
+      ],
+      "traces_to": [
+        "M0",
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+        "M7"
+      ],
+      "path": "docs/06-delivery/definition-of-done.md"
+    },
+    {
+      "document_id": "DOC-DEVPLAN",
+      "title": "Development Plan and Execution Governance",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Program",
+      "depends_on": [
+        "DOC-SPIKES",
+        "DOC-WBS",
+        "DOC-RISKS",
+        "ADR-0012"
+      ],
+      "traces_to": [
+        "M0",
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+        "M7",
+        "WP-001",
+        "WP-002",
+        "WP-003",
+        "WP-004",
+        "WP-005",
+        "WP-006",
+        "WP-007",
+        "WP-008",
+        "WP-009",
+        "WP-010",
+        "WP-011",
+        "WP-012",
+        "WP-013",
+        "WP-014",
+        "WP-015",
+        "WP-016",
+        "WP-017",
+        "WP-018",
+        "WP-019",
+        "WP-020",
+        "WP-021",
+        "WP-022",
+        "WP-023",
+        "WP-024"
+      ],
+      "path": "docs/06-delivery/development-plan.md"
+    },
+    {
+      "document_id": "DOC-RELEASE",
+      "title": "Release, Packaging, Installation, Update, and Rollback",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Release",
+      "depends_on": [
+        "DOC-CICD",
+        "DOC-COMPAT",
+        "DOC-SEC"
+      ],
+      "traces_to": [
+        "WP-022",
+        "WP-023",
+        "WP-024",
+        "SPIKE-010"
+      ],
+      "path": "docs/06-delivery/release-and-packaging.md"
+    },
+    {
+      "document_id": "DOC-RISKS",
+      "title": "Risk Register",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Program",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-CHARTER"
+      ],
+      "traces_to": [
+        "RISK-001",
+        "RISK-002",
+        "RISK-003",
+        "RISK-004",
+        "RISK-005",
+        "RISK-006",
+        "RISK-007",
+        "RISK-008",
+        "RISK-009",
+        "RISK-010",
+        "RISK-011",
+        "RISK-012",
+        "RISK-013",
+        "RISK-014",
+        "RISK-015",
+        "RISK-016",
+        "RISK-017",
+        "RISK-018",
+        "RISK-019",
+        "RISK-020"
+      ],
+      "path": "docs/06-delivery/risk-register.md"
+    },
+    {
+      "document_id": "DOC-SPIKES",
+      "title": "Risk-First Technical Spikes",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Program",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-RISKS"
+      ],
+      "traces_to": [
+        "SPIKE-001",
+        "SPIKE-002",
+        "SPIKE-003",
+        "SPIKE-004",
+        "SPIKE-005",
+        "SPIKE-006",
+        "SPIKE-007",
+        "SPIKE-008",
+        "SPIKE-009",
+        "SPIKE-010"
+      ],
+      "path": "docs/06-delivery/technical-spikes.md"
+    },
+    {
+      "document_id": "DOC-WBS",
+      "title": "Work Breakdown Structure and Backlog Dependencies",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Program",
+      "depends_on": [
+        "DOC-SPIKES",
+        "DOC-ARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "WP-001",
+        "WP-002",
+        "WP-003",
+        "WP-004",
+        "WP-005",
+        "WP-006",
+        "WP-007",
+        "WP-008",
+        "WP-009",
+        "WP-010",
+        "WP-011",
+        "WP-012",
+        "WP-013",
+        "WP-014",
+        "WP-015",
+        "WP-016",
+        "WP-017",
+        "WP-018",
+        "WP-019",
+        "WP-020",
+        "WP-021",
+        "WP-022",
+        "WP-023",
+        "WP-024"
+      ],
+      "path": "docs/06-delivery/work-breakdown-structure.md"
+    },
+    {
+      "document_id": "DOC-DOCGRAPH",
+      "title": "Documentation Dependency Graph",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-GOVMODEL"
+      ],
+      "traces_to": [],
+      "path": "docs/07-traceability/documentation-dependency-graph.md"
+    },
+    {
+      "document_id": "DOC-IMPLGRAPH",
+      "title": "Implementation Dependency Graph",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-SPIKES",
+        "DOC-WBS",
+        "DOC-ARCH"
+      ],
+      "traces_to": [],
+      "path": "docs/07-traceability/implementation-dependency-graph.md"
+    },
+    {
+      "document_id": "DOC-TRACEGUIDE",
+      "title": "Traceability Guide",
+      "version": "0.1.0",
+      "status": "baseline",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-GOVMODEL"
+      ],
+      "traces_to": [
+        "GOAL-004",
+        "GOAL-007"
+      ],
+      "path": "docs/07-traceability/traceability-guide.md"
+    },
+    {
+      "document_id": "ADR-0001",
+      "title": "Use a modular monolith with ports and adapters",
+      "version": "0.1.0",
+      "status": "accepted",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0001"
+      ],
+      "path": "docs/08-adrs/ADR-0001-use-a-modular-monolith-with-ports-and-adapters.md"
+    },
+    {
+      "document_id": "ADR-0002",
+      "title": "Use .NET 10 LTS and C# for the Windows-first implementation",
+      "version": "0.1.0",
+      "status": "accepted",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0002"
+      ],
+      "path": "docs/08-adrs/ADR-0002-use-net-10-lts-and-c-for-the-windows-first-implementation.md"
+    },
+    {
+      "document_id": "ADR-0003",
+      "title": "Separate scan plans from apply",
+      "version": "0.1.0",
+      "status": "accepted",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0003"
+      ],
+      "path": "docs/08-adrs/ADR-0003-separate-scan-plans-from-apply.md"
+    },
+    {
+      "document_id": "ADR-0004",
+      "title": "Use ONNX behind a runtime abstraction",
+      "version": "0.1.0",
+      "status": "accepted",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0004"
+      ],
+      "path": "docs/08-adrs/ADR-0004-use-onnx-behind-a-runtime-abstraction.md"
+    },
+    {
+      "document_id": "ADR-0005",
+      "title": "Use face-landmark evidence with calibrated abstention",
+      "version": "0.1.0",
+      "status": "provisional",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0005"
+      ],
+      "path": "docs/08-adrs/ADR-0005-use-face-landmark-evidence-with-calibrated-abstention.md"
+    },
+    {
+      "document_id": "ADR-0006",
+      "title": "Use ExifTool behind a persistent metadata adapter",
+      "version": "0.1.0",
+      "status": "provisional",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0006"
+      ],
+      "path": "docs/08-adrs/ADR-0006-use-exiftool-behind-a-persistent-metadata-adapter.md"
+    },
+    {
+      "document_id": "ADR-0007",
+      "title": "Use lossless JPEG DCT transforms when eligible",
+      "version": "0.1.0",
+      "status": "provisional",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0007"
+      ],
+      "path": "docs/08-adrs/ADR-0007-use-lossless-jpeg-dct-transforms-when-eligible.md"
+    },
+    {
+      "document_id": "ADR-0008",
+      "title": "Use SQLite for durable job state",
+      "version": "0.1.0",
+      "status": "provisional",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0008"
+      ],
+      "path": "docs/08-adrs/ADR-0008-use-sqlite-for-durable-job-state.md"
+    },
+    {
+      "document_id": "ADR-0009",
+      "title": "Default to safe-copy; guard in-place mode",
+      "version": "0.1.0",
+      "status": "accepted",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0009"
+      ],
+      "path": "docs/08-adrs/ADR-0009-default-to-safe-copy-guard-in-place-mode.md"
+    },
+    {
+      "document_id": "ADR-0010",
+      "title": "Version every external automation contract",
+      "version": "0.1.0",
+      "status": "accepted",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0010"
+      ],
+      "path": "docs/08-adrs/ADR-0010-version-every-external-automation-contract.md"
+    },
+    {
+      "document_id": "ADR-0011",
+      "title": "Do not load arbitrary in-process plugins in v1",
+      "version": "0.1.0",
+      "status": "accepted",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-SRS"
+      ],
+      "traces_to": [
+        "ADR-0011"
+      ],
+      "path": "docs/08-adrs/ADR-0011-do-not-load-arbitrary-in-process-plugins-in-v1.md"
+    },
+    {
+      "document_id": "ADR-0012",
+      "title": "Use risk-first gated delivery",
+      "version": "0.1.0",
+      "status": "accepted",
+      "as_of": "2026-07-21",
+      "owner": "Architecture",
+      "depends_on": [
+        "DOC-RESEARCH",
+        "DOC-RISKS"
+      ],
+      "traces_to": [
+        "ADR-0012"
+      ],
+      "path": "docs/08-adrs/ADR-0012-use-risk-first-gated-delivery.md"
+    }
+  ],
+  "catalogs": {
+    "requirements": "planning/requirements-catalog.csv",
+    "traceability": "planning/traceability-matrix.csv",
+    "components": "planning/component-catalog.csv",
+    "spikes": "planning/spike-register.csv",
+    "backlog": "planning/backlog.csv",
+    "milestones": "planning/milestones.csv",
+    "tests": "planning/test-matrix.csv",
+    "risks": "planning/risk-register.csv",
+    "sources": "planning/research-sources.csv",
+    "decisions": "planning/decision-register.csv",
+    "implementation_dependencies": "planning/dependency-register.csv",
+    "technology_dependencies": "planning/technology-dependencies.csv"
+  },
+  "schemas": [
+    "schemas/capability-report.schema.json",
+    "schemas/config.schema.json",
+    "schemas/event.schema.json",
+    "schemas/job-manifest.schema.json",
+    "schemas/model-manifest.schema.json",
+    "schemas/plan-row.schema.json",
+    "schemas/review-decision.schema.json"
+  ]
+}

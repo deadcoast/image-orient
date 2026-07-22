@@ -1,0 +1,22 @@
+stateDiagram-v2
+  [*] --> Discovered
+  Discovered --> Inspected
+  Inspected --> Assessed
+  Assessed --> Planned
+  Planned --> PlanSealed
+  PlanSealed --> Review
+  Review --> PlanSealed: append override
+  PlanSealed --> Preflighted
+  Preflighted --> Staged
+  Staged --> Verified
+  Verified --> CommitIntent
+  CommitIntent --> Committed
+  Committed --> UndoIntent
+  UndoIntent --> Undone
+  PlanSealed --> Unsupported
+  PlanSealed --> Conflict
+  Preflighted --> Conflict
+  Staged --> Failed
+  CommitIntent --> RecoveryRequired
+  RecoveryRequired --> Committed
+  RecoveryRequired --> Conflict

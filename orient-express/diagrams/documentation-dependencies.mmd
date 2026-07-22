@@ -1,0 +1,196 @@
+flowchart LR
+  DOC_CHANGELOG["DOC-CHANGELOG Development Specification Changelog"]
+  DOC_CONTRIB["DOC-CONTRIB Contributing to the Development Specification"]
+  DOC_LICENSE["DOC-LICENSE Licensing and Third-Party Notice Plan"]
+  DOC_MASTER["DOC-MASTER PhotoUpright Master Development Specification"]
+  DOC_INDEX["DOC-INDEX PhotoUpright Development Specification Index"]
+  DOC_STATUS["DOC-STATUS PhotoUpright Planning Status"]
+  DOC_ASSUMPTIONS["DOC-ASSUMPTIONS Assumptions and Open Questions"]
+  DOC_DECISIONS["DOC-DECISIONS Architecture Decision Log"]
+  DOC_GOVMODEL["DOC-GOVMODEL Documentation Model and Governance"]
+  DOC_GLOSSARY["DOC-GLOSSARY Glossary"]
+  DOC_WORKFLOWS["DOC-WORKFLOWS Personas and Operational Workflows"]
+  DOC_CHARTER["DOC-CHARTER Product Charter"]
+  DOC_PRD["DOC-PRD Product Requirements"]
+  DOC_SCOPE["DOC-SCOPE Scope and Release Policy"]
+  DOC_RESEARCH["DOC-RESEARCH Research Summary"]
+  DOC_LANDSCAPE["DOC-LANDSCAPE Solution Landscape and Fit Assessment"]
+  DOC_SOURCES["DOC-SOURCES Research Sources and Evidence Register"]
+  DOC_TECH["DOC-TECH Technology Evaluation and Baseline Stack"]
+  DOC_AC["DOC-AC Acceptance Criteria"]
+  DOC_NFR["DOC-NFR Non-Functional Requirements"]
+  DOC_SRS["DOC-SRS System Requirements Specification"]
+  DOC_CLI["DOC-CLI CLI User Experience and Command Contract"]
+  DOC_CONTRACTS["DOC-CONTRACTS Component Contracts"]
+  DOC_CONFIG["DOC-CONFIG Configuration, Schemas, Events, and Compatibility"]
+  DOC_DATAMODEL["DOC-DATAMODEL Job, Event, and Persistence Data Model"]
+  DOC_FSSAFE["DOC-FSSAFE Filesystem Safety, Atomicity, Recovery, and Undo"]
+  DOC_METADATA["DOC-METADATA Metadata, Orientation Semantics, Codecs, and Fidelity"]
+  DOC_ML["DOC-ML ML Orientation Engine"]
+  DOC_PLUGIN["DOC-PLUGIN Plugin and Extension Model"]
+  DOC_PIPELINE["DOC-PIPELINE Processing Pipeline and State Machines"]
+  DOC_ARCH["DOC-ARCH System Architecture"]
+  DOC_COMPAT["DOC-COMPAT Compatibility and Qualification Matrix"]
+  DOC_EVAL["DOC-EVAL Corpus, Ground Truth, Calibration, and ML Evaluation Plan"]
+  DOC_OBS["DOC-OBS Observability, Diagnostics, and Supportability"]
+  DOC_PERF["DOC-PERF Performance, Capacity, and Benchmark Plan"]
+  DOC_SEC["DOC-SEC Security, Privacy, and Threat Model"]
+  DOC_TEST["DOC-TEST Test Strategy and Verification Architecture"]
+  DOC_CICD["DOC-CICD CI/CD, Reproducibility, and Software Supply Chain"]
+  DOC_DOD["DOC-DOD Definition of Done and Release Gate Checklist"]
+  DOC_DEVPLAN["DOC-DEVPLAN Development Plan and Execution Governance"]
+  DOC_RELEASE["DOC-RELEASE Release, Packaging, Installation, Update, and Rollback"]
+  DOC_RISKS["DOC-RISKS Risk Register"]
+  DOC_SPIKES["DOC-SPIKES Risk-First Technical Spikes"]
+  DOC_WBS["DOC-WBS Work Breakdown Structure and Backlog Dependencies"]
+  DOC_DOCGRAPH["DOC-DOCGRAPH Documentation Dependency Graph"]
+  DOC_IMPLGRAPH["DOC-IMPLGRAPH Implementation Dependency Graph"]
+  DOC_TRACEGUIDE["DOC-TRACEGUIDE Traceability Guide"]
+  ADR_0001["ADR-0001 Use a modular monolith with ports and adapters"]
+  ADR_0002["ADR-0002 Use .NET 10 LTS and C# for the Windows-first implementation"]
+  ADR_0003["ADR-0003 Separate scan plans from apply"]
+  ADR_0004["ADR-0004 Use ONNX behind a runtime abstraction"]
+  ADR_0005["ADR-0005 Use face-landmark evidence with calibrated abstention"]
+  ADR_0006["ADR-0006 Use ExifTool behind a persistent metadata adapter"]
+  ADR_0007["ADR-0007 Use lossless JPEG DCT transforms when eligible"]
+  ADR_0008["ADR-0008 Use SQLite for durable job state"]
+  ADR_0009["ADR-0009 Default to safe-copy; guard in-place mode"]
+  ADR_0010["ADR-0010 Version every external automation contract"]
+  ADR_0011["ADR-0011 Do not load arbitrary in-process plugins in v1"]
+  ADR_0012["ADR-0012 Use risk-first gated delivery"]
+  DOC_GOVMODEL --> DOC_CONTRIB
+  DOC_TRACEGUIDE --> DOC_CONTRIB
+  DOC_SOURCES --> DOC_LICENSE
+  DOC_CICD --> DOC_LICENSE
+  DOC_CHARTER --> DOC_MASTER
+  DOC_PRD --> DOC_MASTER
+  DOC_SRS --> DOC_MASTER
+  DOC_ARCH --> DOC_MASTER
+  DOC_ML --> DOC_MASTER
+  DOC_FSSAFE --> DOC_MASTER
+  DOC_DEVPLAN --> DOC_MASTER
+  DOC_TEST --> DOC_MASTER
+  DOC_DEVPLAN --> DOC_STATUS
+  DOC_SPIKES --> DOC_STATUS
+  DOC_WBS --> DOC_STATUS
+  DOC_RESEARCH --> DOC_ASSUMPTIONS
+  DOC_RISKS --> DOC_ASSUMPTIONS
+  DOC_RESEARCH --> DOC_DECISIONS
+  DOC_ARCH --> DOC_DECISIONS
+  DOC_CHARTER --> DOC_WORKFLOWS
+  DOC_RESEARCH --> DOC_CHARTER
+  DOC_CHARTER --> DOC_PRD
+  DOC_WORKFLOWS --> DOC_PRD
+  DOC_SCOPE --> DOC_PRD
+  DOC_CHARTER --> DOC_SCOPE
+  DOC_RESEARCH --> DOC_SCOPE
+  DOC_RESEARCH --> DOC_LANDSCAPE
+  DOC_SOURCES --> DOC_LANDSCAPE
+  DOC_RESEARCH --> DOC_TECH
+  DOC_LANDSCAPE --> DOC_TECH
+  DOC_SOURCES --> DOC_TECH
+  DOC_PRD --> DOC_AC
+  DOC_NFR --> DOC_AC
+  DOC_CHARTER --> DOC_NFR
+  DOC_RESEARCH --> DOC_NFR
+  DOC_PRD --> DOC_SRS
+  DOC_NFR --> DOC_SRS
+  DOC_AC --> DOC_SRS
+  DOC_WORKFLOWS --> DOC_CLI
+  DOC_ARCH --> DOC_CLI
+  DOC_CONFIG --> DOC_CLI
+  DOC_ARCH --> DOC_CONTRACTS
+  DOC_DATAMODEL --> DOC_CONTRACTS
+  DOC_CONFIG --> DOC_CONTRACTS
+  DOC_ARCH --> DOC_CONFIG
+  ADR_0010 --> DOC_CONFIG
+  DOC_ARCH --> DOC_DATAMODEL
+  ADR_0003 --> DOC_DATAMODEL
+  ADR_0008 --> DOC_DATAMODEL
+  DOC_ARCH --> DOC_FSSAFE
+  ADR_0003 --> DOC_FSSAFE
+  ADR_0009 --> DOC_FSSAFE
+  DOC_ARCH --> DOC_METADATA
+  DOC_FSSAFE --> DOC_METADATA
+  ADR_0006 --> DOC_METADATA
+  ADR_0007 --> DOC_METADATA
+  DOC_ARCH --> DOC_ML
+  DOC_RESEARCH --> DOC_ML
+  ADR_0004 --> DOC_ML
+  ADR_0005 --> DOC_ML
+  DOC_ARCH --> DOC_PLUGIN
+  ADR_0011 --> DOC_PLUGIN
+  DOC_ARCH --> DOC_PIPELINE
+  DOC_DATAMODEL --> DOC_PIPELINE
+  DOC_FSSAFE --> DOC_PIPELINE
+  DOC_SRS --> DOC_ARCH
+  DOC_TECH --> DOC_ARCH
+  ADR_0001 --> DOC_ARCH
+  ADR_0002 --> DOC_ARCH
+  DOC_SCOPE --> DOC_COMPAT
+  DOC_FSSAFE --> DOC_COMPAT
+  DOC_METADATA --> DOC_COMPAT
+  DOC_TEST --> DOC_COMPAT
+  DOC_TEST --> DOC_EVAL
+  DOC_ML --> DOC_EVAL
+  DOC_SEC --> DOC_EVAL
+  DOC_CONFIG --> DOC_OBS
+  DOC_DATAMODEL --> DOC_OBS
+  DOC_SEC --> DOC_OBS
+  DOC_TEST --> DOC_PERF
+  DOC_PIPELINE --> DOC_PERF
+  DOC_ARCH --> DOC_SEC
+  DOC_FSSAFE --> DOC_SEC
+  DOC_ML --> DOC_SEC
+  DOC_SRS --> DOC_TEST
+  DOC_ARCH --> DOC_TEST
+  DOC_AC --> DOC_TEST
+  DOC_SEC --> DOC_CICD
+  DOC_TEST --> DOC_CICD
+  DOC_GOVMODEL --> DOC_CICD
+  DOC_DEVPLAN --> DOC_DOD
+  DOC_TEST --> DOC_DOD
+  DOC_RELEASE --> DOC_DOD
+  DOC_SPIKES --> DOC_DEVPLAN
+  DOC_WBS --> DOC_DEVPLAN
+  DOC_RISKS --> DOC_DEVPLAN
+  ADR_0012 --> DOC_DEVPLAN
+  DOC_CICD --> DOC_RELEASE
+  DOC_COMPAT --> DOC_RELEASE
+  DOC_SEC --> DOC_RELEASE
+  DOC_RESEARCH --> DOC_RISKS
+  DOC_CHARTER --> DOC_RISKS
+  DOC_RESEARCH --> DOC_SPIKES
+  DOC_RISKS --> DOC_SPIKES
+  DOC_SPIKES --> DOC_WBS
+  DOC_ARCH --> DOC_WBS
+  DOC_SRS --> DOC_WBS
+  DOC_GOVMODEL --> DOC_DOCGRAPH
+  DOC_SPIKES --> DOC_IMPLGRAPH
+  DOC_WBS --> DOC_IMPLGRAPH
+  DOC_ARCH --> DOC_IMPLGRAPH
+  DOC_GOVMODEL --> DOC_TRACEGUIDE
+  DOC_RESEARCH --> ADR_0001
+  DOC_SRS --> ADR_0001
+  DOC_RESEARCH --> ADR_0002
+  DOC_SRS --> ADR_0002
+  DOC_RESEARCH --> ADR_0003
+  DOC_SRS --> ADR_0003
+  DOC_RESEARCH --> ADR_0004
+  DOC_SRS --> ADR_0004
+  DOC_RESEARCH --> ADR_0005
+  DOC_SRS --> ADR_0005
+  DOC_RESEARCH --> ADR_0006
+  DOC_SRS --> ADR_0006
+  DOC_RESEARCH --> ADR_0007
+  DOC_SRS --> ADR_0007
+  DOC_RESEARCH --> ADR_0008
+  DOC_SRS --> ADR_0008
+  DOC_RESEARCH --> ADR_0009
+  DOC_SRS --> ADR_0009
+  DOC_RESEARCH --> ADR_0010
+  DOC_SRS --> ADR_0010
+  DOC_RESEARCH --> ADR_0011
+  DOC_SRS --> ADR_0011
+  DOC_RESEARCH --> ADR_0012
+  DOC_RISKS --> ADR_0012

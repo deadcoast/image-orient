@@ -1,0 +1,21 @@
+sequenceDiagram
+  participant A as Apply Executor
+  participant J as Job Store / Journal
+  participant F as Filesystem
+  participant T as Transformer
+  participant V as Independent Verifier
+  A->>F: Revalidate source identity/fingerprint
+  A->>F: Create and verify backup
+  A->>F: Create same-directory stage
+  A->>T: Transform pixels + metadata into stage
+  T-->>A: Staged artifact
+  A->>F: Flush and close stage
+  A->>V: Reopen and verify stage
+  V-->>A: VerifiedArtifact
+  A->>J: Commit IntentDurable
+  J-->>A: Durable acknowledgement
+  A->>F: ReplaceFileW / qualified atomic replace
+  F-->>A: Replacement result
+  A->>V: Verify final path
+  V-->>A: Final verification
+  A->>J: Commit completion checkpoint

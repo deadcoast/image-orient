@@ -1,0 +1,148 @@
+flowchart LR
+  SPIKE_001["SPIKE-001 Corpus inventory and truth protocol"]
+  SPIKE_002["SPIKE-002 Four-rotation YuNet orientation proof"]
+  SPIKE_003["SPIKE-003 Inference runtime and provider qualification"]
+  SPIKE_004["SPIKE-004 Metadata round-trip and ExifTool integration"]
+  SPIKE_005["SPIKE-005 JPEG lossless rotation edge policy"]
+  SPIKE_006["SPIKE-006 Crash-safe atomic replace on Windows"]
+  SPIKE_007["SPIKE-007 Format and codec capability matrix"]
+  SPIKE_008["SPIKE-008 Job-store durability and scale"]
+  SPIKE_009["SPIKE-009 CLI contract and automation ergonomics"]
+  SPIKE_010["SPIKE-010 Packaging, signing, and native dependency proof"]
+  WP_001["WP-001 Repository and engineering baseline"]
+  WP_002["WP-002 CLI host and contracts"]
+  WP_003["WP-003 Configuration and schemas"]
+  WP_004["WP-004 Filesystem and identity foundation"]
+  WP_005["WP-005 Metadata and codec adapters"]
+  WP_006["WP-006 Model registry and inference runtime"]
+  WP_007["WP-007 Orientation feature engine"]
+  WP_008["WP-008 Calibration and decision policy"]
+  WP_009["WP-009 Job store and immutable planning"]
+  WP_010["WP-010 Transform engine"]
+  WP_011["WP-011 Bounded execution pipeline"]
+  WP_012["WP-012 Journal, commit, recovery, and undo"]
+  WP_013["WP-013 Independent verification"]
+  WP_014["WP-014 Safe-copy end-to-end mode"]
+  WP_015["WP-015 Guarded in-place end-to-end mode"]
+  WP_016["WP-016 Review workflow"]
+  WP_017["WP-017 Job operations and integrity"]
+  WP_018["WP-018 Operational UX and reporting"]
+  WP_019["WP-019 Security and parser hardening"]
+  WP_020["WP-020 Quality corpus and release calibration"]
+  WP_021["WP-021 Performance and soak qualification"]
+  WP_022["WP-022 Portable distribution"]
+  WP_023["WP-023 Installer, signing, SBOM, and provenance"]
+  WP_024["WP-024 Release candidate and operational handoff"]
+  M0(["M0 Evidence foundation"])
+  M1(["M1 Operational foundations"])
+  M2(["M2 Read-only orientation planner"])
+  M3(["M3 Safe-copy processing"])
+  M4(["M4 Professional operations"])
+  M5(["M5 Quality and hardening"])
+  M6(["M6 Distribution candidate"])
+  M7(["M7 Release candidate"])
+  WP_001 -.-> M0
+  SPIKE_009 --> WP_002
+  WP_001 --> WP_002
+  WP_002 -.-> M1
+  WP_001 --> WP_003
+  WP_003 -.-> M1
+  SPIKE_006 --> WP_004
+  WP_001 --> WP_004
+  WP_004 -.-> M1
+  SPIKE_004 --> WP_005
+  SPIKE_007 --> WP_005
+  WP_004 --> WP_005
+  WP_005 -.-> M1
+  SPIKE_003 --> WP_006
+  WP_001 --> WP_006
+  WP_004 --> WP_006
+  WP_006 -.-> M1
+  SPIKE_001 --> WP_007
+  SPIKE_002 --> WP_007
+  WP_005 --> WP_007
+  WP_006 --> WP_007
+  WP_007 -.-> M2
+  SPIKE_001 --> WP_008
+  SPIKE_002 --> WP_008
+  WP_007 --> WP_008
+  WP_008 -.-> M2
+  SPIKE_008 --> WP_009
+  WP_003 --> WP_009
+  WP_004 --> WP_009
+  WP_007 --> WP_009
+  WP_008 --> WP_009
+  WP_009 -.-> M2
+  SPIKE_004 --> WP_010
+  SPIKE_005 --> WP_010
+  SPIKE_007 --> WP_010
+  WP_005 --> WP_010
+  WP_010 -.-> M3
+  SPIKE_006 --> WP_011
+  SPIKE_008 --> WP_011
+  WP_009 --> WP_011
+  WP_010 --> WP_011
+  WP_011 -.-> M3
+  SPIKE_006 --> WP_012
+  WP_004 --> WP_012
+  WP_009 --> WP_012
+  WP_011 --> WP_012
+  WP_012 -.-> M3
+  WP_005 --> WP_013
+  WP_009 --> WP_013
+  WP_010 --> WP_013
+  WP_013 -.-> M3
+  WP_009 --> WP_014
+  WP_010 --> WP_014
+  WP_011 --> WP_014
+  WP_013 --> WP_014
+  WP_014 -.-> M3
+  WP_012 --> WP_015
+  WP_013 --> WP_015
+  WP_014 --> WP_015
+  WP_015 -.-> M4
+  WP_002 --> WP_016
+  WP_007 --> WP_016
+  WP_008 --> WP_016
+  WP_009 --> WP_016
+  WP_016 -.-> M4
+  WP_002 --> WP_017
+  WP_009 --> WP_017
+  WP_012 --> WP_017
+  WP_017 -.-> M4
+  WP_002 --> WP_018
+  WP_014 --> WP_018
+  WP_016 --> WP_018
+  WP_017 --> WP_018
+  WP_018 -.-> M4
+  WP_004 --> WP_019
+  WP_005 --> WP_019
+  WP_006 --> WP_019
+  WP_009 --> WP_019
+  WP_010 --> WP_019
+  WP_019 -.-> M5
+  SPIKE_001 --> WP_020
+  WP_008 --> WP_020
+  WP_014 --> WP_020
+  WP_015 --> WP_020
+  WP_020 -.-> M5
+  WP_011 --> WP_021
+  WP_014 --> WP_021
+  WP_017 --> WP_021
+  WP_021 -.-> M5
+  SPIKE_003 --> WP_022
+  SPIKE_007 --> WP_022
+  SPIKE_010 --> WP_022
+  WP_018 --> WP_022
+  WP_019 --> WP_022
+  WP_021 --> WP_022
+  WP_022 -.-> M6
+  SPIKE_010 --> WP_023
+  WP_022 --> WP_023
+  WP_023 -.-> M6
+  WP_018 --> WP_024
+  WP_019 --> WP_024
+  WP_020 --> WP_024
+  WP_021 --> WP_024
+  WP_023 --> WP_024
+  WP_024 -.-> M7

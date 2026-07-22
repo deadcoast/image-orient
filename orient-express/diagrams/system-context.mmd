@@ -1,0 +1,10 @@
+flowchart LR
+  U[User / PowerShell / CI] --> CLI[PhotoUpright CLI]
+  CLI --> JOB[(SQLite job + manifest)]
+  CLI --> SRC[(Source photos)]
+  CLI --> OUT[(Corrected output / backups)]
+  CLI --> META[ExifTool adapter]
+  CLI --> CODEC[JPEG/raster adapters]
+  CLI --> ML[ONNX inference adapter]
+  ML --> MODEL[Verified model bundle]
+  CLI --> REPORT[Human + JSON/JSONL reports]

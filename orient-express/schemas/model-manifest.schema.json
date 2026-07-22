@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.photoupright.local/v1/model-manifest.schema.json",
+  "title": "PhotoUpright Model Bundle Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "modelId",
+    "version",
+    "artifact",
+    "task",
+    "inputs",
+    "outputs",
+    "preprocessing",
+    "postprocessing",
+    "compatibility",
+    "provenance",
+    "license"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "modelId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]{3,100}$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task": {
+      "type": "string",
+      "enum": [
+        "face-detection-five-landmarks",
+        "scene-orientation-four-way"
+      ]
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "sha256",
+        "bytes",
+        "format"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^[^/\\\\]+\\.onnx$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "format": {
+          "const": "onnx"
+        }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/tensor"
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/tensor"
+      }
+    },
+    "preprocessing": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "colorOrder",
+        "resize"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "colorOrder": {
+          "type": "string",
+          "enum": [
+            "RGB",
+            "BGR"
+          ]
+        },
+        "resize": {
+          "type": "string",
+          "enum": [
+            "stretch",
+            "letterbox",
+            "dynamic-shape"
+          ]
+        },
+        "normalization": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "postprocessing": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "appVersion",
+        "runtimeApi"
+      ],
+      "properties": {
+        "appVersion": {
+          "type": "string"
+        },
+        "runtimeApi": {
+          "type": "string"
+        },
+        "allowedProviders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "requiredOperatorsProfile": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "calibration": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "retrievedUtc"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "format": "uri"
+        },
+        "retrievedUtc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sourceRevision": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "trainingDescription": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expression",
+        "noticeFile"
+      ],
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "noticeFile": {
+          "type": "string"
+        },
+        "redistributionApproved": {
+          "type": "boolean"
+        }
+      }
+    },
+    "signature": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "tensor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "dtype",
+        "shape"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "dtype": {
+          "type": "string",
+          "enum": [
+            "float32",
+            "float16",
+            "int8",
+            "uint8",
+            "int64"
+          ]
+        },
+        "shape": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": [
+              "integer",
+              "string"
+            ],
+            "minimum": -1
+          }
+        }
+      }
+    }
+  }
+}
