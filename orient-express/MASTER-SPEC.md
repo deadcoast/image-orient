@@ -1,6 +1,6 @@
 ---
 document_id: DOC-MASTER
-title: PhotoUpright Master Development Specification
+title: orient-express Master Development Specification
 version: 0.1.0
 status: baseline
 as_of: 2026-07-21
@@ -13,7 +13,7 @@ traces_to: [GOAL-001, GOAL-002, GOAL-003, GOAL-004, GOAL-005, GOAL-006, GOAL-007
 
 ## Mission
 
-PhotoUpright will inspect large Windows photo collections, determine the intended **upright display orientation**, and safely normalize files or route ambiguous cases to review. The product is optimized for selfie-heavy libraries but must remain honest about no-face, multi-face, artistic, damaged, unsupported, and low-confidence images.
+orient-express will inspect large Windows photo collections, determine the intended **upright display orientation**, and safely normalize files or route ambiguous cases to review. The product is optimized for selfie-heavy libraries but must remain honest about no-face, multi-face, artistic, damaged, unsupported, and low-confidence images.
 
 The target is not a simplistic width-versus-height classifier. A stored JPEG may be landscape-shaped while metadata requests a portrait display; EXIF can also encode mirrored transforms. The system therefore models:
 

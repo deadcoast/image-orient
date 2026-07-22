@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "package": "PhotoUpright dev-spec",
+  "package": "orient-express dev-spec",
   "version": "0.1.0",
   "as_of": "2026-07-21",
   "document_count": 59,
@@ -46,7 +46,7 @@
     },
     {
       "document_id": "DOC-MASTER",
-      "title": "PhotoUpright Master Development Specification",
+      "title": "orient-express Master Development Specification",
       "version": "0.1.0",
       "status": "baseline",
       "as_of": "2026-07-21",
@@ -75,7 +75,7 @@
     },
     {
       "document_id": "DOC-INDEX",
-      "title": "PhotoUpright Development Specification Index",
+      "title": "orient-express Development Specification Index",
       "version": "0.1.0",
       "status": "baseline",
       "as_of": "2026-07-21",
@@ -95,7 +95,7 @@
     },
     {
       "document_id": "DOC-STATUS",
-      "title": "PhotoUpright Planning Status",
+      "title": "orient-express Planning Status",
       "version": "0.1.0",
       "status": "baseline",
       "as_of": "2026-07-21",

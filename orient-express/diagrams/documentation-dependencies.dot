@@ -8,9 +8,9 @@ digraph DocumentationDependencies {
     "DOC-CHANGELOG" [label="DOC-CHANGELOG\nDevelopment Specification Changelog", fillcolor="#f3f4f6"];
     "DOC-CONTRIB" [label="DOC-CONTRIB\nContributing to the Development Specification", fillcolor="#f3f4f6"];
     "DOC-LICENSE" [label="DOC-LICENSE\nLicensing and Third-Party Notice Plan", fillcolor="#f3f4f6"];
-    "DOC-MASTER" [label="DOC-MASTER\nPhotoUpright Master Development Specification", fillcolor="#f3f4f6"];
-    "DOC-INDEX" [label="DOC-INDEX\nPhotoUpright Development Specification Index", fillcolor="#f3f4f6"];
-    "DOC-STATUS" [label="DOC-STATUS\nPhotoUpright Planning Status", fillcolor="#f3f4f6"];
+    "DOC-MASTER" [label="DOC-MASTER\norient-express Master Development Specification", fillcolor="#f3f4f6"];
+    "DOC-INDEX" [label="DOC-INDEX\norient-express Development Specification Index", fillcolor="#f3f4f6"];
+    "DOC-STATUS" [label="DOC-STATUS\norient-express Planning Status", fillcolor="#f3f4f6"];
   }
   subgraph cluster_00_governance {
     label="Governance";

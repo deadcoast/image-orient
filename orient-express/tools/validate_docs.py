@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the PhotoUpright dev-spec as an executable documentation set."""
+"""Validate the orient-express dev-spec as an executable documentation set."""
 from __future__ import annotations
 
 import argparse
@@ -301,7 +301,7 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(args.root).resolve()
     errors, stats = validate(root)
-    print("PhotoUpright dev-spec validation")
+    print("orient-express dev-spec validation")
     for key in sorted(stats):
         print(f"  {key}: {stats[key]}")
     if errors:

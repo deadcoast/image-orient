@@ -2813,14 +2813,14 @@ The critical architectural position is now formalized: models and ComfyUI are re
 
 alright, whast next for planning the design in documentation? spec-doc? requirements-doc linking their dependencies together? a dependency graph to help the documentation stay contextual and relevant? Thats ONLY for docuementation. THERE IS STILL MUCH TO DO ON PLANNING THE ACTUAL DEVELOPMENT~! YOUR IN CHANRGE. WHATS NEXT! APPROVED TO CONTINUE.
 Worked for 65m 46s
-PhotoUpright planning baseline is complete
+orient-express planning baseline is complete
 
 The project now has a repository-ready development specification package, not a single oversized requirements document. It connects product goals, normative requirements, architecture, implementation work, tests, risks, evidence gates, and release milestones through machine-readable identifiers and dependency edges.
 
 This is version 0.1.0 of the planning baseline. It does not claim the application source code has been implemented.
 
 Deliverables
-Download the complete PhotoUpright dev-spec package
+Download the complete orient-express dev-spec package
 Download the archive SHA-256 file
 README.md
 MASTER-SPEC.md

@@ -17,7 +17,7 @@ Large photo libraries frequently contain files whose stored pixels or orientatio
 
 ## Product promise
 
-PhotoUpright will make orientation cleanup safe enough to automate and transparent enough to trust:
+orient-express will make orientation cleanup safe enough to automate and transparent enough to trust:
 
 - inspect before changing;
 - infer upright orientation locally;

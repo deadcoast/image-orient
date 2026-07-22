@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.photoupright.local/v1/model-manifest.schema.json",
-  "title": "PhotoUpright Model Bundle Manifest",
+  "$id": "https://schemas.orient-express.local/v1/model-manifest.schema.json",
+  "title": "orient-express Model Bundle Manifest",
   "type": "object",
   "additionalProperties": false,
   "required": [

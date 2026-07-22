@@ -13,7 +13,7 @@ traces_to: [COMP-CLI, COMP-CONFIG, COMP-CAPABILITIES, COMP-DISCOVERY, COMP-METAD
 
 ## Architectural style
 
-PhotoUpright is a **Windows-first modular monolith**: one deployable CLI process with strongly separated domain, application, infrastructure, and presentation layers. Native executables/libraries may run in-process or as supervised child processes, but they are integrations rather than architectural authorities.
+orient-express is a **Windows-first modular monolith**: one deployable CLI process with strongly separated domain, application, infrastructure, and presentation layers. Native executables/libraries may run in-process or as supervised child processes, but they are integrations rather than architectural authorities.
 
 This shape minimizes installation and operational complexity while supporting replacement of uncertain technology choices after spikes.
 
@@ -21,7 +21,7 @@ This shape minimizes installation and operational complexity while supporting re
 
 ```mermaid
 flowchart LR
-    User[User / PowerShell / automation] --> CLI[PhotoUpright CLI]
+    User[User / PowerShell / automation] --> CLI[orient-express CLI]
     CLI --> FS[(Photo files and output roots)]
     CLI --> Job[(Job directory + SQLite)]
     CLI --> Tools[Bundled native tools/codecs]
@@ -120,24 +120,24 @@ System.CommandLine command tree, human renderer, JSON/JSONL serializer, PowerShe
 
 ```text
 src/
-  PhotoUpright.Cli/
-  PhotoUpright.Application/
-  PhotoUpright.Domain/
-  PhotoUpright.Contracts/
-  PhotoUpright.Infrastructure.Windows/
-  PhotoUpright.Infrastructure.Sqlite/
-  PhotoUpright.Infrastructure.Metadata.ExifTool/
-  PhotoUpright.Infrastructure.Imaging/
-  PhotoUpright.Infrastructure.Inference/
+  orient-express.Cli/
+  orient-express.Application/
+  orient-express.Domain/
+  orient-express.Contracts/
+  orient-express.Infrastructure.Windows/
+  orient-express.Infrastructure.Sqlite/
+  orient-express.Infrastructure.Metadata.ExifTool/
+  orient-express.Infrastructure.Imaging/
+  orient-express.Infrastructure.Inference/
 tests/
-  PhotoUpright.UnitTests/
-  PhotoUpright.ContractTests/
-  PhotoUpright.IntegrationTests/
-  PhotoUpright.MediaGoldenTests/
-  PhotoUpright.FilesystemFaultTests/
-  PhotoUpright.CliGoldenTests/
-  PhotoUpright.ArchitectureTests/
-  PhotoUpright.EndToEndTests/
+  orient-express.UnitTests/
+  orient-express.ContractTests/
+  orient-express.IntegrationTests/
+  orient-express.MediaGoldenTests/
+  orient-express.FilesystemFaultTests/
+  orient-express.CliGoldenTests/
+  orient-express.ArchitectureTests/
+  orient-express.EndToEndTests/
 tools/
   corpus/
   evaluation/

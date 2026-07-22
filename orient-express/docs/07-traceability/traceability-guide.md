@@ -13,7 +13,7 @@ traces_to: [GOAL-004, GOAL-007]
 
 ## Why a graph, not a single specification
 
-A large design becomes stale when decisions, requirements, code work, and tests are copied into disconnected documents. PhotoUpright uses stable IDs and two related graphs:
+A large design becomes stale when decisions, requirements, code work, and tests are copied into disconnected documents. orient-express uses stable IDs and two related graphs:
 
 - **Documentation dependency graph:** which document must be read/updated before another.
 - **Implementation dependency graph:** which spike/component/work package must exist or pass before another.

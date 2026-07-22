@@ -13,7 +13,7 @@ traces_to: [NFR-SEC-003, NFR-MAINT-001]
 
 ## v1 policy
 
-PhotoUpright will not load arbitrary third-party assemblies or native DLLs into the CLI process. The image parser/native/tool attack surface and the destructive nature of file operations make an unrestricted plugin system unjustified for v1.
+orient-express will not load arbitrary third-party assemblies or native DLLs into the CLI process. The image parser/native/tool attack surface and the destructive nature of file operations make an unrestricted plugin system unjustified for v1.
 
 ## Extensibility built into the core
 

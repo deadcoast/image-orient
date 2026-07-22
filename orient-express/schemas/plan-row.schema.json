@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.photoupright.local/v1/plan-row.schema.json",
-  "title": "PhotoUpright Sealed Plan Row",
+  "$id": "https://schemas.orient-express.local/v1/plan-row.schema.json",
+  "title": "orient-express Sealed Plan Row",
   "type": "object",
   "additionalProperties": false,
   "required": [

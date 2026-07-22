@@ -1,6 +1,6 @@
 ---
 document_id: DOC-INDEX
-title: PhotoUpright Development Specification Index
+title: orient-express Development Specification Index
 version: 0.1.0
 status: baseline
 as_of: 2026-07-21
@@ -9,14 +9,14 @@ depends_on: []
 traces_to: [GOAL-001, GOAL-002, GOAL-003, GOAL-004, GOAL-005, GOAL-006, GOAL-007, GOAL-008]
 ---
 
-# PhotoUpright development specification
+# orient-express development specification
 
 **Baseline:** 0.1.0  
 **As of:** 2026-07-21  
 **Product:** Windows-first, offline, professional CLI for automatic upright photo orientation  
 **Provisional executable:** `upright`
 
-This repository is the authoritative planning baseline for developing PhotoUpright. It deliberately separates product intent, normative requirements, architecture, verification, delivery, and evidence. Source code is **not** represented as complete by this package.
+This repository is the authoritative planning baseline for developing orient-express. It deliberately separates product intent, normative requirements, architecture, verification, delivery, and evidence. Source code is **not** represented as complete by this package.
 
 ## Start here
 

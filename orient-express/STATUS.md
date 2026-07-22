@@ -1,6 +1,6 @@
 ---
 document_id: DOC-STATUS
-title: PhotoUpright Planning Status
+title: orient-express Planning Status
 version: 0.1.0
 status: baseline
 as_of: 2026-07-21

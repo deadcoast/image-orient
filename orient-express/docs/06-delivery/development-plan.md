@@ -13,7 +13,7 @@ traces_to: [M0, M1, M2, M3, M4, M5, M6, M7, WP-001, WP-002, WP-003, WP-004, WP-0
 
 ## Delivery strategy
 
-PhotoUpright uses **risk-first, evidence-gated incremental delivery**. The team does not build the full CLI around unproven ML, metadata, JPEG, and filesystem assumptions. Each milestone leaves a usable vertical slice and a reproducible evidence pack.
+orient-express uses **risk-first, evidence-gated incremental delivery**. The team does not build the full CLI around unproven ML, metadata, JPEG, and filesystem assumptions. Each milestone leaves a usable vertical slice and a reproducible evidence pack.
 
 ## Critical path
 

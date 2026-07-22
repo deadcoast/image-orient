@@ -30,7 +30,7 @@ Baseline release set:
 ## Directory layout
 
 ```text
-PhotoUpright/
+orient-express/
   upright.exe
   *.dll
   runtimes/

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.photoupright.local/v1/capability-report.schema.json",
-  "title": "PhotoUpright Capability Report",
+  "$id": "https://schemas.orient-express.local/v1/capability-report.schema.json",
+  "title": "orient-express Capability Report",
   "type": "object",
   "additionalProperties": false,
   "required": [

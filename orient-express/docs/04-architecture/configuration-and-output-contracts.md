@@ -18,7 +18,7 @@ Highest wins:
 1. CLI option.
 2. Environment variable `UPRIGHT_*`.
 3. Explicit `--config`.
-4. User config `%APPDATA%\PhotoUpright\config.json`.
+4. User config `%APPDATA%\orient-express\config.json`.
 5. Built-in defaults.
 
 Job plans store the normalized effective configuration relevant to decisions and mutation, plus its digest. Apply uses the sealed configuration; ordinary CLI options cannot silently replace it.
