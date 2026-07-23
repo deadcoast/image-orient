@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.8
+version: 0.1.9
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,18 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.9 — 2026-07-23
+
+WP-004 filesystem and identity foundation (implemented):
+
+- Context packet at `planning/context-packets/WP-004-context-packet.md`.
+- `OrientExpress.Contracts`: DOC-COMPONENTS `Result<T>`/`ErrorInfo` common model; `NormalizedPath` (display + extended-length forms, NFR-COMP-002), `FileFingerprint` (standard/strong per DOC-DATAMODEL), `FileSnapshot`, `SnapshotComparison`, `FilesystemCapability` with NFR-COMP-001 classes.
+- `OrientExpress.Application`: `IFileIdentityService`/`IAtomicFileOperations`/`IVolumeCapabilityProbe` ports plus pure `PathCanonicalizer` and `StagePathPlanner` (same-directory, unpredictable, exclusive-create).
+- `OrientExpress.Infrastructure.Windows`: handle-based identity capture with drift comparison (`SIZE/LAST_WRITE/CONTENT_PREFIX/CONTENT/FILE_ID/VOLUME_CHANGED`, `MISSING`); reparse points and cloud placeholders policy-refused, never traversed or hydrated; SPIKE-006-qualified `ReplaceFileW(WRITE_THROUGH)` and create-path `MoveFileEx` (no overwrite flag — `DESTINATION_EXISTS` is typed) with actionable error classes; volume capability probe via DeleteOnClose handle; hardlink helper for alias handling.
+- `upright doctor --probe-target <dir>`: live volume/identity/atomic-replace/create-path probes on an operator-named directory with guaranteed cleanup; the atomic probe demonstrates the SPIKE-006 file-id re-baseline. Doctor capability truth-telling updated (configuration and filesystem-identity now available).
+- Tests: 15 real-NTFS integration tests (identity stability, hardlink aliases, prefix-digest drift with preserved size+timestamp, >280-char Unicode paths, locked/missing/reparse cases; symlink test skips without developer mode) plus 3 new CLI golden tests.
+- Affected IDs: WP-004, PRD-FR-001 (identity portion), PRD-FR-010 (primitives portion), NFR-COMP-001, NFR-COMP-002, SPIKE-006 (consequences productionized), COMP-FILESYSTEM, COMP-NATIVE, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema or migration impact.
 
 ## 0.1.8 — 2026-07-23
 

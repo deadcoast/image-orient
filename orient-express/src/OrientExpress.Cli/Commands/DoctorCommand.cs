@@ -17,11 +17,28 @@ public static class DoctorCommand
 {
     private const string NotImplemented = "NOT_YET_IMPLEMENTED";
 
-    public static int Run(OutputContext context, CancellationToken cancellationToken)
+    public static int Run(OutputContext context, string? probeTarget, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(context);
         cancellationToken.ThrowIfCancellationRequested();
         var report = BuildReport();
+        if (probeTarget is not null)
+        {
+            if (!Directory.Exists(probeTarget))
+            {
+                context.WriteError(
+                    CliExitCode.InvalidArgument,
+                    "PROBE_TARGET_NOT_FOUND",
+                    $"probe target '{probeTarget}' is not an existing directory",
+                    "pass an existing directory you own");
+                return (int)CliExitCode.InvalidArgument;
+            }
+
+            report = report with
+            {
+                Components = [.. report.Components, .. FilesystemProbe.Run(probeTarget, cancellationToken)],
+            };
+        }
 
         if (context.Format == OutputFormat.Json)
         {
@@ -97,8 +114,8 @@ public static class DoctorCommand
             Components =
             [
                 new ComponentCapability { Id = "cli-host", Available = true, Status = "implemented (WP-002)", Version = VersionCommand.ToolVersion },
-                new ComponentCapability { Id = "configuration", Available = false, Status = "gated: WP-003" },
-                new ComponentCapability { Id = "filesystem-identity", Available = false, Status = "gated: WP-004 (SPIKE-006 evidence recorded)" },
+                new ComponentCapability { Id = "configuration", Available = true, Status = "implemented (WP-003)" },
+                new ComponentCapability { Id = "filesystem-identity", Available = true, Status = "implemented (WP-004); guarded execution gated (WP-012/WP-015)" },
                 new ComponentCapability { Id = "metadata-exiftool", Available = false, Status = "gated: SPIKE-004 + WP-005" },
                 new ComponentCapability { Id = "codecs", Available = false, Status = "gated: SPIKE-007 + WP-005" },
                 new ComponentCapability { Id = "inference-runtime", Available = false, Status = "gated: SPIKE-003 + WP-006" },
