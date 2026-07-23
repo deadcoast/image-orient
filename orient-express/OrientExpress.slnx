@@ -15,6 +15,8 @@
     <Project Path="tests/OrientExpress.UnitTests/OrientExpress.UnitTests.csproj" />
   </Folder>
   <Folder Name="/spikes/">
+    <Project Path="spikes/SPIKE-001-corpus/OrientExpress.Spike001/OrientExpress.Spike001.csproj" />
+    <Project Path="spikes/SPIKE-001-corpus/OrientExpress.Spike001.Tests/OrientExpress.Spike001.Tests.csproj" />
     <Project Path="spikes/SPIKE-006-atomic-replace/OrientExpress.Spike006/OrientExpress.Spike006.csproj" />
     <Project Path="spikes/SPIKE-006-atomic-replace/OrientExpress.Spike006.Tests/OrientExpress.Spike006.Tests.csproj" />
     <Project Path="spikes/SPIKE-008-job-store/OrientExpress.Spike008/OrientExpress.Spike008.csproj" />

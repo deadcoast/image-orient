@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- SPIKE-001 corpus tooling (DOC-SPIKES): opt-in, read-only inventory
+         scanner. Aggregates only by default; no image is copied or modified. -->
+    <AssemblyName>spike001</AssemblyName>
+    <RootNamespace>OrientExpress.Spike001</RootNamespace>
+  </PropertyGroup>
+
+</Project>
