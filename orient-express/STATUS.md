@@ -1,9 +1,9 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.1
+version: 0.1.2
 status: baseline
-as_of: 2026-07-22
+as_of: 2026-07-23
 owner: Program
 depends_on: [DOC-DEVPLAN, DOC-SPIKES, DOC-WBS]
 traces_to: []
@@ -14,6 +14,8 @@ traces_to: []
 ## Current state
 
 The project is at **engineering baseline / pre-implementation**. Product intent, requirements, architecture, risk model, technical spikes, work packages, milestones, draft schemas, and traceability structure are defined. WP-001 is implemented pending CI verification and review: the `OrientExpress` solution and project boundaries exist with architecture conformance tests (NFR-MAINT-001), analyzers/formatting/warnings-as-errors, deterministic pinned builds with locked packages, and a CI pipeline that gates documentation, build, style, and tests. No production feature code or measured accuracy claim is represented as complete.
+
+SPIKE-006 has a recorded NTFS pilot evidence pack ([report](spikes/SPIKE-006-atomic-replace/report.md)): the DOC-FSSAFE recovery state machine is proven by unit tests and a twelve-case crash fault matrix with zero source-loss cases, and the atomic primitives are measured (notably: `ReplaceFileW` preserves creation time, attributes, ADS, and DACL, but not the NTFS file ID). The spike stays open pending cross-domain review, non-NTFS capability classes, and undo-path evidence; in-place mode remains blocked.
 
 ## Approved to begin
 
@@ -31,7 +33,7 @@ The project is at **engineering baseline / pre-implementation**. Product intent,
 | Selected inference provider | SPIKE-003 report and ADR update |
 | Metadata guarantee language | SPIKE-004 round-trip matrix |
 | Default JPEG edge policy | SPIKE-005 report |
-| In-place mode | SPIKE-006 plus fault-injection evidence |
+| In-place mode | SPIKE-006 review sign-off plus non-NTFS capability classes and undo-path evidence (NTFS pilot fault matrix recorded 2026-07-23) |
 | HEIC/AVIF claims | SPIKE-007 capability matrix |
 | Final job-store settings | SPIKE-008 scale/durability report |
 | Frozen CLI v1 contract | SPIKE-009 usability/automation evidence |

@@ -1,15 +1,26 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.1
+version: 0.1.2
 status: baseline
-as_of: 2026-07-22
+as_of: 2026-07-23
 owner: Architecture
 depends_on: []
 traces_to: []
 ---
 
 # Changelog
+
+## 0.1.2 — 2026-07-23
+
+SPIKE-006 NTFS pilot evidence (crash-safe atomic replace):
+
+- Added the SPIKE-006 decision harness under `spikes/SPIKE-006-atomic-replace/` (`OrientExpress.Spike006` plus its test project, registered in the solution): the DOC-FSSAFE in-place protocol with a durable JSON-lines journal, kernel-level crash injection at every step boundary, the recovery state machine, and primitive qualification of `ReplaceFileW`/`MoveFileEx`.
+- Encoded the recovery state machine test-first: 31 unit tests, including matrix rows, torn-journal tolerance, and totality over the observation space, run in CI with the solution.
+- Recorded machine-readable evidence (24 scenarios): all twelve fault-injection cases recover per the DOC-FSSAFE matrix with zero source-loss cases and idempotent re-recovery; `ReplaceFileW` preserves creation time, attributes, alternate data streams, and DACL but **not** the NTFS file ID; `MoveFileEx` replace loses creation time, ADS, and identity; sharing/read-only/missing-target error classes measured; cross-volume rejection stays capability-gated (single-volume machine).
+- Recorded the WP-004 design consequence: handle-based identity must re-baseline after commit because the file ID does not survive `ReplaceFileW`.
+- Updated the spike register (SPIKE-006 → evidence-recorded-pending-review) and STATUS; in-place mode remains blocked pending review sign-off, non-NTFS capability classes, and undo-path evidence.
+- Affected IDs: SPIKE-006, RISK-005, ADR-0009 (evidence pending review), WP-004, WP-011, WP-012, WP-015, DOC-FSSAFE (reviewed follow-up), DOC-STATUS, DOC-CHANGELOG. No schema or migration impact; no new package dependencies (NFR-SEC-002 unchanged).
 
 ## 0.1.1 — 2026-07-22
 
