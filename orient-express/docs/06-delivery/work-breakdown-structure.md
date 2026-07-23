@@ -1,9 +1,9 @@
 ---
 document_id: DOC-WBS
 title: Work Breakdown Structure and Backlog Dependencies
-version: 0.1.0
+version: 0.1.1
 status: baseline
-as_of: 2026-07-21
+as_of: 2026-07-23
 owner: Program
 depends_on: [DOC-SPIKES, DOC-ARCH, DOC-SRS]
 traces_to: [WP-001, WP-002, WP-003, WP-004, WP-005, WP-006, WP-007, WP-008, WP-009, WP-010, WP-011, WP-012, WP-013, WP-014, WP-015, WP-016, WP-017, WP-018, WP-019, WP-020, WP-021, WP-022, WP-023, WP-024]
@@ -39,6 +39,20 @@ Work packages are vertical outcomes, not folders or generic engineering activiti
 | WP-022 | M6 | Portable distribution | SPIKE-003;SPIKE-007;SPIKE-010;WP-018;WP-019;WP-021 | Self-contained win-x64 zip; native/model inventory; clean-VM qualification; update/rollback docs | NFR-COMP-001;NFR-SEC-002 | COMP-CAPABILITIES;COMP-MODELS |
 | WP-023 | M6 | Installer, signing, SBOM, and provenance | SPIKE-010;WP-022 | Signed installer; uninstaller; SBOM; checksums; provenance attestations; license notices | NFR-SEC-002;NFR-MAINT-002 | — |
 | WP-024 | M7 | Release candidate and operational handoff | WP-018;WP-019;WP-020;WP-021;WP-023 | RC gates; compatibility report; support/runbooks; rollback drill; release notes | GOAL-001;GOAL-002;GOAL-003;GOAL-004;GOAL-005;GOAL-006;GOAL-007;GOAL-008 | — |
+
+## Spike-driven design notes
+
+- **WP-004 (from SPIKE-006):** the NTFS file ID does not survive `ReplaceFileW`;
+  identity components must re-baseline file identity after every in-place
+  commit and must not key plans or journals on the file ID across a commit.
+  Sharing-violation (32) and access-denied (5) are actionable stop/retry
+  classes; read-only sources need an explicit precondition before in-place is
+  offered. See the [SPIKE-006 report](../../spikes/SPIKE-006-atomic-replace/report.md).
+- **WP-011 / WP-012 / WP-015 (from SPIKE-006):** the journal checkpoint set
+  (`IntentDurable`, `Committed`, `Finalized`), torn-line tolerance, and the
+  recovery decision table are proven on NTFS and should be carried into the
+  production journal design unchanged; `MoveFileEx` replace is disqualified
+  for in-place commits.
 
 ## Sizing and decomposition rule
 

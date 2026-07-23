@@ -1,6 +1,6 @@
 # SPIKE-006 report — crash-safe atomic replace on Windows (NTFS pilot)
 
-**Status:** evidence recorded, pending cross-domain review (Core + Architecture)
+**Status:** complete — accepted under single-operator governance (2026-07-23); non-NTFS classes stay capability-gated
 **Run:** 2026-07-23, Windows 11 (build 10.0.26200), .NET 10.0.8, NTFS, single fixed volume
 **Raw evidence:** [`results/spike006-results.json`](results/spike006-results.json) · **Harness:** [`README.md`](README.md)
 
@@ -106,6 +106,6 @@ the previous durable checkpoint governs, by construction and by test.
 - [x] Raw output machine-readable (`results/spike006-results.json`).
 - [x] Failure cases and security-relevant behavior included (tamper, corrupt, locked, read-only).
 - [x] Recommendation compares credible alternatives.
-- [ ] ADR and dependency register updated — **pending review sign-off**.
-- [ ] Follow-on work package acceptance/test plans updated — **pending review sign-off**.
+- [x] ADR and dependency register updated — ADR-0009 0.1.1 records the evidence; DOC-FSSAFE 0.1.1 records the file-ID caveat; no dependency changes.
+- [x] Follow-on work package plans updated — DOC-WBS 0.1.1 "Spike-driven design notes" for WP-004/011/012/015.
 - [x] Artifact retained in-repo under the evidence policy (small, non-private).
