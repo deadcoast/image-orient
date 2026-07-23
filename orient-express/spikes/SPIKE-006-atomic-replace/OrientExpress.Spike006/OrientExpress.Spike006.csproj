@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- SPIKE-006 decision harness (DOC-SPIKES): evidence generator, not production code.
+         Lives outside src/ so DOC-ARCH layer rules keep applying to the product tree. -->
+    <AssemblyName>spike006</AssemblyName>
+    <RootNamespace>OrientExpress.Spike006</RootNamespace>
+    <!-- LibraryImport-generated marshalling stubs require unsafe blocks. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+</Project>

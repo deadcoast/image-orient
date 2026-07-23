@@ -1,0 +1,498 @@
+{
+  "Spike": "SPIKE-006",
+  "Environment": {
+    "OsDescription": "Microsoft Windows 10.0.26200",
+    "OsVersion": "Microsoft Windows NT 10.0.26200.0",
+    "Framework": ".NET 10.0.8",
+    "ProcessArchitecture": "X64",
+    "VolumeFileSystem": "NTFS",
+    "VolumeSerialHex": "ea058835",
+    "HarnessVersion": "0.1.0",
+    "FixturePolicy": "synthetic deterministic fixtures derived from scenario ids; no user photos (SPIKE-001 consent rules)",
+    "RunUtc": "2026-07-23T14:35:46.9790707\u002B00:00"
+  },
+  "Scenarios": [
+    {
+      "Id": "P-REPLACE-BASIC",
+      "Category": "primitive",
+      "Description": "ReplaceFileW swaps content atomically and consumes the replacement file",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "replacement_consumed": "true",
+        "target_has_expected_content": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-REPLACE-BACKUP-PARAM",
+      "Category": "primitive",
+      "Description": "lpBackupFileName receives the original content",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "api_backup_holds_original": "true",
+        "replace_succeeded": "true",
+        "target_has_expected_content": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-REPLACE-PRESERVATION",
+      "Category": "primitive",
+      "Description": "measured retention of creation time, attributes, and file identity across ReplaceFileW",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "creation_time_after": "2020-01-02T03:04:05.0000000Z",
+        "creation_time_preserved": "true",
+        "file_id_after": "ea058835:00070000002db9c1:links=1",
+        "file_id_before": "ea058835:00060000002db957:links=1",
+        "file_id_preserved": "false",
+        "hidden_attribute_preserved": "true",
+        "last_write_time_from_replacement": "true",
+        "target_has_expected_content": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-REPLACE-ADS",
+      "Category": "primitive",
+      "Description": "measured retention of a named alternate data stream on the replaced file",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "ads_payload_intact": "true",
+        "ads_preserved": "true",
+        "target_has_expected_content": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-REPLACE-DACL",
+      "Category": "primitive",
+      "Description": "measured retention of an explicit DACL entry across ReplaceFileW",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "dacl_sddl_after_sha256": "1a1eb590c7839b868394d32d9a7314a0eb468ed614c86a50abd06b767640068f",
+        "dacl_sddl_before_sha256": "1a1eb590c7839b868394d32d9a7314a0eb468ed614c86a50abd06b767640068f",
+        "dacl_sddl_unchanged": "true",
+        "explicit_ace_in_before_sddl": "true",
+        "explicit_ace_preserved": "true",
+        "target_has_expected_content": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-REPLACE-SHARE-DENIED",
+      "Category": "primitive",
+      "Description": "an open handle without delete sharing must block ReplaceFileW and leave the target untouched",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "error_is_sharing_or_replacement_class": "true",
+        "replace_rejected": "true",
+        "replacement_preserved": "true",
+        "target_unchanged": "true",
+        "win32_error": "32"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-REPLACE-SHARE-FULL",
+      "Category": "primitive",
+      "Description": "measured behavior when the target is open with read/write/delete sharing",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "content_is_original_or_expected": "true",
+        "replace_succeeded": "true",
+        "win32_error": "0"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-REPLACE-READONLY",
+      "Category": "primitive",
+      "Description": "measured behavior against a read-only target",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "content_is_original_or_expected": "true",
+        "replace_succeeded": "false",
+        "win32_error": "5"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-REPLACE-MISSING-TARGET",
+      "Category": "primitive",
+      "Description": "ReplaceFileW requires an existing target; MoveFileEx(write-through) is the create-path fallback",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "error_is_file_not_found": "true",
+        "movefileex_fallback_succeeded": "true",
+        "replace_rejected": "true",
+        "target_has_expected_content": "true",
+        "win32_error": "2"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-MOVEFILEEX-COMPARISON",
+      "Category": "primitive",
+      "Description": "MoveFileEx(REPLACE_EXISTING) comparison: what the alternative primitive fails to preserve",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "ads_preserved": "false",
+        "creation_time_preserved": "false",
+        "file_id_preserved": "false",
+        "movefileex_succeeded": "true",
+        "target_has_expected_content": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "P-REPLACE-CROSS-VOLUME",
+      "Category": "primitive",
+      "Description": "same-volume staging is mandatory: ReplaceFileW must reject a cross-volume replacement",
+      "Outcome": "skipped",
+      "SourceSafetyHeld": true,
+      "Measurements": {},
+      "Error": "no second fixed volume on this machine; cross-volume rejection stays capability-gated (DOC-FSSAFE)"
+    },
+    {
+      "Id": "P-DIR-FLUSH",
+      "Category": "primitive",
+      "Description": "directory-handle FlushFileBuffers support on this volume",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "directory_flush_succeeded": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-BASELINE",
+      "Category": "fault-injection",
+      "Description": "no fault: protocol completes; post-run recovery is a terminal no-op",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "0",
+        "final_source_class": "expected",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "Finalized",
+        "observed_source": "ExpectedOutput",
+        "observed_stage": "Missing",
+        "original_content_recoverable": "true",
+        "recovery_action": "FinalizeIdempotent",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "already finalized; no action",
+        "second_recovery_action": "FinalizeIdempotent",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-AFTER-BACKUP",
+      "Category": "fault-injection",
+      "Description": "crash after verified backup, before staging",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "original",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "None",
+        "observed_source": "Original",
+        "observed_stage": "Missing",
+        "original_content_recoverable": "true",
+        "recovery_action": "QuarantineStageSourceAuthoritative",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "no stage remnant; source authoritative",
+        "second_recovery_action": "QuarantineStageSourceAuthoritative",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-AFTER-STAGE-CREATED",
+      "Category": "fault-injection",
+      "Description": "crash right after exclusive stage creation (stage empty)",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "original",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "None",
+        "observed_source": "Original",
+        "observed_stage": "Corrupt",
+        "original_content_recoverable": "true",
+        "recovery_action": "QuarantineStageSourceAuthoritative",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "stage quarantined to \u0027C:\\Users\\ryanf\\AppData\\Local\\Temp\\spike006-20260723-143545\\faults\\F-AFTER-STAGE-CREATED\\quarantine\\source.bin.oxstage-9eb2e7312483\u0027; source authoritative",
+        "second_recovery_action": "QuarantineStageSourceAuthoritative",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-AFTER-STAGE-WRITTEN",
+      "Category": "fault-injection",
+      "Description": "crash after stage write but before flush",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "original",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "None",
+        "observed_source": "Original",
+        "observed_stage": "VerifiedExpectedOutput",
+        "original_content_recoverable": "true",
+        "recovery_action": "QuarantineStageSourceAuthoritative",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "stage quarantined to \u0027C:\\Users\\ryanf\\AppData\\Local\\Temp\\spike006-20260723-143545\\faults\\F-AFTER-STAGE-WRITTEN\\quarantine\\source.bin.oxstage-61b8ec45ed1d\u0027; source authoritative",
+        "second_recovery_action": "QuarantineStageSourceAuthoritative",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-AFTER-STAGE-FLUSHED",
+      "Category": "fault-injection",
+      "Description": "crash after stage flush and verification, before durable intent",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "original",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "None",
+        "observed_source": "Original",
+        "observed_stage": "VerifiedExpectedOutput",
+        "original_content_recoverable": "true",
+        "recovery_action": "QuarantineStageSourceAuthoritative",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "stage quarantined to \u0027C:\\Users\\ryanf\\AppData\\Local\\Temp\\spike006-20260723-143545\\faults\\F-AFTER-STAGE-FLUSHED\\quarantine\\source.bin.oxstage-3b6659c1cf7e\u0027; source authoritative",
+        "second_recovery_action": "QuarantineStageSourceAuthoritative",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-AFTER-INTENT",
+      "Category": "fault-injection",
+      "Description": "crash after durable intent, before replacement: recovery must finish the job",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "expected",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "IntentDurable",
+        "observed_source": "Original",
+        "observed_stage": "VerifiedExpectedOutput",
+        "original_content_recoverable": "true",
+        "recovery_action": "RetryReplacement",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "replacement retried, verified, and committed",
+        "second_recovery_action": "FinalizeIdempotent",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-AFTER-REPLACE",
+      "Category": "fault-injection",
+      "Description": "crash between replacement and verification",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "expected",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "IntentDurable",
+        "observed_source": "ExpectedOutput",
+        "observed_stage": "Missing",
+        "original_content_recoverable": "true",
+        "recovery_action": "RecordRecoveredCommit",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "existing replacement independently verified; commit recorded",
+        "second_recovery_action": "FinalizeIdempotent",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-AFTER-VERIFY",
+      "Category": "fault-injection",
+      "Description": "crash between verification and the commit record",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "expected",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "IntentDurable",
+        "observed_source": "ExpectedOutput",
+        "observed_stage": "Missing",
+        "original_content_recoverable": "true",
+        "recovery_action": "RecordRecoveredCommit",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "existing replacement independently verified; commit recorded",
+        "second_recovery_action": "FinalizeIdempotent",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-AFTER-COMMITTED",
+      "Category": "fault-injection",
+      "Description": "crash after durable commit, before cleanup",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "expected",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "Committed",
+        "observed_source": "ExpectedOutput",
+        "observed_stage": "Missing",
+        "original_content_recoverable": "true",
+        "recovery_action": "FinalizeIdempotent",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "finalize checkpoint recorded",
+        "second_recovery_action": "FinalizeIdempotent",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-INTENT-STAGE-CORRUPT",
+      "Category": "fault-injection",
+      "Description": "durable intent but the stage was damaged before recovery ran",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "original",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "IntentDurable",
+        "observed_source": "Original",
+        "observed_stage": "Corrupt",
+        "original_content_recoverable": "true",
+        "recovery_action": "StopActionableStageError",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "stage unusable; stopped with source authoritative; artifacts preserved",
+        "second_recovery_action": "StopActionableStageError",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-INTENT-SOURCE-TAMPER",
+      "Category": "fault-injection",
+      "Description": "durable intent but the source was changed externally: critical conflict, everything preserved",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "tampered",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "IntentDurable",
+        "observed_source": "Tampered",
+        "observed_stage": "VerifiedExpectedOutput",
+        "original_content_recoverable": "true",
+        "recovery_action": "StopCriticalConflict",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "critical conflict; stopped; all artifacts preserved",
+        "second_recovery_action": "StopCriticalConflict",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "F-COMMITTED-SOURCE-TAMPER",
+      "Category": "fault-injection",
+      "Description": "post-commit external change: report drift, never overwrite",
+      "Outcome": "pass",
+      "SourceSafetyHeld": true,
+      "Measurements": {
+        "backup_intact": "true",
+        "child_exit_as_injected": "true",
+        "child_exit_code": "42",
+        "final_source_class": "tampered",
+        "final_source_state_as_expected": "true",
+        "observed_backup": "VerifiedOriginal",
+        "observed_checkpoint": "Committed",
+        "observed_source": "Tampered",
+        "observed_stage": "Missing",
+        "original_content_recoverable": "true",
+        "recovery_action": "ReportDriftWithoutOverwrite",
+        "recovery_action_matches_matrix": "true",
+        "recovery_notes": "post-commit external change reported; nothing overwritten",
+        "second_recovery_action": "ReportDriftWithoutOverwrite",
+        "second_recovery_is_non_mutating_class": "true",
+        "second_recovery_left_source_unchanged": "true"
+      },
+      "Error": null
+    }
+  ],
+  "Summary": {
+    "Total": 24,
+    "Pass": 23,
+    "Fail": 0,
+    "Skipped": 1,
+    "SourceLossCases": 0
+  }
+}
