@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.10
+version: 0.1.11
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,17 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.11 — 2026-07-23
+
+SPIKE-004 metadata round-trip and ExifTool integration (complete for baseline formats); ADR-0006 accepted:
+
+- Installed and digest-pinned ExifTool 13.59 (DEP-007, winget `OliverBetz.ExifTool` — exactly the baseline-research snapshot version); harness under `spikes/SPIKE-004-metadata/` with the typed `-stay_open` adapter prototype and 3 CI-safe fixture tests.
+- 6/6 evidence scenarios pass: protocol synchronization on one persistent process; round-trip matrix (orientation write changes exactly `IFD0:Orientation` with EXIF 12 / GPS 5 / XMP 4 / IPTC 3 tags byte-stable and JPEG structure unchanged); `-P` timestamp preservation; error attribution via a per-command `-echo4` stderr sentinel (a protocol requirement discovered by this spike — without it stderr is unattributable); PNG XMP round-trip.
+- Measured rewrite side effects: ExifTool drops ADS and changes the NTFS file id — same class as SPIKE-006's ReplaceFileW finding; metadata writes happen on the stage copy and fold into the commit re-baseline.
+- Guarantee language recorded: maker notes explicitly non-guaranteed until the SPIKE-001 corpus tranche; ADS survival and file-id stability are executor concerns, not adapter guarantees.
+- ADR-0006 0.1.1 provisional → **accepted**; DEP-007 selected with digest; DOC-WBS 0.1.4 adds WP-005/010/014 design notes.
+- Affected IDs: SPIKE-004, ADR-0006, DEP-007, DOC-WBS, DOC-STATUS, DOC-CHANGELOG, WP-005, WP-010, WP-014, NFR-FID-001. No new packages; no schema or migration impact.
 
 ## 0.1.10 — 2026-07-23
 

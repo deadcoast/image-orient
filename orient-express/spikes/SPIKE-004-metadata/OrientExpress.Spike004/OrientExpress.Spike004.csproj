@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- SPIKE-004 decision harness (DOC-SPIKES): qualifies the ExifTool
+         -stay_open adapter (DEP-007, ADR-0006). Evidence tooling, not the
+         WP-005 metadata service. -->
+    <AssemblyName>spike004</AssemblyName>
+    <RootNamespace>OrientExpress.Spike004</RootNamespace>
+    <!-- LibraryImport-generated marshalling stubs require unsafe blocks. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+</Project>

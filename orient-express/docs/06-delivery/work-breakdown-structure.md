@@ -1,7 +1,7 @@
 ---
 document_id: DOC-WBS
 title: Work Breakdown Structure and Backlog Dependencies
-version: 0.1.3
+version: 0.1.4
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -59,6 +59,15 @@ Work packages are vertical outcomes, not folders or generic engineering activiti
   argument per line); grammar errors keep machine stdout empty. Registry
   numerics freeze at WP-002 entry. See the
   [SPIKE-009 report](../../spikes/SPIKE-009-cli-contract/report.md).
+- **WP-005 / WP-010 / WP-014 (from SPIKE-004):** the metadata adapter is the
+  typed `-stay_open` protocol with per-command `{ready<id>}` **and** `-echo4`
+  stderr sentinels (diagnostics must be attributable); reads use
+  `-j -G1 -a -n`; writes use `-P -overwrite_original` on the stage copy.
+  ExifTool's rewrite drops ADS and changes the file id — both fold into the
+  commit protocol's re-baseline, and ADS re-attachment is the executor's
+  responsibility, never the adapter's. Maker-note guarantees stay gated on
+  the corpus tranche. See the
+  [SPIKE-004 report](../../spikes/SPIKE-004-metadata/report.md).
 - **WP-010 / WP-013 / WP-014 (from SPIKE-005):** `jpegEdge` policy mapping is
   approved — `abort` = `jpegtran -perfect` with `JPEG_EDGE_NOT_PERFECT`
   refusal; `preserve-partial` = default mode (reversible, imperfect edges,

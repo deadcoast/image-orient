@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.10
+version: 0.1.11
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -31,6 +31,8 @@ SPIKE-001 is **in progress** ([harness](spikes/SPIKE-001-corpus/README.md)): the
 
 SPIKE-005 is **complete** ([report](spikes/SPIKE-005-jpeg-edge/report.md)): the jpegtran edge matrix (108 adversarial cases on libjpeg-turbo 3.2.0, DEP-008 installed and digest-pinned) passed all safety expectations. `-perfect` successes are coefficient-lossless (round-trip proven); default mode is reversible with disclosed imperfect edges; `-trim` visibly resizes; nothing silently crops or re-encodes. The `output.jpegEdge` policy mapping is approved with `abort` as default (ADR-0007 accepted). Binding verification finding for WP-013: losslessness is proven by inverse-transform round-trip or coefficient digest, never decoded-pixel comparison. The blocked-gates table row for the default JPEG edge policy is resolved.
 
+SPIKE-004 is **complete for baseline formats** ([report](spikes/SPIKE-004-metadata/report.md)): the ExifTool 13.59 `-stay_open` adapter (DEP-007 installed and digest-pinned) passed the round-trip matrix — an orientation write changes exactly one tag with EXIF/GPS/XMP/IPTC families byte-stable, `-P` preserves timestamps, and errors are attributable per command via an `-echo4` stderr sentinel with the process surviving bad input. ExifTool's rewrite drops ADS and changes the file id, folding into the commit protocol's identity re-baseline. ADR-0006 is **accepted**; maker-note guarantees stay capability-gated on the SPIKE-001 corpus tranche. WP-005's metadata spike gate is satisfied for baseline formats.
+
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 
 ## Approved to begin
@@ -47,7 +49,7 @@ The project operates under single-operator governance: the documentation gates (
 |---|---|
 | Production orientation thresholds | SPIKE-001 and SPIKE-002 reports |
 | Selected inference provider | SPIKE-003 report and ADR update |
-| Metadata guarantee language | SPIKE-004 round-trip matrix |
+| Metadata guarantee language | Settled for baseline formats (SPIKE-004 complete 2026-07-23); maker notes await the corpus tranche |
 | Default JPEG edge policy | Settled: abort-by-default via -perfect (SPIKE-005 complete 2026-07-23) |
 | In-place mode | Full fault suite across supported compatibility classes plus undo-path evidence (SPIKE-006 NTFS pilot complete 2026-07-23) |
 | HEIC/AVIF claims | SPIKE-007 capability matrix |
