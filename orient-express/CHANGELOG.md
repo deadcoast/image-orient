@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.2
+version: 0.1.3
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,17 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.3 — 2026-07-23
+
+SPIKE-006 closure under single-operator governance:
+
+- Marked SPIKE-006 `complete`: its exit gate (recovery state machine proven on NTFS, unsupported conditions capability-gated, zero source-loss fault matrix) is met by the recorded evidence.
+- ADR-0009 0.1.1 records the qualification evidence: `ReplaceFileW(REPLACEFILE_WRITE_THROUGH)` is the sole in-place primitive; `MoveFileEx` replace is disqualified for in-place use.
+- DOC-FSSAFE 0.1.1 records measured primitive behavior and the normative caveat that file IDs are pre-commit-only identity (re-baseline after commit).
+- DOC-WBS 0.1.1 adds spike-driven design notes for WP-004, WP-011, WP-012, and WP-015.
+- STATUS 0.1.3 records the single-operator governance mode: documentation gates (validator, CI, tests, evidence rules) are the control surface; review sign-offs are the operator's own acceptance.
+- Affected IDs: SPIKE-006, ADR-0009, DOC-FSSAFE, DOC-WBS, DOC-STATUS, DOC-CHANGELOG, WP-004, WP-011, WP-012, WP-015. No schema or migration impact; no dependency changes.
 
 ## 0.1.2 — 2026-07-23
 

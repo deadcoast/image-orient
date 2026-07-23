@@ -1,9 +1,9 @@
 ---
 document_id: ADR-0009
 title: Default to safe-copy; guard in-place mode
-version: 0.1.0
+version: 0.1.1
 status: accepted
-as_of: 2026-07-21
+as_of: 2026-07-23
 owner: Architecture
 depends_on: [DOC-RESEARCH, DOC-SRS]
 traces_to: [ADR-0009]
@@ -33,6 +33,17 @@ Additional disk use and workflow steps; significantly stronger trust. In-place c
 ## Proof / review gate
 
 SPIKE-006 and zero-source-loss fault suite.
+
+**Evidence (2026-07-23):** the SPIKE-006 NTFS pilot
+([report](../../spikes/SPIKE-006-atomic-replace/report.md)) proved the
+recovery state machine on NTFS with a twelve-case crash fault matrix and zero
+source-loss cases; `ReplaceFileW(REPLACEFILE_WRITE_THROUGH)` is qualified as
+the sole in-place commit primitive, and `MoveFileEx` replace is rejected for
+in-place use (loses creation time, ADS, and file identity). Handle-based
+identity must re-baseline after commit because the NTFS file ID does not
+survive replacement. In-place mode remains gated on the full fault-injection
+suite across every supported compatibility class (non-NTFS classes stay
+capability-gated) and the undo path, per DOC-FSSAFE.
 
 ## Revisit triggers
 

@@ -1,9 +1,9 @@
 ---
 document_id: DOC-FSSAFE
 title: Filesystem Safety, Atomicity, Recovery, and Undo
-version: 0.1.0
+version: 0.1.1
 status: baseline
-as_of: 2026-07-21
+as_of: 2026-07-23
 owner: Core
 depends_on: [DOC-ARCH, ADR-0003, ADR-0009]
 traces_to: [PRD-FR-009, PRD-FR-010, PRD-FR-013, PRD-FR-014, PRD-FR-015, NFR-REL-001, NFR-REL-002, NFR-REL-003, NFR-REL-004]
@@ -91,10 +91,26 @@ capture current source
 
 No API name is treated as a guarantee without the fault matrix.
 
+**Measured (SPIKE-006 NTFS pilot, 2026-07-23):** `ReplaceFileW` preserves the
+replaced file's creation time, attributes, alternate data streams, and DACL,
+and takes last-write time from the replacement — but it does **not** preserve
+the NTFS file ID; the result carries the replacement's identity. `MoveFileEx`
+with `MOVEFILE_REPLACE_EXISTING` additionally loses creation time and ADS and
+is therefore qualified only for creating a destination that does not yet
+exist (safe-copy path), never for in-place replacement. Sharing-violation
+(32) and access-denied (5) rejections leave both files intact and are
+actionable stop/retry classes. Cross-volume rejection, ReFS, and SMB remain
+unmeasured and capability-gated. Evidence:
+[SPIKE-006 report](../../spikes/SPIKE-006-atomic-replace/report.md).
+
 ## Identity and alias handling
 
 - Open handles with sharing flags appropriate to read/replace.
 - Query volume serial and file ID where supported.
+- File IDs are valid for pre-commit alias/lock checks only: the NTFS file ID
+  does not survive `ReplaceFileW` (SPIKE-006), so plans and journals must
+  re-baseline identity after commit and must never use the file ID as a
+  cross-commit key.
 - Detect source=destination after normalization and handle identity.
 - Deduplicate hardlink aliases during planning.
 - Default: do not traverse reparse points.
