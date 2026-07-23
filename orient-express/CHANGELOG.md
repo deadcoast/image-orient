@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.9
+version: 0.1.10
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,17 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.10 — 2026-07-23
+
+SPIKE-005 JPEG lossless rotation edge policy (complete); ADR-0007 accepted:
+
+- Installed and digest-pinned libjpeg-turbo 3.2.0 (DEP-008, winget `libjpeg-turbo.libjpeg-turbo.VC`); harness under `spikes/SPIKE-005-jpeg-edge/` runs a 108-case adversarial matrix (six dimension classes × 4:4:4/4:2:0 × three rotations × default/`-perfect`/`-trim`) on synthetic orientation-sensitive fixtures, with 5 CI tests proving the managed reference rotation.
+- All safety expectations pass: `-perfect` successes (10) are coefficient-lossless by inverse-rotation round-trip; refusals (26) are characterized by rotation and alignment; default mode always produces full-dimension output and was round-trip lossless in all 36 cases on 3.2.0; `-trim` visibly resizes (23 cases); `-copy all`/`-copy none` marker behavior measured.
+- **Binding verification finding (WP-013):** decoded-pixel comparison is the wrong losslessness test — integer IDCT and chroma upsampling are not rotation-equivariant (deltas ≤4, up to ~7% of bytes at 4:2:0, while coefficients are exact). Verification must use inverse-transform round-trip or coefficient digests.
+- Approved `output.jpegEdge` policy mapping: `abort` (default) = `-perfect` + `JPEG_EDGE_NOT_PERFECT` refusal; `preserve-partial` = default mode with disclosure; `trim` = `-trim`; `reencode` = raster path. Always `-copy all`; metadata authority stays with the ExifTool adapter.
+- ADR-0007 0.1.1 provisional → **accepted**; decision register updated; DOC-WBS 0.1.3 adds WP-010/013/014 design notes.
+- Affected IDs: SPIKE-005, ADR-0007, DEP-008, DOC-WBS, DOC-STATUS, DOC-CHANGELOG, WP-010, WP-013, WP-014, NFR-FID-002. No new packages; no schema or migration impact.
 
 ## 0.1.9 — 2026-07-23
 

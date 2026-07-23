@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- SPIKE-005 decision harness (DOC-SPIKES): qualifies jpegtran
+         (DEP-008, ADR-0007) lossless-rotation edge behavior. Evidence
+         tooling, not the WP-010 transform engine. -->
+    <AssemblyName>spike005</AssemblyName>
+    <RootNamespace>OrientExpress.Spike005</RootNamespace>
+  </PropertyGroup>
+
+</Project>

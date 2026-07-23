@@ -1,7 +1,7 @@
 ---
 document_id: DOC-WBS
 title: Work Breakdown Structure and Backlog Dependencies
-version: 0.1.2
+version: 0.1.3
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -59,6 +59,16 @@ Work packages are vertical outcomes, not folders or generic engineering activiti
   argument per line); grammar errors keep machine stdout empty. Registry
   numerics freeze at WP-002 entry. See the
   [SPIKE-009 report](../../spikes/SPIKE-009-cli-contract/report.md).
+- **WP-010 / WP-013 / WP-014 (from SPIKE-005):** `jpegEdge` policy mapping is
+  approved — `abort` = `jpegtran -perfect` with `JPEG_EDGE_NOT_PERFECT`
+  refusal; `preserve-partial` = default mode (reversible, imperfect edges,
+  disclosed); `trim` = `-trim` (visible resize); `reencode` = raster path.
+  Always invoke with `-copy all` and re-apply metadata via the metadata
+  adapter. **WP-013 verifier must prove losslessness by inverse-transform
+  round-trip or coefficient digest — never by decoded-pixel comparison
+  against a spatial reference** (integer IDCT/chroma upsampling are not
+  rotation-equivariant; decode deltas ≤4 are expected). See the
+  [SPIKE-005 report](../../spikes/SPIKE-005-jpeg-edge/report.md).
 - **WP-004 / WP-009 / WP-011 / WP-017 (from SPIKE-008):** batched writes
   through the single-writer queue are a requirement (single-row transactions
   are 6.5× slower); state-transition constraints live in the schema as
