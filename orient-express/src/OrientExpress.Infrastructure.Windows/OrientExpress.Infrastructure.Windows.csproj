@@ -1,7 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <!-- LibraryImport-generated marshalling stubs require unsafe blocks. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\OrientExpress.Application\OrientExpress.Application.csproj" />
+    <ProjectReference Include="..\OrientExpress.Contracts\OrientExpress.Contracts.csproj" />
     <ProjectReference Include="..\OrientExpress.Domain\OrientExpress.Domain.csproj" />
   </ItemGroup>
 

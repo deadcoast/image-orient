@@ -38,6 +38,8 @@ public sealed class CommandLineModel
 
     public required Command Doctor { get; init; }
 
+    public required Option<string> DoctorProbeTarget { get; init; }
+
     public required Command Completion { get; init; }
 
     public required Argument<string> CompletionShell { get; init; }
@@ -130,8 +132,13 @@ public sealed class CommandLineModel
         };
 
         var version = new Command("version", "Report tool and contract versions.");
+        var doctorProbeTarget = new Option<string>("--probe-target")
+        {
+            Description = "Directory for filesystem operation probes (identity, atomic replace); files are cleaned up.",
+        };
         var doctor = new Command(
-            "doctor", "Environment and capability diagnostics; never writes or modifies images.");
+            "doctor", "Environment and capability diagnostics; never reads or modifies images.");
+        doctor.Options.Add(doctorProbeTarget);
 
         var completionShell = new Argument<string>("shell") { Description = "Target shell (powershell)." };
         var completion = new Command("completion", "Emit a shell completion script from the command model.");
@@ -223,6 +230,7 @@ public sealed class CommandLineModel
             Profile = profile,
             Version = version,
             Doctor = doctor,
+            DoctorProbeTarget = doctorProbeTarget,
             Completion = completion,
             CompletionShell = completionShell,
             ConfigInit = configInit,

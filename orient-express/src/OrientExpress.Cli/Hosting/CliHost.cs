@@ -95,7 +95,7 @@ public static class CliHost
 
         if (command == model.Doctor)
         {
-            return DoctorCommand.Run(context, cancellationToken);
+            return DoctorCommand.Run(context, parse.GetValue(model.DoctorProbeTarget), cancellationToken);
         }
 
         if (command == model.Completion)

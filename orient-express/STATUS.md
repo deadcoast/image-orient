@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.8
+version: 0.1.9
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -26,6 +26,8 @@ SPIKE-001 is **in progress** ([harness](spikes/SPIKE-001-corpus/README.md)): the
 **WP-002 (CLI host and contracts) is implemented** — the first production feature code ([context packet](planning/context-packets/WP-002-context-packet.md)). `upright` now hosts the full DOC-CLI command tree on System.CommandLine: working `version`, `doctor` (schema-shaped capability report with real platform probes), and `completion powershell`; frozen exit-code registry (`cli-contract/1.0`, DOC-CLI 0.2.0) in `OrientExpress.Contracts`; machine JSON/JSONL streams per the event schema; response files; cancellation wiring; and every not-yet-proven command honestly refusing with `22 CAPABILITY_UNAVAILABLE` and a consumable refusal document. 44 CLI golden tests run in CI. AC-033/034 implemented; AC-003/035/048 partially implemented (process-level sweeps land with WP-018/CI).
 
 **WP-003 (configuration and schemas) is implemented** ([context packet](planning/context-packets/WP-003-context-packet.md)): DOC-CONFIG's five-layer precedence (CLI > `UPRIGHT_*` environment > `--config` > user file > defaults) with per-setting provenance, strict schema-mirroring validation that fails closed before any work (AC-036/AC-037 implemented), the canonical effective-config digest that WP-009 will seal into plans, `privacy.telemetry` unoverridable by any layer, and working `config init/show/validate` — including `config show --redacted --json` as the canonical support view. Pure precedence/validation logic lives in `OrientExpress.Application`; the host gained a hermetic environment seam for testing.
+
+**WP-004 (filesystem and identity foundation) is implemented** ([context packet](planning/context-packets/WP-004-context-packet.md)): the DOC-COMPONENTS `Result<T>` model and `IFileIdentityService` port, handle-based snapshots with standard/strong fingerprints and drift detection, extended-length Unicode path canonicalization (NFR-COMP-002), reparse/cloud-placeholder policy refusals, NFR-COMP-001 volume capability classes (NTFS-fixed supported; network/removable/non-NTFS gated), same-directory stage planning, and the SPIKE-006-qualified atomic primitives with typed error classes. `upright doctor --probe-target <dir>` now runs live filesystem probes — including demonstrating the post-replace file-id re-baseline — and cleans up after itself. Real-NTFS integration tests cover identity, hardlink aliases, long paths, and locked/missing/tampered cases.
 
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 

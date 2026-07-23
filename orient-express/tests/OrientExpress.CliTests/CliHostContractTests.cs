@@ -72,7 +72,7 @@ public sealed class CliHostContractTests : IDisposable
     }
 
     [Fact]
-    public void Doctor_reports_only_the_cli_host_as_available_today()
+    public void Doctor_capability_truth_telling_matches_implemented_work()
     {
         var result = Invoke("doctor", "--json");
         using var document = JsonDocument.Parse(result.Stdout);
@@ -80,8 +80,42 @@ public sealed class CliHostContractTests : IDisposable
             .ToDictionary(
                 component => component.GetProperty("id").GetString()!,
                 component => component.GetProperty("available").GetBoolean());
-        Assert.True(availability["cli-host"]);
-        Assert.All(availability.Where(pair => pair.Key != "cli-host"), pair => Assert.False(pair.Value));
+        string[] implemented = ["cli-host", "configuration", "filesystem-identity"];
+        Assert.All(implemented, id => Assert.True(availability[id], id));
+        Assert.All(
+            availability.Where(pair => !implemented.Contains(pair.Key)),
+            pair => Assert.False(pair.Value, pair.Key));
+    }
+
+    [Fact]
+    public void Doctor_probe_target_runs_filesystem_probes_and_cleans_up()
+    {
+        var probeDirectory = Path.Combine(_directory, "probe");
+        Directory.CreateDirectory(probeDirectory);
+
+        var result = Invoke("doctor", "--probe-target", probeDirectory, "--json", "--non-interactive");
+        Assert.Equal(0, result.ExitCode);
+
+        using var document = JsonDocument.Parse(result.Stdout);
+        var probes = document.RootElement.GetProperty("components").EnumerateArray()
+            .Where(component => component.GetProperty("id").GetString()!.StartsWith("probe.", StringComparison.Ordinal))
+            .ToDictionary(
+                component => component.GetProperty("id").GetString()!,
+                component => component.GetProperty("available").GetBoolean());
+        foreach (var id in new[] { "probe.volume", "probe.identity", "probe.atomic-replace", "probe.create-path" })
+        {
+            Assert.True(probes[id], id);
+        }
+
+        Assert.Empty(Directory.GetFiles(probeDirectory));
+    }
+
+    [Fact]
+    public void Doctor_probe_target_refuses_a_missing_directory()
+    {
+        var result = Invoke("doctor", "--probe-target", Path.Combine(_directory, "absent"));
+        Assert.Equal((int)CliExitCode.InvalidArgument, result.ExitCode);
+        Assert.Contains("PROBE_TARGET_NOT_FOUND", result.Stderr, StringComparison.Ordinal);
     }
 
     [Fact]
