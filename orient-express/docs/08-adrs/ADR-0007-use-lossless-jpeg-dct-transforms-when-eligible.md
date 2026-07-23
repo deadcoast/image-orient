@@ -1,9 +1,9 @@
 ---
 document_id: ADR-0007
 title: Use lossless JPEG DCT transforms when eligible
-version: 0.1.0
-status: provisional
-as_of: 2026-07-21
+version: 0.1.1
+status: accepted
+as_of: 2026-07-23
 owner: Architecture
 depends_on: [DOC-RESEARCH, DOC-SRS]
 traces_to: [ADR-0007]
@@ -33,6 +33,16 @@ More complex capability/verification and native packaging; materially better fid
 ## Proof / review gate
 
 SPIKE-005 coefficient/pixel/dimension/marker matrix.
+
+**Evidence (2026-07-23, [report](../../spikes/SPIKE-005-jpeg-edge/report.md)):**
+SPIKE-005 proof gate met on libjpeg-turbo 3.2.0 with a 108-case adversarial
+matrix. `-perfect` successes are coefficient-lossless (round-trip proven);
+default mode is reversible with imperfect edges; `-trim` visibly resizes;
+no mode silently crops or re-encodes. Policy mapping to `output.jpegEdge`
+approved with `abort` as default. Verification must use inverse-transform
+round-trip or coefficient digests, never decoded-pixel comparison against a
+spatial reference (integer IDCT and chroma upsampling are not
+rotation-equivariant; deltas <=4 are expected).
 
 ## Revisit triggers
 

@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.9
+version: 0.1.10
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -29,6 +29,8 @@ SPIKE-001 is **in progress** ([harness](spikes/SPIKE-001-corpus/README.md)): the
 
 **WP-004 (filesystem and identity foundation) is implemented** ([context packet](planning/context-packets/WP-004-context-packet.md)): the DOC-COMPONENTS `Result<T>` model and `IFileIdentityService` port, handle-based snapshots with standard/strong fingerprints and drift detection, extended-length Unicode path canonicalization (NFR-COMP-002), reparse/cloud-placeholder policy refusals, NFR-COMP-001 volume capability classes (NTFS-fixed supported; network/removable/non-NTFS gated), same-directory stage planning, and the SPIKE-006-qualified atomic primitives with typed error classes. `upright doctor --probe-target <dir>` now runs live filesystem probes — including demonstrating the post-replace file-id re-baseline — and cleans up after itself. Real-NTFS integration tests cover identity, hardlink aliases, long paths, and locked/missing/tampered cases.
 
+SPIKE-005 is **complete** ([report](spikes/SPIKE-005-jpeg-edge/report.md)): the jpegtran edge matrix (108 adversarial cases on libjpeg-turbo 3.2.0, DEP-008 installed and digest-pinned) passed all safety expectations. `-perfect` successes are coefficient-lossless (round-trip proven); default mode is reversible with disclosed imperfect edges; `-trim` visibly resizes; nothing silently crops or re-encodes. The `output.jpegEdge` policy mapping is approved with `abort` as default (ADR-0007 accepted). Binding verification finding for WP-013: losslessness is proven by inverse-transform round-trip or coefficient digest, never decoded-pixel comparison. The blocked-gates table row for the default JPEG edge policy is resolved.
+
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 
 ## Approved to begin
@@ -46,7 +48,7 @@ The project operates under single-operator governance: the documentation gates (
 | Production orientation thresholds | SPIKE-001 and SPIKE-002 reports |
 | Selected inference provider | SPIKE-003 report and ADR update |
 | Metadata guarantee language | SPIKE-004 round-trip matrix |
-| Default JPEG edge policy | SPIKE-005 report |
+| Default JPEG edge policy | Settled: abort-by-default via -perfect (SPIKE-005 complete 2026-07-23) |
 | In-place mode | Full fault suite across supported compatibility classes plus undo-path evidence (SPIKE-006 NTFS pilot complete 2026-07-23) |
 | HEIC/AVIF claims | SPIKE-007 capability matrix |
 | Final job-store settings | Settled: WAL + NORMAL + batched single-writer + trigger constraints (SPIKE-008 complete 2026-07-23) |
