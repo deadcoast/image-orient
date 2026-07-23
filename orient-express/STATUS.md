@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.5
+version: 0.1.6
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -20,6 +20,8 @@ SPIKE-006 is **complete** ([report](spikes/SPIKE-006-atomic-replace/report.md)):
 SPIKE-009 is **complete** ([report](spikes/SPIKE-009-cli-contract/report.md)): the DOC-CLI machine contract, exit-code registry, destructive-flag guard, sealed-plan staleness refusal, response files, completion, and cancellation are validated on System.CommandLine 2.0.10 (DEP-002) with 20 CI golden tests and 11 out-of-process byte-level evidence scenarios, all passing. DOC-CLI 0.1.1 records the binding contract decisions; registry numerics freeze at WP-002 entry. WP-002 and WP-018 are unblocked on their spike gate.
 
 SPIKE-008 is **complete** ([report](spikes/SPIKE-008-job-store/report.md)): the ADR-0008 proof gate is met at 100k and 1m synthetic rows — batched inserts 162k–185k rows/s, 1m-row restart in 43 ms, migration in 243 ms, integrity ok after kernel-kill crash injection with exactly the committed rows surviving. ADR-0008 is now **accepted**; the DOC-DATAMODEL constraints are enforced as schema triggers and proven by CI tests. Dependency intake caught and pinned past a vulnerable SQLitePCLRaw transitive (DEP-018, GHSA-2m69-gcr7-jv3q). WP-009's spike gate is satisfied.
+
+SPIKE-001 is **in progress** ([harness](spikes/SPIKE-001-corpus/README.md)): the opt-in read-only inventory scanner (aggregates only; EXIF orientation histogram, formats, buckets) is verified by CI tests and a synthetic self-test, and the truth protocol (labeling guide, adjudication, kappa measurement, dataset cards, slice taxonomy) is drafted. The exit gate now waits only on operator-owned photos: scanner runs over opted-in trees, a stratified consented tranche, and double labeling. This is the sole remaining blocker for SPIKE-002/003 and the M2 ML work.
 
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 

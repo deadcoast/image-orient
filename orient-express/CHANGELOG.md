@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.5
+version: 0.1.6
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,16 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.6 — 2026-07-23
+
+SPIKE-001 corpus harness and truth protocol (spike in progress):
+
+- Added the SPIKE-001 tooling under `spikes/SPIKE-001-corpus/` (`OrientExpress.Spike001` plus tests, registered in the solution): an opt-in, read-only inventory scanner emitting aggregates only — format signatures, JPEG EXIF orientation histogram (tag 0x0112, both TIFF endiannesses), SOF/IHDR dimensions, megapixel/size buckets, camera-make counts. Bounded 256 KiB probe, share-friendly handles, reparse points skipped, corrupt files counted not fatal. No paths, hashes, or thumbnails in output (privacy handling per the spike definition).
+- 12 CI unit tests cover the parsers against synthetic byte fixtures; `spike001 self-test` verifies the end-to-end pipeline on a generated fixture tree (all 8 orientations, PNG, HEIC, corrupt, non-image) with committed evidence.
+- Drafted the truth protocol: labeling guide (7-label set with first-class AMBIGUOUS/UNDECIDABLE, double labeling with Cohen's kappa, adjudication, consent rules, slice taxonomy) and dataset card template.
+- SPIKE-001 remains in progress: the exit gate requires operator-owned photos (scanner runs, stratified consented tranche, double labeling). No new package dependencies.
+- Affected IDs: SPIKE-001, DOC-STATUS, DOC-CHANGELOG. No schema or migration impact.
 
 ## 0.1.5 — 2026-07-23
 
