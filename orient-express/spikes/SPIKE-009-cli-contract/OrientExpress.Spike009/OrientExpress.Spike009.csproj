@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- SPIKE-009 decision harness (DOC-SPIKES): qualifies the CLI contract
+         (DOC-CLI) and DEP-002. Evidence tooling, not the WP-002 CLI host. -->
+    <AssemblyName>spike009</AssemblyName>
+    <RootNamespace>OrientExpress.Spike009</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
+
+</Project>

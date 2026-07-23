@@ -1,0 +1,170 @@
+{
+  "spike": "SPIKE-009",
+  "environment": {
+    "osDescription": "Microsoft Windows 10.0.26200",
+    "framework": ".NET 10.0.8",
+    "processArchitecture": "X64",
+    "dependency": "System.CommandLine 2.0.10 (DEP-002)",
+    "contractVersion": "cli-contract/1.0-draft",
+    "harnessVersion": "0.1.0",
+    "workRoot": "C:\\Users\\ryanf\\AppData\\Local\\Temp\\spike009-20260723-145620",
+    "runUtc": "2026-07-23T14:56:22.4052277\u002B00:00"
+  },
+  "scenarios": [
+    {
+      "Id": "E-JSONL-PARSE-CLEAN",
+      "Category": "machine-stream",
+      "Description": "JSONL stdout is BOM-free strict UTF-8; every line is an independently parseable schema-shaped event",
+      "Outcome": "pass",
+      "Measurements": {
+        "every_line_parses": "true",
+        "exit_code": "10",
+        "exit_review_required": "true",
+        "line_count": "4",
+        "no_bom": "true",
+        "non_ascii_is_escaped_on_the_wire": "true",
+        "required_event_fields_present": "true",
+        "strict_utf8_decode": "true",
+        "unicode_round_trip": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-JSON-SINGLE-DOC",
+      "Category": "machine-stream",
+      "Description": "JSON mode emits exactly one parseable document on stdout",
+      "Outcome": "pass",
+      "Measurements": {
+        "declares_result_type": "true",
+        "exit_success": "true",
+        "no_bom": "true",
+        "single_document_parses": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-STREAM-SEPARATION",
+      "Category": "machine-stream",
+      "Description": "progress goes to stderr in interactive mode and machine stdout stays parse-clean",
+      "Outcome": "pass",
+      "Measurements": {
+        "non_interactive_suppresses_progress": "true",
+        "stderr_has_progress": "true",
+        "stdout_lines_all_json": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-EXIT-MATRIX",
+      "Category": "exit-codes",
+      "Description": "registry values for success, review, partial, nothing, capability, grammar",
+      "Outcome": "pass",
+      "Measurements": {
+        "capability_22": "true",
+        "grammar_20_bad_format": "true",
+        "grammar_20_missing_paths": "true",
+        "grammar_20_unknown_option": "true",
+        "nothing_12": "true",
+        "partial_11": "true",
+        "review_10": "true",
+        "success_0": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-DESTRUCTIVE-GUARD",
+      "Category": "safety",
+      "Description": "in-place plans refuse to apply without --acknowledge-in-place",
+      "Outcome": "pass",
+      "Measurements": {
+        "plan_sealed": "true",
+        "proceeds_with_flag": "true",
+        "refusal_carries_reason_code": "true",
+        "refusal_names_the_flag": "true",
+        "refused_without_flag": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-STALE-PLAN",
+      "Category": "safety",
+      "Description": "a tampered sealed plan is refused with STALE_PLAN, not partially applied",
+      "Outcome": "pass",
+      "Measurements": {
+        "names_stale_plan": "true",
+        "stale_plan_30": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-RESPONSE-FILE",
+      "Category": "automation",
+      "Description": "@file arguments expand to the same contract as direct arguments",
+      "Outcome": "pass",
+      "Measurements": {
+        "exit_code": "10",
+        "missing_response_file_is_grammar_error": "true",
+        "same_exit_code": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-COMPLETION",
+      "Category": "automation",
+      "Description": "PowerShell completion derives from the command model and is deterministic",
+      "Outcome": "pass",
+      "Measurements": {
+        "byte_identical_runs": "true",
+        "contains_apply": "true",
+        "contains_doctor": "true",
+        "contains_opt_acknowledge-in-place": "true",
+        "contains_opt_output-format": "true",
+        "contains_scan": "true",
+        "exit_success": "true",
+        "unsupported_shell_is_grammar_error": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-HUMAN-CONTRACT",
+      "Category": "human-output",
+      "Description": "first line names command/mode/job; redirected output carries no ANSI",
+      "Outcome": "pass",
+      "Measurements": {
+        "first_line": "upright-proto scan \u2014 mode=safe-copy job=none",
+        "first_line_contract": "true",
+        "no_ansi_stderr": "true",
+        "no_ansi_stdout": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-HELP-AND-CANCEL",
+      "Category": "automation",
+      "Description": "--help exits 0 with usage; simulated cancellation exits 40 with a cancelled event",
+      "Outcome": "pass",
+      "Measurements": {
+        "cancel_exit_40": "true",
+        "final_event_cancelled": "true",
+        "help_exit_0": "true",
+        "help_shows_usage": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-CORRELATION",
+      "Category": "automation",
+      "Description": "caller-provided correlation id is echoed on every machine event",
+      "Outcome": "pass",
+      "Measurements": {
+        "every_event_carries_correlation_id": "true"
+      },
+      "Error": null
+    }
+  ],
+  "summary": {
+    "total": 11,
+    "pass": 11,
+    "fail": 0
+  }
+}
