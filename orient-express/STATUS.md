@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.6
+version: 0.1.7
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -22,6 +22,8 @@ SPIKE-009 is **complete** ([report](spikes/SPIKE-009-cli-contract/report.md)): t
 SPIKE-008 is **complete** ([report](spikes/SPIKE-008-job-store/report.md)): the ADR-0008 proof gate is met at 100k and 1m synthetic rows — batched inserts 162k–185k rows/s, 1m-row restart in 43 ms, migration in 243 ms, integrity ok after kernel-kill crash injection with exactly the committed rows surviving. ADR-0008 is now **accepted**; the DOC-DATAMODEL constraints are enforced as schema triggers and proven by CI tests. Dependency intake caught and pinned past a vulnerable SQLitePCLRaw transitive (DEP-018, GHSA-2m69-gcr7-jv3q). WP-009's spike gate is satisfied.
 
 SPIKE-001 is **in progress** ([harness](spikes/SPIKE-001-corpus/README.md)): the opt-in read-only inventory scanner (aggregates only; EXIF orientation histogram, formats, buckets) is verified by CI tests and a synthetic self-test, and the truth protocol (labeling guide, adjudication, kappa measurement, dataset cards, slice taxonomy) is drafted. The exit gate now waits only on operator-owned photos: scanner runs over opted-in trees, a stratified consented tranche, and double labeling. This is the sole remaining blocker for SPIKE-002/003 and the M2 ML work.
+
+**WP-002 (CLI host and contracts) is implemented** — the first production feature code ([context packet](planning/context-packets/WP-002-context-packet.md)). `upright` now hosts the full DOC-CLI command tree on System.CommandLine: working `version`, `doctor` (schema-shaped capability report with real platform probes), and `completion powershell`; frozen exit-code registry (`cli-contract/1.0`, DOC-CLI 0.2.0) in `OrientExpress.Contracts`; machine JSON/JSONL streams per the event schema; response files; cancellation wiring; and every not-yet-proven command honestly refusing with `22 CAPABILITY_UNAVAILABLE` and a consumable refusal document. 44 CLI golden tests run in CI. AC-033/034 implemented; AC-003/035/048 partially implemented (process-level sweeps land with WP-018/CI).
 
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 

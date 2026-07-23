@@ -1,7 +1,7 @@
 ﻿id,requirement,criterion,status
 AC-001,PRD-FR-001,"Given mixed files/directories and filters, discovery returns the same canonical ordered set across repeated runs.",planned
 AC-002,PRD-FR-001,"Loops, inaccessible paths, reparse points, aliases, and duplicate identities are handled according to policy without infinite traversal.",planned
-AC-003,PRD-FR-002,`doctor --json` emits a schema-valid capability report and performs no source writes.,planned
+AC-003,PRD-FR-002,`doctor --json` emits a schema-valid capability report and performs no source writes.,partially-implemented (WP-002: report emitted and structurally tested; automated JSON-schema validation pending)
 AC-004,PRD-FR-002,"`inspect` explains stored dimensions, EXIF transform, candidate evidence, proposed action, and blockers for one file.",planned
 AC-005,PRD-FR-003,Golden images for all EXIF Orientation values 1–8 render to the same intended upright view.,planned
 AC-006,PRD-FR-004,Candidate generation composes EXIF display transforms before additional rotational hypotheses.,planned
@@ -31,9 +31,9 @@ AC-029,PRD-FR-015,Undo restores a byte-verified backup when the current file mat
 AC-030,PRD-FR-015,Undo refuses and reports conflict when the current file was independently changed.,planned
 AC-031,PRD-FR-016,"Review decisions can be exported, edited with documented values, imported, validated, and appended to the job.",planned
 AC-032,PRD-FR-016,"Review thumbnails are orientation-labeled, bounded in size, and stored only when explicitly enabled.",planned
-AC-033,PRD-FR-017,`--json` emits one schema-valid document; `--jsonl` emits independently parseable event lines.,planned
-AC-034,PRD-FR-017,"With machine output selected, stdout contains no progress bars, ANSI styling, or unsolicited prose.",planned
-AC-035,PRD-FR-018,All documented result classes map to stable exit codes tested on Windows PowerShell and cmd.exe.,planned
+AC-033,PRD-FR-017,`--json` emits one schema-valid document; `--jsonl` emits independently parseable event lines.,implemented (WP-002 golden tests)
+AC-034,PRD-FR-017,"With machine output selected, stdout contains no progress bars, ANSI styling, or unsolicited prose.",implemented (WP-002 golden tests)
+AC-035,PRD-FR-018,All documented result classes map to stable exit codes tested on Windows PowerShell and cmd.exe.,partially-implemented (WP-002: registry frozen + in-process tests; shell-level sweep at WP-018/CI)
 AC-036,PRD-FR-019,Configuration precedence is CLI > environment > explicit file > user file > defaults.,planned
 AC-037,PRD-FR-019,Unknown or invalid configuration fields fail before file processing unless forward-compatible mode is explicitly selected.,planned
 AC-038,PRD-FR-020,"A model bundle with wrong digest, unsupported schema, or incompatible runtime is quarantined and never activated.",planned
@@ -46,6 +46,6 @@ AC-044,PRD-FR-023,Default logs contain no image bytes and path redaction is avai
 AC-045,PRD-FR-024,Sequence consensus can break a bounded tie but cannot override hard safety or evidence gates.,planned
 AC-046,PRD-FR-025,Scene fallback remains disabled unless its evaluation report demonstrates statistically supported net benefit.,planned
 AC-047,PRD-FR-026,"Benchmark output records hardware, OS, runtime, model, configuration, corpus descriptor, throughput, latency, and memory.",planned
-AC-048,PRD-FR-027,"Generated PowerShell completion and UTF-8 response files handle spaces, Unicode, and long paths.",planned
+AC-048,PRD-FR-027,"Generated PowerShell completion and UTF-8 response files handle spaces, Unicode, and long paths.",partially-implemented (WP-002: completion + response files; long-path/Unicode process sweep pending)
 AC-049,PRD-FR-028,"Job integrity detects missing artifacts, invalid schema, digest mismatch, illegal state transition, and orphaned temporary files.",planned
 AC-050,PRD-FR-028,Prune defaults to dry-run and cannot remove jobs with pending recovery or undo retention.,planned

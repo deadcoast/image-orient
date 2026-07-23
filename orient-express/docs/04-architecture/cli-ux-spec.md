@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CLI
 title: CLI User Experience and Command Contract
-version: 0.1.1
+version: 0.2.0
 status: baseline
 as_of: 2026-07-23
 owner: Product
@@ -147,7 +147,18 @@ Requires a sealed compatible job. Options can restrict work (`--only accepted`, 
 - Paths follow redaction/output policy.
 - Unknown additive fields follow schema compatibility rules.
 
-## Proposed exit-code registry
+## Exit-code registry (frozen)
+
+**Frozen at WP-002 entry (2026-07-23, `cli-contract/1.0`).** The numeric
+values below are implemented in `OrientExpress.Contracts.Cli.CliExitCode`,
+guarded by registry-freeze tests, and must never be repurposed within this
+contract major version. Additional non-grammar refusal semantics recorded at
+implementation: a *gated* command (subsystem evidence pending) exits
+`22 CAPABILITY_UNAVAILABLE` with reason code `NOT_YET_IMPLEMENTED` and, in
+machine formats, emits a consumable refusal document — unlike grammar errors,
+which keep machine stdout empty.
+
+
 
 | Code | Symbol | Meaning |
 |---:|---|---|
@@ -167,7 +178,7 @@ Requires a sealed compatible job. Options can restrict work (`--only accepted`, 
 | 40 | `CANCELLED` | Graceful cancellation with durable resumable state. |
 | 50 | `INTERNAL_ERROR` | Unhandled defect/system invariant failure. |
 
-The exact numeric registry freezes only after SPIKE-009 and must never be repurposed within contract major version.
+The SPIKE-009 precondition for freezing was met and the freeze took effect at WP-002 entry (see above).
 
 **SPIKE-009 evidence (2026-07-23,
 [report](../../spikes/SPIKE-009-cli-contract/report.md)):** the registry and
