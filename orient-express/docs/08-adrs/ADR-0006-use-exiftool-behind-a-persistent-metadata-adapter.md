@@ -1,9 +1,9 @@
 ---
 document_id: ADR-0006
 title: Use ExifTool behind a persistent metadata adapter
-version: 0.1.0
-status: provisional
-as_of: 2026-07-21
+version: 0.1.1
+status: accepted
+as_of: 2026-07-23
 owner: Architecture
 depends_on: [DOC-RESEARCH, DOC-SRS]
 traces_to: [ADR-0006]
@@ -33,6 +33,15 @@ Adds executable/protocol/license/security supervision. Avoids reimplementing dec
 ## Proof / review gate
 
 SPIKE-004 and dependency/legal review. Failure blocks adoption, not the architecture.
+
+**Evidence (2026-07-23, [report](../../spikes/SPIKE-004-metadata/report.md)):**
+SPIKE-004 baseline-format gate met on ExifTool 13.59 (digest-pinned): an
+orientation write changes exactly one tag with EXIF/GPS/XMP/IPTC families
+byte-stable; `-P` preserves the filesystem mtime; errors are attributable per
+command via an `-echo4` stderr sentinel and the persistent process survives
+bad input. ExifTool's rewrite drops ADS and changes the NTFS file id, so
+metadata writes fold into the commit protocol's identity re-baseline.
+Maker-note preservation stays capability-gated on the SPIKE-001 corpus.
 
 ## Revisit triggers
 

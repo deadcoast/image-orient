@@ -1,0 +1,103 @@
+{
+  "spike": "SPIKE-004",
+  "environment": {
+    "osDescription": "Microsoft Windows 10.0.26200",
+    "framework": ".NET 10.0.8",
+    "exifTool": {
+      "path": "C:\\Users\\ryanf\\AppData\\Local\\Programs\\ExifTool\\ExifTool.exe",
+      "version": "13.59",
+      "sha256": "ce389bf0eff9f2e2aae21eb7d85e1f255d243bb9a2ddfed8da65f106ccba87e6",
+      "dependency": "DEP-007 (winget OliverBetz.ExifTool)"
+    },
+    "fixturePolicy": "synthetic cjpeg/managed fixtures; no user photos; maker notes await the SPIKE-001 corpus",
+    "harnessVersion": "0.1.0",
+    "runUtc": "2026-07-23T19:15:27.5829801\u002B00:00"
+  },
+  "scenarios": [
+    {
+      "Id": "E-STAYOPEN-PROTOCOL",
+      "Description": "one persistent process; every command synchronized on its execute id",
+      "Outcome": "pass",
+      "Measurements": {
+        "commands_synchronized": "true",
+        "exiftool_version": "13.59",
+        "single_process_reused": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-ORIENTATION-ROUNDTRIP",
+      "Description": "orientation write changes exactly one tag; EXIF/XMP/IPTC/GPS families intact",
+      "Outcome": "pass",
+      "Measurements": {
+        "changed_tags": "",
+        "family_EXIF_before": "12",
+        "family_EXIF_nonempty_and_preserved": "true",
+        "family_GPS_before": "5",
+        "family_GPS_nonempty_and_preserved": "true",
+        "family_IPTC_before": "3",
+        "family_IPTC_nonempty_and_preserved": "true",
+        "family_XMP_before": "4",
+        "family_XMP_nonempty_and_preserved": "true",
+        "jpeg_structure_stable": "true",
+        "lost_tags": "",
+        "no_tag_changed_besides_orientation": "true",
+        "no_tag_lost": "true",
+        "orientation_written": "true",
+        "tags_after": "54",
+        "tags_before": "53",
+        "write_response": "1 image files updated"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-TIMESTAMP-RESTORE",
+      "Description": "-P preserves the filesystem modify time; omitting it does not",
+      "Outcome": "pass",
+      "Measurements": {
+        "dash_p_preserves_mtime": "true",
+        "without_dash_p_mtime_changes": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-ADS-AND-IDENTITY",
+      "Description": "ExifTool\u0027s rewrite drops ADS and changes the file id (re-baseline required)",
+      "Outcome": "pass",
+      "Measurements": {
+        "ads_survived": "false",
+        "behavior_recorded": "true",
+        "file_id_after": "00100000002ef616",
+        "file_id_before": "00090000002ef617",
+        "file_id_changed": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-ERROR-CHANNEL",
+      "Description": "an invalid write surfaces an error and the process keeps serving",
+      "Outcome": "pass",
+      "Measurements": {
+        "error_surfaced_on_synchronized_stderr": "true",
+        "invalid_write_stderr": "Warning: Tag \u0027NotARealTagName\u0027 is not defined\r\nNothing to do.",
+        "process_survives_and_serves": "true"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-PNG-XMP",
+      "Description": "XMP round-trips into a PNG and the container stays valid",
+      "Outcome": "pass",
+      "Measurements": {
+        "png_container_still_valid": "true",
+        "xmp_rating_round_trips": "true"
+      },
+      "Error": null
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "pass": 6,
+    "fail": 0
+  }
+}
