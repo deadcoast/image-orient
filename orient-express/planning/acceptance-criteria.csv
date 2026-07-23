@@ -34,8 +34,8 @@ AC-032,PRD-FR-016,"Review thumbnails are orientation-labeled, bounded in size, a
 AC-033,PRD-FR-017,`--json` emits one schema-valid document; `--jsonl` emits independently parseable event lines.,implemented (WP-002 golden tests)
 AC-034,PRD-FR-017,"With machine output selected, stdout contains no progress bars, ANSI styling, or unsolicited prose.",implemented (WP-002 golden tests)
 AC-035,PRD-FR-018,All documented result classes map to stable exit codes tested on Windows PowerShell and cmd.exe.,partially-implemented (WP-002: registry frozen + in-process tests; shell-level sweep at WP-018/CI)
-AC-036,PRD-FR-019,Configuration precedence is CLI > environment > explicit file > user file > defaults.,planned
-AC-037,PRD-FR-019,Unknown or invalid configuration fields fail before file processing unless forward-compatible mode is explicitly selected.,planned
+AC-036,PRD-FR-019,Configuration precedence is CLI > environment > explicit file > user file > defaults.,implemented (WP-003: merger + provenance + golden tests)
+AC-037,PRD-FR-019,Unknown or invalid configuration fields fail before file processing unless forward-compatible mode is explicitly selected.,implemented (WP-003: strict is the only mode; no forward-compatible consumer exists yet)
 AC-038,PRD-FR-020,"A model bundle with wrong digest, unsupported schema, or incompatible runtime is quarantined and never activated.",planned
 AC-039,PRD-FR-020,Model activation is atomic and rollback restores the prior verified model.,planned
 AC-040,PRD-FR-021,Format support is reported per operation; unsupported write/metadata combinations fail during planning rather than mid-commit.,planned

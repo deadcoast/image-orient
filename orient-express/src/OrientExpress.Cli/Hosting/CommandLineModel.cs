@@ -30,6 +30,10 @@ public sealed class CommandLineModel
 
     public required Option<bool> NonInteractive { get; init; }
 
+    public required Option<string> ConfigPath { get; init; }
+
+    public required Option<string> Profile { get; init; }
+
     public required Command Version { get; init; }
 
     public required Command Doctor { get; init; }
@@ -37,6 +41,18 @@ public sealed class CommandLineModel
     public required Command Completion { get; init; }
 
     public required Argument<string> CompletionShell { get; init; }
+
+    public required Command ConfigInit { get; init; }
+
+    public required Option<string> ConfigInitPath { get; init; }
+
+    public required Option<bool> ConfigInitForce { get; init; }
+
+    public required Command ConfigShow { get; init; }
+
+    public required Option<bool> ConfigShowRedacted { get; init; }
+
+    public required Command ConfigValidate { get; init; }
 
     public required IReadOnlyDictionary<Command, GatedCommandSpec> Gated { get; init; }
 
@@ -62,9 +78,6 @@ public sealed class CommandLineModel
         new("models install", "Install a model artifact.", "WP-006"),
         new("models activate", "Activate an installed model.", "WP-006"),
         new("models remove", "Remove an installed model.", "WP-006"),
-        new("config init", "Write a starter configuration.", "WP-003"),
-        new("config show", "Show effective configuration.", "WP-003"),
-        new("config validate", "Validate configuration against its schema.", "WP-003"),
         new("benchmark", "Measure local throughput and latency.", "WP-021"),
     ];
 
@@ -105,6 +118,16 @@ public sealed class CommandLineModel
             Description = "Refuse prompts and progress; required for deterministic automation.",
             Recursive = true,
         };
+        var configPath = new Option<string>("--config")
+        {
+            Description = "Explicit configuration file (layer 3 of the precedence chain).",
+            Recursive = true,
+        };
+        var profile = new Option<string>("--profile")
+        {
+            Description = "Analysis profile override (CLI layer): conservative, balanced, or expert.",
+            Recursive = true,
+        };
 
         var version = new Command("version", "Report tool and contract versions.");
         var doctor = new Command(
@@ -113,6 +136,29 @@ public sealed class CommandLineModel
         var completionShell = new Argument<string>("shell") { Description = "Target shell (powershell)." };
         var completion = new Command("completion", "Emit a shell completion script from the command model.");
         completion.Arguments.Add(completionShell);
+
+        var configInitPath = new Option<string>("--path")
+        {
+            Description = "Destination file (defaults to the user configuration path).",
+        };
+        var configInitForce = new Option<bool>("--force") { Description = "Overwrite an existing file." };
+        var configInit = new Command("init", "Write a starter configuration with the built-in defaults.");
+        configInit.Options.Add(configInitPath);
+        configInit.Options.Add(configInitForce);
+
+        var configShowRedacted = new Option<bool>("--redacted")
+        {
+            Description = "Replace path values with digests (canonical support view).",
+        };
+        var configShow = new Command("show", "Show the effective configuration with per-setting provenance.");
+        configShow.Options.Add(configShowRedacted);
+
+        var configValidate = new Command("validate", "Validate the effective configuration; exits 21 on issues.");
+
+        var configCommand = new Command("config", "Configuration operations (precedence: CLI > env > --config > user file > defaults).");
+        configCommand.Subcommands.Add(configInit);
+        configCommand.Subcommands.Add(configShow);
+        configCommand.Subcommands.Add(configValidate);
 
         var root = new RootCommand(
             "upright — offline photo orientation for Windows. Diagnostic-mode alpha: " +
@@ -124,9 +170,12 @@ public sealed class CommandLineModel
         root.Options.Add(verbosity);
         root.Options.Add(correlationId);
         root.Options.Add(nonInteractive);
+        root.Options.Add(configPath);
+        root.Options.Add(profile);
         root.Subcommands.Add(version);
         root.Subcommands.Add(doctor);
         root.Subcommands.Add(completion);
+        root.Subcommands.Add(configCommand);
 
         var gated = new Dictionary<Command, GatedCommandSpec>();
         var parents = new Dictionary<string, Command>(StringComparer.Ordinal);
@@ -170,10 +219,18 @@ public sealed class CommandLineModel
             Verbosity = verbosity,
             CorrelationId = correlationId,
             NonInteractive = nonInteractive,
+            ConfigPath = configPath,
+            Profile = profile,
             Version = version,
             Doctor = doctor,
             Completion = completion,
             CompletionShell = completionShell,
+            ConfigInit = configInit,
+            ConfigInitPath = configInitPath,
+            ConfigInitForce = configInitForce,
+            ConfigShow = configShow,
+            ConfigShowRedacted = configShowRedacted,
+            ConfigValidate = configValidate,
             Gated = gated,
         };
     }

@@ -118,7 +118,7 @@ public sealed class CliHostContractTests : IDisposable
     [InlineData("review", "decide")]
     [InlineData("jobs", "prune")]
     [InlineData("models", "install")]
-    [InlineData("config", "show")]
+    [InlineData("verify")]
     [InlineData("benchmark")]
     public void Gated_commands_refuse_with_capability_unavailable(params string[] command)
     {
@@ -224,7 +224,7 @@ public sealed class CliHostContractTests : IDisposable
         using var cancellation = new CancellationTokenSource();
         cancellation.Cancel();
 
-        var exitCode = CliHost.Invoke(["doctor"], stdout, stderr, cancellation.Token);
+        var exitCode = CliHost.Invoke(["doctor"], stdout, stderr, cancellationToken: cancellation.Token);
         Assert.Equal((int)CliExitCode.Cancelled, exitCode);
         Assert.Contains("OPERATION_CANCELLED", stderr.ToString(), StringComparison.Ordinal);
     }

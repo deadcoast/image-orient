@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.7
+version: 0.1.8
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -24,6 +24,8 @@ SPIKE-008 is **complete** ([report](spikes/SPIKE-008-job-store/report.md)): the 
 SPIKE-001 is **in progress** ([harness](spikes/SPIKE-001-corpus/README.md)): the opt-in read-only inventory scanner (aggregates only; EXIF orientation histogram, formats, buckets) is verified by CI tests and a synthetic self-test, and the truth protocol (labeling guide, adjudication, kappa measurement, dataset cards, slice taxonomy) is drafted. The exit gate now waits only on operator-owned photos: scanner runs over opted-in trees, a stratified consented tranche, and double labeling. This is the sole remaining blocker for SPIKE-002/003 and the M2 ML work.
 
 **WP-002 (CLI host and contracts) is implemented** — the first production feature code ([context packet](planning/context-packets/WP-002-context-packet.md)). `upright` now hosts the full DOC-CLI command tree on System.CommandLine: working `version`, `doctor` (schema-shaped capability report with real platform probes), and `completion powershell`; frozen exit-code registry (`cli-contract/1.0`, DOC-CLI 0.2.0) in `OrientExpress.Contracts`; machine JSON/JSONL streams per the event schema; response files; cancellation wiring; and every not-yet-proven command honestly refusing with `22 CAPABILITY_UNAVAILABLE` and a consumable refusal document. 44 CLI golden tests run in CI. AC-033/034 implemented; AC-003/035/048 partially implemented (process-level sweeps land with WP-018/CI).
+
+**WP-003 (configuration and schemas) is implemented** ([context packet](planning/context-packets/WP-003-context-packet.md)): DOC-CONFIG's five-layer precedence (CLI > `UPRIGHT_*` environment > `--config` > user file > defaults) with per-setting provenance, strict schema-mirroring validation that fails closed before any work (AC-036/AC-037 implemented), the canonical effective-config digest that WP-009 will seal into plans, `privacy.telemetry` unoverridable by any layer, and working `config init/show/validate` — including `config show --redacted --json` as the canonical support view. Pure precedence/validation logic lives in `OrientExpress.Application`; the host gained a hermetic environment seam for testing.
 
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 

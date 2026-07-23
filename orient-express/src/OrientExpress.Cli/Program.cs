@@ -21,7 +21,7 @@ Console.CancelKeyPress += (_, eventArgs) =>
 
 try
 {
-    return CliHost.Invoke(args, Console.Out, Console.Error, cancellation.Token);
+    return CliHost.Invoke(args, Console.Out, Console.Error, cancellationToken: cancellation.Token);
 }
 catch (Exception exception)
 {
