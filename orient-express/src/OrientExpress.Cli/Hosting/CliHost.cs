@@ -1,5 +1,6 @@
 using System.CommandLine;
 using OrientExpress.Cli.Commands;
+using OrientExpress.Cli.Config;
 using OrientExpress.Cli.Output;
 using OrientExpress.Contracts.Cli;
 
@@ -17,14 +18,19 @@ public static class CliHost
     public const string ContractVersion = "cli-contract/1.0";
     public const string ExecutableName = "upright";
 
-    public static int Invoke(string[] args, TextWriter stdout, TextWriter stderr, CancellationToken cancellationToken = default)
+    public static int Invoke(
+        string[] args,
+        TextWriter stdout,
+        TextWriter stderr,
+        HostEnvironment? hostEnvironment = null,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(args);
         ArgumentNullException.ThrowIfNull(stdout);
         ArgumentNullException.ThrowIfNull(stderr);
         try
         {
-            return InvokeCore(args, stdout, stderr, cancellationToken);
+            return InvokeCore(args, stdout, stderr, hostEnvironment ?? HostEnvironment.CreateDefault(), cancellationToken);
         }
         catch (OperationCanceledException)
         {
@@ -42,7 +48,12 @@ public static class CliHost
         }
     }
 
-    private static int InvokeCore(string[] args, TextWriter stdout, TextWriter stderr, CancellationToken cancellationToken)
+    private static int InvokeCore(
+        string[] args,
+        TextWriter stdout,
+        TextWriter stderr,
+        HostEnvironment hostEnvironment,
+        CancellationToken cancellationToken)
     {
         if (!ResponseFiles.TryExpand(args, out var expanded, out var expansionError))
         {
@@ -90,6 +101,26 @@ public static class CliHost
         if (command == model.Completion)
         {
             return CompletionCommand.Run(context, model, parse.GetValue(model.CompletionShell)!);
+        }
+
+        if (command == model.ConfigInit)
+        {
+            return ConfigCommands.Init(
+                context,
+                hostEnvironment,
+                parse.GetValue(model.ConfigInitPath),
+                parse.GetValue(model.ConfigInitForce));
+        }
+
+        if (command == model.ConfigShow || command == model.ConfigValidate)
+        {
+            var load = ConfigLoader.Load(
+                hostEnvironment,
+                parse.GetValue(model.ConfigPath),
+                parse.GetValue(model.Profile));
+            return command == model.ConfigShow
+                ? ConfigCommands.Show(context, load, parse.GetValue(model.ConfigShowRedacted))
+                : ConfigCommands.Validate(context, load);
         }
 
         if (model.Gated.TryGetValue(command, out var spec))

@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0",
   "package": "orient-express dev-spec",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "as_of": "2026-07-23",
   "document_count": 59,
   "documents": [
     {
       "document_id": "DOC-CHANGELOG",
       "title": "Development Specification Changelog",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "status": "baseline",
       "as_of": "2026-07-23",
       "owner": "Architecture",
@@ -96,7 +96,7 @@
     {
       "document_id": "DOC-STATUS",
       "title": "orient-express Planning Status",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "status": "baseline",
       "as_of": "2026-07-23",
       "owner": "Program",

@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.7
+version: 0.1.8
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,17 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.8 — 2026-07-23
+
+WP-003 configuration and schemas (implemented):
+
+- Context packet at `planning/context-packets/WP-003-context-packet.md`.
+- `OrientExpress.Contracts`: configuration record tree mirroring `schemas/config.schema.json` with strict unknown-member rejection (AC-037), plus `EffectiveConfig`/`ConfigIssue`.
+- `OrientExpress.Application` (pure, package-free): built-in defaults mirroring schema defaults; deterministic five-layer merge with per-setting provenance (AC-036); validator mirroring schema bounds/enums/consts including `privacy.telemetry` pinned false; canonical effective-config digest (future plan sealing); `UPRIGHT_GROUP__KEY` environment mapping where unknown `UPRIGHT_` names and malformed values fail loudly.
+- `OrientExpress.Cli`: `HostEnvironment` seam (hermetic tests, no process-global state); `ConfigLoader` fails closed — any parse, mapping, or validation issue means exit `21 INVALID_CONFIGURATION` and no work; global `--config`/`--profile`; working `config init` (starter file, refuses overwrite with `34 CONFLICT`/`CONFIG_EXISTS`, `--force`), `config show` (provenance + digest; `--redacted` digests path values; machine `config.effective` document), `config validate` (machine `config.issues` document on failure).
+- Tests: 13 Application precedence/validation unit tests + 9 CLI config golden tests; gated-command list updated (config commands are now real).
+- Affected IDs: WP-003, PRD-FR-019, NFR-MAINT-002, AC-036, AC-037, DOC-CONFIG (implemented as specified; no text change), COMP-CONFIG, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema text changes; no migration impact.
 
 ## 0.1.7 — 2026-07-23
 
