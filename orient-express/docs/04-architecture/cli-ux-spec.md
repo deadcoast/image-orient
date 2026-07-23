@@ -1,9 +1,9 @@
 ---
 document_id: DOC-CLI
 title: CLI User Experience and Command Contract
-version: 0.1.0
+version: 0.1.1
 status: baseline
-as_of: 2026-07-21
+as_of: 2026-07-23
 owner: Product
 depends_on: [DOC-WORKFLOWS, DOC-ARCH, DOC-CONFIG]
 traces_to: [PRD-FR-002, PRD-FR-016, PRD-FR-017, PRD-FR-018, PRD-FR-019, PRD-FR-027, NFR-UX-001, NFR-UX-002]
@@ -168,6 +168,25 @@ Requires a sealed compatible job. Options can restrict work (`--only accepted`, 
 | 50 | `INTERNAL_ERROR` | Unhandled defect/system invariant failure. |
 
 The exact numeric registry freezes only after SPIKE-009 and must never be repurposed within contract major version.
+
+**SPIKE-009 evidence (2026-07-23,
+[report](../../spikes/SPIKE-009-cli-contract/report.md)):** the registry and
+machine-stream rules are validated on System.CommandLine 2.0.10 (DEP-002) with
+golden tests and out-of-process byte-level checks; numerics may freeze at
+WP-002 entry. Binding contract decisions recorded from the spike:
+
+- Exit aggregation: failed > review > success > capability-unavailable >
+  nothing-to-do; cancellation dominates all.
+- Grammar errors keep machine stdout empty: diagnostics on stderr, exit 20;
+  automation keys on the exit code.
+- The host must reject option-like tokens bound into greedy positional
+  arguments — the parser alone does not enforce the grammar guarantee.
+- Machine output requires explicit UTF-8-without-BOM console encoding on
+  Windows; redirected stdout otherwise uses the legacy codepage.
+- Non-ASCII in machine output is `\uXXXX`-escaped; decoded values are the
+  contract, and consumers must not byte-match non-ASCII paths.
+- Response files: UTF-8, one argument per line, `#` comments, no nesting,
+  expanded by the host before parsing.
 
 ## PowerShell behavior
 

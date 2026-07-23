@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.3
+version: 0.1.4
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,17 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.4 — 2026-07-23
+
+SPIKE-009 CLI contract and automation ergonomics (complete):
+
+- Added the SPIKE-009 harness under `spikes/SPIKE-009-cli-contract/` (`OrientExpress.Spike009` plus tests, registered in the solution): a representative DOC-CLI command slice on System.CommandLine 2.0.10 with machine event streams per `schemas/event.schema.json`, the exit-code registry, sealed digest-checked plans, response files, model-derived PowerShell completion, and simulated cancellation.
+- 20 in-process golden contract tests run in CI; 11 out-of-process evidence scenarios measure byte-level behavior (no BOM, strict UTF-8, stream separation, `$LASTEXITCODE` values), all passing.
+- Destructive guard proven: in-place plans refuse to apply without `--acknowledge-in-place` (`IN_PLACE_NOT_ACKNOWLEDGED`); tampered plans are refused with `30 STALE_PLAN`.
+- DOC-CLI 0.1.1 records the binding contract decisions: exit aggregation order, empty machine stdout on grammar errors, host-side rejection of option-like positional tokens (parser binds them silently), explicit UTF-8-without-BOM console encoding on Windows, `\uXXXX` escaping of non-ASCII, and host-expanded response files.
+- Pinned System.CommandLine 2.0.10 centrally (DEP-002 qualification evidence recorded). WP-002 and WP-018 are unblocked on their spike gate; registry numerics freeze at WP-002 entry.
+- Affected IDs: SPIKE-009, DEP-002, ADR-0003 (plan-consumption contract exercised), ADR-0010, DOC-CLI, DOC-STATUS, DOC-CHANGELOG, WP-002, WP-018. No schema changes (event schema exercised as-is); no migration impact.
 
 ## 0.1.3 — 2026-07-23
 
