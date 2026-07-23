@@ -5,7 +5,13 @@
     <!-- Provisional executable name per DOC-INDEX / product charter. -->
     <AssemblyName>upright</AssemblyName>
     <RootNamespace>OrientExpress.Cli</RootNamespace>
+    <Version>0.1.0-alpha</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- DEP-002, qualified by SPIKE-009. -->
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
 
   <!-- Composition root: the only src project allowed to see infrastructure. -->
   <ItemGroup>

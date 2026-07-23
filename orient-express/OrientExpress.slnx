@@ -12,6 +12,7 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/OrientExpress.ArchitectureTests/OrientExpress.ArchitectureTests.csproj" />
+    <Project Path="tests/OrientExpress.CliTests/OrientExpress.CliTests.csproj" />
     <Project Path="tests/OrientExpress.UnitTests/OrientExpress.UnitTests.csproj" />
   </Folder>
   <Folder Name="/spikes/">

@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.6
+version: 0.1.7
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,19 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.7 — 2026-07-23
+
+WP-002 CLI host and contracts (implemented) — first production feature code:
+
+- Generated the DOC-DEVPLAN work-package context packet (`planning/context-packets/WP-002-context-packet.md`) before implementation.
+- `OrientExpress.Contracts` gains the frozen exit-code registry (`CliExitCode` + symbols, cli-contract/1.0), the machine event record per `schemas/event.schema.json`, and capability-report records per `schemas/capability-report.schema.json` — all package-free per NFR-MAINT-001.
+- `OrientExpress.Cli` replaces the stub with the production System.CommandLine host (DEP-002): full DOC-CLI command tree; global output options; UTF-8-without-BOM console encoding; host-expanded response files; Ctrl+C cancellation wired to exit `40 CANCELLED`; stable error lines (symbol + reason code + message + next action).
+- Working commands: `version`, `doctor` (unwrapped schema-shaped capability report with real probes: long-paths registry value, temp writability, OS/framework/arch; capability truth-telling — only `cli-host` reports available), `completion powershell` (deterministic, model-derived).
+- Every other documented command is registered but gated: refuses with `22 CAPABILITY_UNAVAILABLE`, reason `NOT_YET_IMPLEMENTED`, the gating WP ids, and — in machine formats — a consumable refusal document. Contract decision recorded in DOC-CLI 0.2.0 (registry frozen at WP-002 entry).
+- `tests/OrientExpress.CliTests`: 44 golden tests (registry freeze, machine-stream purity, capability-report shape, gated refusals, grammar-error classes, response files, completion determinism, correlation ids, cancellation).
+- Statuses: WP-002 → implemented; AC-033/AC-034 implemented; AC-003/AC-035/AC-048 partially implemented with named remainders.
+- Affected IDs: WP-002, PRD-FR-002 (doctor portion), PRD-FR-017, PRD-FR-018, PRD-FR-027, NFR-UX-001, NFR-UX-002, AC-003, AC-033, AC-034, AC-035, AC-048, DEP-002, DOC-CLI, DOC-STATUS, DOC-CHANGELOG. No schema changes (existing draft schemas implemented as-is); no migration impact.
 
 ## 0.1.6 — 2026-07-23
 
