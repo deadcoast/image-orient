@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.4
+version: 0.1.5
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,17 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.5 — 2026-07-23
+
+SPIKE-008 job-store durability and scale (complete); ADR-0008 accepted:
+
+- Added the SPIKE-008 harness under `spikes/SPIKE-008-job-store/` (`OrientExpress.Spike008` plus tests, registered in the solution): DOC-DATAMODEL schema prototype with trigger-enforced state-transition constraints (append-only events, sealed-plan immutability, forward-only journal checkpoints), WAL + NORMAL durability policy, incremental canonical plan sealing, guarded v1→v2 migration, kernel-kill crash matrix, and the 100k/1m synthetic-row gate.
+- Gate met with wide margins: batched inserts 162k–185k rows/s (target 20k), 1m-row restart+counts 43 ms (target 2 s), migration 243 ms (target 30 s), integrity ok after both crash cases with exactly the committed rows surviving. Single-row transactions measured 6.5× slower than batching — the batched single-writer queue is a requirement.
+- ADR-0008 provisional → **accepted** (0.1.1); decision register updated; DEP-011 marked selected with evidence.
+- Dependency-intake finding: NuGet audit failed the build on the vulnerable transitive `SQLitePCLRaw.lib.e_sqlite3` 2.1.11 (GHSA-2m69-gcr7-jv3q); pinned `SQLitePCLRaw.bundle_e_sqlite3` 2.1.12 as DEP-018 with a review rule on every DEP-011 bump.
+- DOC-WBS 0.1.2 adds SPIKE-008 and SPIKE-009 design notes for WP-002/004/009/011/017.
+- Affected IDs: SPIKE-008, ADR-0008, DEP-011, DEP-018, DOC-DATAMODEL (constraints exercised as specified; no text change), DOC-WBS, DOC-STATUS, DOC-CHANGELOG, WP-004, WP-009, WP-011, WP-017, NFR-SEC-002. No schema-contract or migration impact.
 
 ## 0.1.4 — 2026-07-23
 

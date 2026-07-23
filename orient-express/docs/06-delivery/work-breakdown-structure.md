@@ -1,7 +1,7 @@
 ---
 document_id: DOC-WBS
 title: Work Breakdown Structure and Backlog Dependencies
-version: 0.1.1
+version: 0.1.2
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -53,6 +53,19 @@ Work packages are vertical outcomes, not folders or generic engineering activiti
   recovery decision table are proven on NTFS and should be carried into the
   production journal design unchanged; `MoveFileEx` replace is disqualified
   for in-place commits.
+- **WP-002 (from SPIKE-009):** the host must reject option-like tokens bound
+  into greedy positional arguments; machine output requires explicit
+  UTF-8-without-BOM console encoding; response files are host-expanded (one
+  argument per line); grammar errors keep machine stdout empty. Registry
+  numerics freeze at WP-002 entry. See the
+  [SPIKE-009 report](../../spikes/SPIKE-009-cli-contract/report.md).
+- **WP-004 / WP-009 / WP-011 / WP-017 (from SPIKE-008):** batched writes
+  through the single-writer queue are a requirement (single-row transactions
+  are 6.5× slower); state-transition constraints live in the schema as
+  triggers; WAL + `synchronous=NORMAL` + explicit truncate checkpoints is the
+  qualified durability policy; out-of-range schema versions are refused. Keep
+  the SQLitePCLRaw bundle pin (DEP-018) under review on every DEP-011 bump.
+  See the [SPIKE-008 report](../../spikes/SPIKE-008-job-store/report.md).
 
 ## Sizing and decomposition rule
 

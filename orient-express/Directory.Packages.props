@@ -4,6 +4,11 @@
        inventoried in planning/technology-dependencies.csv before use. -->
   <ItemGroup>
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <!-- DEP-011 (SRC-016/SRC-017, ADR-0008): job store under SPIKE-008 qualification.
+         SQLitePCLRaw is pinned above the transitive 2.1.11, which NuGet audit
+         flags for GHSA-2m69-gcr7-jv3q (SPIKE-008 dependency-intake finding). -->
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.10" />
+    <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.12" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <!-- DEP-002 (SRC-002, ADR-0010): CLI parser under SPIKE-009 qualification. -->
     <PackageVersion Include="System.CommandLine" Version="2.0.10" />

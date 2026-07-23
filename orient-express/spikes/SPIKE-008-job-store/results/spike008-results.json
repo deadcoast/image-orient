@@ -1,0 +1,119 @@
+{
+  "spike": "SPIKE-008",
+  "environment": {
+    "osDescription": "Microsoft Windows 10.0.26200",
+    "framework": ".NET 10.0.8",
+    "processArchitecture": "X64",
+    "dependency": "Microsoft.Data.Sqlite 10.0.10 (DEP-011)",
+    "harnessVersion": "0.1.0",
+    "workRoot": "C:\\Users\\ryanf\\AppData\\Local\\Temp\\spike008-20260723-162352",
+    "runUtc": "2026-07-23T16:24:03.0824907\u002B00:00"
+  },
+  "scenarios": [
+    {
+      "Id": "E-CONFIG",
+      "Description": "WAL \u002B NORMAL sync \u002B integrity are active",
+      "Outcome": "pass",
+      "Measurements": {
+        "integrity_ok": "true",
+        "journal_mode_wal": "true",
+        "sqlite_version": "3.53.3"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-BATCHING",
+      "Description": "transaction batching economics: single-row vs 1k-row transactions",
+      "Outcome": "pass",
+      "Measurements": {
+        "batched_1k_rows_per_sec": "137604",
+        "batched_meets_20k_per_sec_target": "true",
+        "single_row_txn_rows_per_sec": "20902"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-CRASH-MID-TXN",
+      "Description": "kernel kill mid-transaction: only committed rows survive; integrity ok",
+      "Outcome": "pass",
+      "Measurements": {
+        "child_crashed_as_injected": "true",
+        "child_exit_code": "42",
+        "exactly_committed_rows_survive": "true",
+        "integrity_ok_after_crash": "true",
+        "rows_after_recovery": "10000"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-CRASH-AFTER-COMMIT",
+      "Description": "kernel kill after commit: every committed row is durable",
+      "Outcome": "pass",
+      "Measurements": {
+        "child_crashed_as_injected": "true",
+        "child_exit_code": "42",
+        "exactly_committed_rows_survive": "true",
+        "integrity_ok_after_crash": "true",
+        "rows_after_recovery": "10000"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-SCALE-100K",
+      "Description": "ADR-0008 gate at 100k synthetic rows",
+      "Outcome": "pass",
+      "Measurements": {
+        "counts_total_matches": "true",
+        "db_size_bytes": "25272320",
+        "event_append_rows_per_sec": "692193",
+        "insert_meets_20k_per_sec_target": "true",
+        "insert_rows_per_sec": "162086",
+        "integrity_check_ms": "106",
+        "integrity_ok": "true",
+        "migration_under_30s_target": "true",
+        "migration_v1_to_v2_ms": "24",
+        "pending_batch_query_ms": "0",
+        "pending_batch_returns_rows": "true",
+        "plan_seal_prefix": "093c568e960c0279",
+        "restart_counts_under_2s_target": "true",
+        "restart_open_and_counts_ms": "7",
+        "seal_ms": "91",
+        "seal_verifies_after_restart": "true",
+        "seal_verify_ms": "73",
+        "wal_checkpoint_ms": "4"
+      },
+      "Error": null
+    },
+    {
+      "Id": "E-SCALE-1M",
+      "Description": "ADR-0008 gate at 1m synthetic rows",
+      "Outcome": "pass",
+      "Measurements": {
+        "counts_total_matches": "true",
+        "db_size_bytes": "184745984",
+        "event_append_rows_per_sec": "773963",
+        "insert_meets_20k_per_sec_target": "true",
+        "insert_rows_per_sec": "185286",
+        "integrity_check_ms": "1127",
+        "integrity_ok": "true",
+        "migration_under_30s_target": "true",
+        "migration_v1_to_v2_ms": "243",
+        "pending_batch_query_ms": "0",
+        "pending_batch_returns_rows": "true",
+        "plan_seal_prefix": "b2fb5af8da74bc92",
+        "restart_counts_under_2s_target": "true",
+        "restart_open_and_counts_ms": "43",
+        "seal_ms": "590",
+        "seal_verifies_after_restart": "true",
+        "seal_verify_ms": "580",
+        "wal_checkpoint_ms": "4"
+      },
+      "Error": null
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "pass": 6,
+    "fail": 0
+  }
+}
