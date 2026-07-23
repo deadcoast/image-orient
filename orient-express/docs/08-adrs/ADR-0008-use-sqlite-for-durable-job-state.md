@@ -1,9 +1,9 @@
 ---
 document_id: ADR-0008
 title: Use SQLite for durable job state
-version: 0.1.0
-status: provisional
-as_of: 2026-07-21
+version: 0.1.1
+status: accepted
+as_of: 2026-07-23
 owner: Architecture
 depends_on: [DOC-RESEARCH, DOC-SRS]
 traces_to: [ADR-0008]
@@ -11,7 +11,7 @@ traces_to: [ADR-0008]
 
 # ADR-0008: Use SQLite for durable job state
 
-**Status:** Accepted pending scale spike  
+**Status:** Accepted (SPIKE-008 proof gate met 2026-07-23)  
 **Decision date:** 2026-07-21
 
 ## Context
@@ -33,6 +33,19 @@ Schema/migration discipline and WAL/network-filesystem policy are required. Job 
 ## Proof / review gate
 
 SPIKE-008 at 100k and 1m synthetic rows plus crash/migration/integrity tests.
+
+**Evidence (2026-07-23,
+[report](../../spikes/SPIKE-008-job-store/report.md)):** gate met at both row
+counts with wide margins — batched inserts 162k–185k rows/s (target 20k),
+1m-row restart+counts 43 ms (target 2 s), migration 243 ms (target 30 s),
+`integrity_check = ok` including after kernel-kill crash injection with
+exactly the committed rows surviving. DOC-DATAMODEL constraints (append-only
+events, sealed-plan immutability, forward-only journal checkpoints) are
+enforced by schema triggers and proven by CI tests. Single-row transactions
+measured 6.5× slower than 1k-row batches: the batched single-writer queue is
+a requirement, not an optimization. Supply chain: the transitive
+`SQLitePCLRaw.lib.e_sqlite3` 2.1.11 is vulnerable (GHSA-2m69-gcr7-jv3q);
+`SQLitePCLRaw.bundle_e_sqlite3` is pinned at ≥ 2.1.12 (DEP-018).
 
 ## Revisit triggers
 

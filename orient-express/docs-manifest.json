@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0",
   "package": "orient-express dev-spec",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "as_of": "2026-07-23",
   "document_count": 59,
   "documents": [
     {
       "document_id": "DOC-CHANGELOG",
       "title": "Development Specification Changelog",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "status": "baseline",
       "as_of": "2026-07-23",
       "owner": "Architecture",
@@ -96,7 +96,7 @@
     {
       "document_id": "DOC-STATUS",
       "title": "orient-express Planning Status",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "status": "baseline",
       "as_of": "2026-07-23",
       "owner": "Program",
@@ -1172,7 +1172,7 @@
     {
       "document_id": "DOC-WBS",
       "title": "Work Breakdown Structure and Backlog Dependencies",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "status": "baseline",
       "as_of": "2026-07-23",
       "owner": "Program",
@@ -1368,9 +1368,9 @@
     {
       "document_id": "ADR-0008",
       "title": "Use SQLite for durable job state",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "status": "provisional",
-      "as_of": "2026-07-21",
+      "as_of": "2026-07-23",
       "owner": "Architecture",
       "depends_on": [
         "DOC-RESEARCH",

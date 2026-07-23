@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- SPIKE-008 decision harness (DOC-SPIKES): qualifies the DOC-DATAMODEL
+         job store on SQLite (DEP-011, ADR-0008). Evidence tooling, not the
+         WP-009 job store. -->
+    <AssemblyName>spike008</AssemblyName>
+    <RootNamespace>OrientExpress.Spike008</RootNamespace>
+    <!-- LibraryImport-generated marshalling stubs require unsafe blocks. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+    <!-- Direct reference lifts the vulnerable transitive (NU1903). -->
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" />
+  </ItemGroup>
+
+</Project>
