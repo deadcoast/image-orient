@@ -19,9 +19,9 @@ AC-017,PRD-FR-009,"Collision behavior is deterministic, logged, and configurable
 AC-018,PRD-FR-010,In-place mode cannot begin without explicit acknowledgement and a writable verified backup target.,planned
 AC-019,PRD-FR-010,Fault injection before atomic replacement leaves the source unchanged and a recoverable journal.,planned
 AC-020,PRD-FR-010,Fault injection after replacement but before final checkpoint is reconciled safely on restart.,planned
-AC-021,PRD-FR-011,Eligible JPEG rotations use the DCT-domain path without generation loss.,planned
-AC-022,PRD-FR-011,Non-MCU-aligned JPEG behavior follows the selected abort/reencode/trim/preserve-partial policy and is never silent.,planned
-AC-023,PRD-FR-012,Successful normalization writes display-equivalent upright pixels and sets orientation metadata to 1.,planned
+AC-021,PRD-FR-011,Eligible JPEG rotations use the DCT-domain path without generation loss.,implemented (WP-010: jpegtran -copy all; -perfect successes byte-exact on inverse-rotation round-trip in tests)
+AC-022,PRD-FR-011,Non-MCU-aligned JPEG behavior follows the selected abort/reencode/trim/preserve-partial policy and is never silent.,implemented (WP-010: abort=JPEG_EDGE_NOT_PERFECT refusal; trim/preserve-partial per SPIKE-005; reencode is a typed refusal until the raster path exists)
+AC-023,PRD-FR-012,Successful normalization writes display-equivalent upright pixels and sets orientation metadata to 1.,partially implemented (WP-010 engine: lossless operation + tag=1 on the stage copy; independent display-equivalence verification lands with WP-013)
 AC-024,PRD-FR-012,Required metadata fields pass the device/format round-trip corpus under the active preservation policy.,planned
 AC-025,PRD-FR-013,"Verification reopens output and rejects decode failure, wrong dimensions, wrong orientation, or missing required metadata.",planned
 AC-026,PRD-FR-013,A verification failure prevents commit or triggers recovery without deleting the last known-good source.,planned

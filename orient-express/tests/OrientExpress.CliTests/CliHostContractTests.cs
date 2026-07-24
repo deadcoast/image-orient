@@ -81,7 +81,7 @@ public sealed class CliHostContractTests : IDisposable
                 component => component.GetProperty("id").GetString()!,
                 component => component.GetProperty("available").GetBoolean());
         string[] implemented = ["cli-host", "configuration", "filesystem-identity", "format-prober", "inference-runtime"];
-        string[] machineDependent = ["metadata-exiftool", "orientation-model"];
+        string[] machineDependent = ["metadata-exiftool", "orientation-model", "transform-jpegtran"];
         Assert.All(implemented, id => Assert.True(availability[id], id));
         Assert.All(
             availability.Where(pair => !implemented.Contains(pair.Key) && !machineDependent.Contains(pair.Key)),

@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.15
+version: 0.1.16
 status: baseline
 as_of: 2026-07-24
 owner: Architecture
@@ -10,6 +10,19 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.16 — 2026-07-24
+
+WP-010 transform engine (implemented) and SPIKE-002 two-rule evaluation:
+
+- Context packet at `planning/context-packets/WP-010-context-packet.md`.
+- `OrientExpress.Contracts.Transform`: `JpegOperation` (the eight jpegtran lossless operations), `JpegEdgePolicy`, `TransformPlan` (policy-authored, executed verbatim — no silent fallbacks), `StagingTarget`, `TransformArtifact` (`CoefficientLossless` only for `-perfect` semantics or untouched coefficients).
+- `OrientExpress.Application.Transform`: `IImageTransformer` port (DOC-COMPONENTS shape); `OrientationNormalizationPlanner` — pure mapping of EXIF orientation 1..8 to one lossless operation, expected dimensions, and tag reset to 1 (the deterministic no-ML normalization path; AC-006 display-transform ordering).
+- `OrientExpress.Infrastructure.Imaging`: `JpegtranTransformer` per the SPIKE-005-approved mapping — always `-copy all`; `abort`→`-perfect` refusing `JPEG_EDGE_NOT_PERFECT`; `preserve-partial`→default; `trim`→`-trim`; `reencode`→typed `TRANSFORM_REENCODE_UNAVAILABLE` (no raster encoder exists; a silent lossy substitute is forbidden). Exclusive stage creation (DOC-FSSAFE), stage cleanup on every failure path, orientation tag set on the stage copy via the ExifTool adapter (SPIKE-004 binding). `JpegtranLocator` (DEP-008) surfaces path+digest through a new doctor `transform-jpegtran` component row.
+- Tests: 18 pure planner/policy unit tests; 7 integration tests against real jpegtran (skip when absent) — byte-exact inverse-rotation round-trip on the SPIKE-005 512x512 always-accepted fixture (AC-021), `JPEG_EDGE_NOT_PERFECT` on the 500x500 always-refused fixture, preserve-partial/trim/reencode/no-op/conflict/cleanup paths (AC-022). 225 tests green.
+- SPIKE-002 evaluate mode now scores two decision rules per photo (first real-corpus run: rule A 80.95% on 21 photos with confidently-wrong cases): rule B sums confident faces (>=0.6 vote filter), checks eyes-above-mouth geometry, requires a relative margin, and abstains with recorded reasons; `--show-failures` (console-only paths) and `--debug-evidence` added; results JSONs git-ignored.
+- Honest scope: the CLI still cannot rotate a photo — the engine reaches `scan`/`apply` only through WP-009 + WP-011..WP-014; AC-023 is engine-level until WP-013's independent verification; AC-024 stays gated on the corpus tranche.
+- Affected IDs: WP-010, SPIKE-002, PRD-FR-011, PRD-FR-012, NFR-FID-002, AC-006, AC-021, AC-022, AC-023, ADR-0006, ADR-0007, DEP-007, DEP-008, COMP-TRANSFORM, COMP-CODEC, COMP-METADATA, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema text changes.
 
 ## 0.1.15 — 2026-07-24
 
