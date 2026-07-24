@@ -39,8 +39,8 @@ AC-037,PRD-FR-019,Unknown or invalid configuration fields fail before file proce
 AC-038,PRD-FR-020,"A model bundle with wrong digest, unsupported schema, or incompatible runtime is quarantined and never activated.",implemented (WP-006: digest/schema/runtime failures quarantine with typed reasons; quarantined bundles are unlistable and unactivatable)
 AC-039,PRD-FR-020,Model activation is atomic and rollback restores the prior verified model.,implemented (WP-006: temp+ReplaceFileW pointer write; rollback restores the prior model only after re-verification)
 AC-040,PRD-FR-021,Format support is reported per operation; unsupported write/metadata combinations fail during planning rather than mid-commit.,planned
-AC-041,PRD-FR-022,"Configured queue and worker limits bound memory under a 100,000-file synthetic workload.",planned
-AC-042,PRD-FR-022,Ctrl+C first requests graceful cancellation; a second interrupt terminates promptly with durable state.,planned
+AC-041,PRD-FR-022,"Configured queue and worker limits bound memory under a 100,000-file synthetic workload.",partially implemented (WP-011: limits provably bound stage concurrency and in-flight items; the 100k synthetic memory measurement runs with WP-014 scan)
+AC-042,PRD-FR-022,Ctrl+C first requests graceful cancellation; a second interrupt terminates promptly with durable state.,partially implemented (WP-011: soft-cancel drains admitted items and hard-abort abandons promptly in tests; the console double-interrupt wiring is WP-014)
 AC-043,PRD-FR-023,"Every file has a terminal event with action, result, reason code, timings, and provenance.",planned
 AC-044,PRD-FR-023,Default logs contain no image bytes and path redaction is available for support bundles.,planned
 AC-045,PRD-FR-024,Sequence consensus can break a bounded tie but cannot override hard safety or evidence gates.,planned
