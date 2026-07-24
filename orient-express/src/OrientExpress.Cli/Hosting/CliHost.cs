@@ -95,7 +95,19 @@ public static class CliHost
 
         if (command == model.Doctor)
         {
-            return DoctorCommand.Run(context, parse.GetValue(model.DoctorProbeTarget), cancellationToken);
+            using var metadata = CreateMetadataService(hostEnvironment);
+            return DoctorCommand.Run(context, parse.GetValue(model.DoctorProbeTarget), metadata, cancellationToken);
+        }
+
+        if (command == model.Inspect)
+        {
+            using var metadata = CreateMetadataService(hostEnvironment);
+            return InspectCommand.Run(
+                context,
+                parse.GetValue(model.InspectFile)!,
+                metadata,
+                new OrientExpress.Infrastructure.Imaging.ManagedFormatProber(),
+                cancellationToken);
         }
 
         if (command == model.Completion)
@@ -169,6 +181,12 @@ public static class CliHost
         context.WriteError(CliExitCode.CapabilityUnavailable, ReasonCode, message, nextAction);
         return (int)CliExitCode.CapabilityUnavailable;
     }
+
+    private static OrientExpress.Infrastructure.Metadata.ExifTool.ExifToolMetadataService CreateMetadataService(
+        HostEnvironment hostEnvironment)
+        => new OrientExpress.Infrastructure.Metadata.ExifTool.ExifToolMetadataService(
+            OrientExpress.Infrastructure.Metadata.ExifTool.ExifToolLocator.Locate(
+                hostEnvironment.EnvironmentVariables));
 
     private static void WriteGrammarError(TextWriter stderr, string message)
         => stderr.WriteLine(

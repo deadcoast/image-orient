@@ -186,6 +186,7 @@
         "type": "Project",
         "dependencies": {
           "OrientExpress.Application": "[1.0.0, )",
+          "OrientExpress.Contracts": "[1.0.0, )",
           "OrientExpress.Domain": "[1.0.0, )"
         }
       },
@@ -200,6 +201,7 @@
         "type": "Project",
         "dependencies": {
           "OrientExpress.Application": "[1.0.0, )",
+          "OrientExpress.Contracts": "[1.0.0, )",
           "OrientExpress.Domain": "[1.0.0, )"
         }
       },

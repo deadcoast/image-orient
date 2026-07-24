@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.12
+version: 0.1.13
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,19 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.13 — 2026-07-23
+
+WP-005 metadata and codec adapters (implemented, diagnostic mode):
+
+- Context packet at `planning/context-packets/WP-005-context-packet.md`.
+- `OrientExpress.Contracts`: `MetadataSnapshot` (group-qualified field-aware tags, NFR-FID-001) with EXIF orientation 1–8 accessor, `MetadataDiff`, `ImageFormatProbe`.
+- `OrientExpress.Application`: `IMetadataService` (diagnostic subset of DOC-COMPONENTS: Identify/Read/WriteOrientation/Compare) and `IImageFormatProber` ports.
+- `OrientExpress.Infrastructure.Metadata.ExifTool`: production SPIKE-004 protocol — lazy single-process `-stay_open`, per-command `{ready<id>}` + `-echo4` stderr sentinels, allowlisted operations, `-j -G1 -a -n` reads, `-P -overwrite_original` orientation write, volatile-group-aware field diff, tool locator + version/digest identity, clean degradation to `EXIFTOOL_NOT_FOUND`.
+- `OrientExpress.Infrastructure.Imaging`: `ManagedFormatProber` — bounded 256 KiB header probe, content signatures (JPEG/PNG/HEIC/AVIF/WebP/TIFF/GIF/BMP), JPEG SOF dimensions + EXIF IFD0 orientation in both TIFF endiannesses, PNG IHDR; corrupt input warns, never throws (PRD-FR-003 read path, AC-005).
+- `upright inspect <file>` alpha (M1 exit deliverable): identity + format + orientation with `decision.available=false` and `DECISION_ENGINE_GATED`; `inspect.result` machine document; missing file refused with typed error. Doctor truth-telling updated: metadata-exiftool reports version + digest when found, format-prober available, per-format abilities with reason codes; scan's gate list corrected (WP-004/005 satisfied).
+- Tests: 9 prober tests (both endiannesses, truncation, typed not-found), 3 adapter tests including a real-tool read/write/diff cycle (skips when ExifTool is absent on CI), 4 inspect/doctor golden tests. 183 tests green across 10 test projects.
+- Affected IDs: WP-005, PRD-FR-003, PRD-FR-012 (adapter portion), PRD-FR-021 (baseline exposure), NFR-FID-001, AC-005, ADR-0006, DEP-007, DEP-009, COMP-METADATA, COMP-CODEC, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema or migration impact.
 
 ## 0.1.12 — 2026-07-23
 

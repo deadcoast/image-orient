@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.12
+version: 0.1.13
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -34,6 +34,8 @@ SPIKE-005 is **complete** ([report](spikes/SPIKE-005-jpeg-edge/report.md)): the 
 SPIKE-004 is **complete for baseline formats** ([report](spikes/SPIKE-004-metadata/report.md)): the ExifTool 13.59 `-stay_open` adapter (DEP-007 installed and digest-pinned) passed the round-trip matrix — an orientation write changes exactly one tag with EXIF/GPS/XMP/IPTC families byte-stable, `-P` preserves timestamps, and errors are attributable per command via an `-echo4` stderr sentinel with the process surviving bad input. ExifTool's rewrite drops ADS and changes the file id, folding into the commit protocol's identity re-baseline. ADR-0006 is **accepted**; maker-note guarantees stay capability-gated on the SPIKE-001 corpus tranche. WP-005's metadata spike gate is satisfied for baseline formats.
 
 SPIKE-007 is **complete** ([report](spikes/SPIKE-007-codecs/report.md)): JPEG/PNG (plus TIFF/BMP/GIF) are guaranteed on the WIC baseline with dimension-exact encode/decode round-trips and WIC-readable EXIF orientation; optional formats are gated per machine by header-engagement probes with stable diagnostics (this machine: HEIC/AVIF/WebP present-engaged, JPEG XL absent). Method finding: enumeration (registry or COM) is unreliable — decode-attempt probing is the capability mechanism. DEP-009 selected; Magick.NET stays a candidate behind a delegate-license review. Decode proof of optional formats awaits corpus samples. WP-005's codec spike gate is satisfied.
+
+**WP-005 (metadata and codec adapters) is implemented** ([context packet](planning/context-packets/WP-005-context-packet.md)): the production ExifTool `-stay_open` adapter (typed operations, per-command stdout **and** `-echo4` stderr sentinels, lazy start, thread-safe, digest-identified, degrades to typed `EXIFTOOL_NOT_FOUND` capability errors) behind the COMP-METADATA port; the bounded managed format prober (signatures, JPEG SOF + EXIF orientation both endiannesses, PNG IHDR) behind COMP-CODEC; capability truth-telling in doctor (metadata/format components, per-format read/metadata abilities with reason codes); and the **`upright inspect <file>` alpha** — identity, format, dimensions, and EXIF orientation with the decision engine explicitly gated (`DECISION_ENGINE_GATED`). With WP-002/003/004/005 implemented, **M1's component roster is complete except inference** (WP-006, gated on SPIKE-003 + model artifacts).
 
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 
