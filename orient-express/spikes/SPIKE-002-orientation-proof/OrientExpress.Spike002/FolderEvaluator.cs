@@ -27,6 +27,8 @@ public static class FolderEvaluator
         var resultsPath = "spike002-evaluation.json";
         var toolsDirectory = @"C:\libjpeg-turbo64\bin";
         var maxImages = 250;
+        var showFailures = false;
+        var debugEvidence = false;
         for (var index = 0; index + 1 < args.Length; index += 2)
         {
             switch (args[index])
@@ -42,6 +44,14 @@ public static class FolderEvaluator
                     break;
                 case "--max":
                     maxImages = int.Parse(args[index + 1], CultureInfo.InvariantCulture);
+                    break;
+                case "--show-failures":
+                    showFailures = true;
+                    index--;
+                    break;
+                case "--debug-evidence":
+                    debugEvidence = true;
+                    index--;
                     break;
                 default:
                     break;
@@ -62,20 +72,19 @@ public static class FolderEvaluator
             .Take(maxImages * 3)
             .ToList();
 
-        var cases = new List<CaseOutcome>();
-        int evaluated = 0, skippedExif = 0, skippedNoFace = 0, unreadable = 0;
+        var photos = new List<PhotoOutcome>();
+        int skippedExif = 0, skippedNoFace = 0, unreadable = 0;
         foreach (var file in files)
         {
-            if (evaluated >= maxImages)
+            if (photos.Count >= maxImages)
             {
                 break;
             }
 
-            int? exifOrientation;
             PixelImage image;
             try
             {
-                exifOrientation = ReadExifOrientation(file);
+                var exifOrientation = ReadExifOrientation(file);
                 if (exifOrientation is not null && exifOrientation != 1)
                 {
                     skippedExif++;
@@ -101,109 +110,167 @@ public static class FolderEvaluator
                     Math.Max(64, (int)(image.Height * scale)));
             }
 
-            var uprightFaces = detector.Detect(image, scoreThreshold: 0.5f);
-            if (uprightFaces.Count == 0)
+            // The four rotations of the photo ARE the four restore candidates
+            // for every presentation, so one pass per rotation covers all.
+            var evidence = new CandidateEvidence[4];
+            for (var rotation = 0; rotation < 4; rotation++)
+            {
+                var faces = detector.Detect(image.Rotate(rotation), scoreThreshold: 0.3f);
+
+                // Only clearly-detected faces (>= 0.6) vote in the sum;
+                // weak 0.3-level detections would otherwise let several
+                // false faces in a sideways copy out-vote one real face.
+                evidence[rotation] = new CandidateEvidence(
+                    faces.Count > 0 ? faces[0].Score : 0,
+                    faces.Where(face => face.Score >= 0.6f).Sum(face => face.Score),
+                    faces.Count,
+                    faces.Count > 0 && faces[0].EyesAboveMouth);
+
+                if (debugEvidence)
+                {
+                    var scoreList = string.Join(
+                        " ",
+                        faces.Select(face => face.Score.ToString("0.000", CultureInfo.InvariantCulture)
+                            + (face.EyesAboveMouth ? "^" : "v")));
+                    Console.Error.WriteLine(
+                        $"debug photo {photos.Count + 1} rot{rotation * 90,3}: faces=[{scoreList}]");
+                }
+            }
+
+            if (evidence[0].FaceCount == 0)
             {
                 skippedNoFace++;
                 continue;
             }
 
-            evaluated++;
-            for (var presented = 0; presented < 4; presented++)
-            {
-                var presentedImage = image.Rotate(presented);
-                var scores = new float[4];
-                var eyesAboveMouth = new bool[4];
-                for (var candidate = 0; candidate < 4; candidate++)
-                {
-                    var faces = detector.Detect(presentedImage.Rotate(candidate), scoreThreshold: 0.3f);
-                    scores[candidate] = faces.Count > 0 ? faces[0].Score : 0;
-                    eyesAboveMouth[candidate] = faces.Count > 0 && faces[0].EyesAboveMouth;
-                }
+            var ruleA = DecisionRules.RuleA(evidence);
+            var ruleB = DecisionRules.RuleB(evidence);
+            photos.Add(new PhotoOutcome(
+                photos.Count + 1,
+                file,
+                ruleA.Chosen == 0,
+                (float)Math.Round(ruleA.Margin, 4),
+                ruleB.Abstained ? "abstain" : ruleB.Chosen == 0 ? "correct" : "wrong",
+                (float)Math.Round(ruleB.Margin, 4),
+                ruleB.AbstainReason));
 
-                var chosen = Array.IndexOf(scores, scores.Max());
-                var expected = (4 - presented) % 4;
-                var ordered = scores.OrderDescending().ToArray();
-                cases.Add(new CaseOutcome(
-                    evaluated,
-                    presented * 90,
-                    chosen == expected,
-                    (float)Math.Round(ordered[0] - ordered[1], 4),
-                    eyesAboveMouth[chosen]));
-            }
-
-            if (evaluated % 25 == 0)
+            if (photos.Count % 25 == 0)
             {
-                Console.Error.WriteLine($"progress: {evaluated} photos evaluated");
+                Console.Error.WriteLine($"progress: {photos.Count} photos evaluated");
             }
         }
 
-        if (cases.Count == 0)
+        if (photos.Count == 0)
         {
             Console.Error.WriteLine(
                 "spike002: no evaluable photos (need upright JPEGs with EXIF orientation 1/absent and a detectable face).");
             return 2;
         }
 
-        var correct = cases.Count(c => c.Recovered);
+        var ruleACorrect = photos.Count(p => p.RuleACorrect);
+        var margins = photos.Select(p => p.RuleAMargin).Order().ToList();
         var abstention = MarginThresholds.ToDictionary(
             threshold => threshold.ToString("0.00", CultureInfo.InvariantCulture),
             threshold =>
             {
-                var decided = cases.Where(c => c.Margin >= threshold).ToList();
+                var decided = photos.Where(p => p.RuleAMargin >= threshold).ToList();
                 return new
                 {
-                    coveragePercent = Math.Round(100.0 * decided.Count / cases.Count, 2),
+                    coveragePercent = Math.Round(100.0 * decided.Count / photos.Count, 2),
                     accuracyPercent = decided.Count == 0
                         ? 0
-                        : Math.Round(100.0 * decided.Count(c => c.Recovered) / decided.Count, 2),
+                        : Math.Round(100.0 * decided.Count(p => p.RuleACorrect) / decided.Count, 2),
                 };
             });
 
-        var margins = cases.Select(c => c.Margin).Order().ToList();
+        var ruleBDecided = photos.Where(p => p.RuleBOutcome != "abstain").ToList();
+        var ruleBCorrect = ruleBDecided.Count(p => p.RuleBOutcome == "correct");
         var report = new
         {
             spike = "SPIKE-002 evaluation",
             runUtc = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
-            privacy = "aggregates and anonymous case numbers only; no file names or paths are recorded",
-            photosEvaluated = evaluated,
+            privacy = "aggregates and anonymous photo numbers only; no file names or paths are recorded",
+            photosEvaluated = photos.Count,
             skipped = new { exifRotated = skippedExif, noFaceDetected = skippedNoFace, unreadable },
-            rotationCases = cases.Count,
-            recovered = correct,
-            accuracyPercent = Math.Round(100.0 * correct / cases.Count, 2),
-            accuracyByPresentedRotation = cases.GroupBy(c => c.PresentedDegrees).OrderBy(g => g.Key)
-                .ToDictionary(
-                    g => g.Key.ToString(CultureInfo.InvariantCulture),
-                    g => Math.Round(100.0 * g.Count(c => c.Recovered) / g.Count(), 2)),
-            marginMedian = margins[margins.Count / 2],
-            marginP10 = margins[(int)(margins.Count * 0.10)],
-            abstentionCurve = abstention,
-            geometricAgreementPercent = Math.Round(
-                100.0 * cases.Count(c => c.Recovered && c.EyesAboveMouthInChosen) / Math.Max(1, correct), 2),
-            cases,
+            ruleA_topFaceScore = new
+            {
+                correct = ruleACorrect,
+                accuracyPercent = Math.Round(100.0 * ruleACorrect / photos.Count, 2),
+                marginMedian = margins[margins.Count / 2],
+                abstentionCurve = abstention,
+            },
+            ruleB_allFacesPlusGeometry = new
+            {
+                decided = ruleBDecided.Count,
+                abstained = photos.Count - ruleBDecided.Count,
+                coveragePercent = Math.Round(100.0 * ruleBDecided.Count / photos.Count, 2),
+                correct = ruleBCorrect,
+                accuracyOnDecidedPercent = ruleBDecided.Count == 0
+                    ? 0
+                    : Math.Round(100.0 * ruleBCorrect / ruleBDecided.Count, 2),
+            },
+            photos = photos.Select(p => new
+            {
+                p.PhotoNumber,
+                p.RuleACorrect,
+                p.RuleAMargin,
+                p.RuleBOutcome,
+                p.RuleBMargin,
+                p.RuleBAbstainReason,
+            }),
         };
 
         File.WriteAllText(resultsPath, JsonSerializer.Serialize(report, ReportOptions) + "\n");
-        Console.WriteLine($"photos evaluated : {evaluated} (skipped: {skippedExif} exif-rotated, {skippedNoFace} no face, {unreadable} unreadable)");
-        Console.WriteLine($"rotation tests   : {cases.Count}");
-        Console.WriteLine($"correct          : {correct}  ({report.accuracyPercent}%)");
-        foreach (var entry in report.accuracyByPresentedRotation)
-        {
-            Console.WriteLine($"  presented {entry.Key,3} deg : {entry.Value}%");
-        }
-
-        Console.WriteLine("with abstention (skip low-confidence instead of guessing):");
+        Console.WriteLine($"photos evaluated : {photos.Count} (skipped: {skippedExif} exif-rotated, {skippedNoFace} no face, {unreadable} unreadable)");
+        Console.WriteLine($"rule A (best face score only):");
+        Console.WriteLine($"  correct        : {ruleACorrect}/{photos.Count}  ({report.ruleA_topFaceScore.accuracyPercent}%)");
         foreach (var entry in abstention)
         {
             Console.WriteLine(
-                $"  margin >= {entry.Key} : decides {entry.Value.coveragePercent}% of cases, {entry.Value.accuracyPercent}% of those correct");
+                $"  margin >= {entry.Key} : decides {entry.Value.coveragePercent}%, {entry.Value.accuracyPercent}% of those correct");
+        }
+
+        Console.WriteLine($"rule B (all faces vote + eye/mouth geometry check, abstains when unsure):");
+        Console.WriteLine(
+            $"  decides        : {ruleBDecided.Count}/{photos.Count}  ({report.ruleB_allFacesPlusGeometry.coveragePercent}%)");
+        Console.WriteLine(
+            $"  of those right : {ruleBCorrect}/{ruleBDecided.Count}  ({report.ruleB_allFacesPlusGeometry.accuracyOnDecidedPercent}%)");
+        var abstainReasons = photos.Where(p => p.RuleBOutcome == "abstain")
+            .GroupBy(p => p.RuleBAbstainReason ?? "unknown")
+            .Select(g => $"{g.Key}: {g.Count()}");
+        Console.WriteLine(
+            $"  abstained      : {photos.Count - ruleBDecided.Count} (left for review, not rotated)"
+            + (photos.Count - ruleBDecided.Count > 0 ? $"  [{string.Join(", ", abstainReasons)}]" : string.Empty));
+
+        if (showFailures)
+        {
+            Console.WriteLine("problem photos (console only; not written to the results file):");
+            foreach (var photo in photos.Where(p => !p.RuleACorrect || p.RuleBOutcome == "wrong"))
+            {
+                Console.WriteLine($"  WRONG   ruleA={(photo.RuleACorrect ? "ok" : "wrong")} ruleB={photo.RuleBOutcome} : {photo.FilePath}");
+            }
+
+            foreach (var photo in photos.Where(p => p.RuleACorrect && p.RuleBOutcome == "abstain"))
+            {
+                Console.WriteLine($"  ABSTAIN ruleA=ok : {photo.FilePath}");
+            }
         }
 
         Console.WriteLine($"results written to {Path.GetFullPath(resultsPath)}");
         return 0;
     }
 
+    private sealed record PhotoOutcome(
+        int PhotoNumber,
+        string FilePath,
+        bool RuleACorrect,
+        float RuleAMargin,
+        string RuleBOutcome,
+        float RuleBMargin,
+        string? RuleBAbstainReason);
+
     private sealed record CaseOutcome(
+
         int PhotoNumber, int PresentedDegrees, bool Recovered, float Margin, bool EyesAboveMouthInChosen);
 
     /// <summary>Minimal bounded EXIF IFD0 orientation read (both endiannesses).</summary>
