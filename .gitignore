@@ -29,3 +29,6 @@ Thumbs.db
 # Local agent workspace
 .claude/*
 !.claude/settings.json
+
+# operator evaluation results (local evidence, never committed)
+spike002-evaluation*.json
