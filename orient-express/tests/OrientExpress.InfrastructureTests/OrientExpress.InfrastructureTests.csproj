@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\src\OrientExpress.Infrastructure.Imaging\OrientExpress.Infrastructure.Imaging.csproj" />
     <ProjectReference Include="..\..\src\OrientExpress.Infrastructure.Inference\OrientExpress.Infrastructure.Inference.csproj" />
     <ProjectReference Include="..\..\src\OrientExpress.Infrastructure.Metadata.ExifTool\OrientExpress.Infrastructure.Metadata.ExifTool.csproj" />
+    <ProjectReference Include="..\..\src\OrientExpress.Infrastructure.Sqlite\OrientExpress.Infrastructure.Sqlite.csproj" />
     <ProjectReference Include="..\..\src\OrientExpress.Infrastructure.Windows\OrientExpress.Infrastructure.Windows.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.16
+version: 0.1.17
 status: baseline
 as_of: 2026-07-24
 owner: Architecture
@@ -10,6 +10,19 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.17 — 2026-07-24
+
+WP-009 job store and immutable planning (implemented):
+
+- Context packet at `planning/context-packets/WP-009-context-packet.md`, including the recorded sequencing deviation: WP-007/008 remain corpus-gated, so plans carry model/policy identity as nullable columns — null is the honest record for the deterministic no-ML path; their identities populate the same columns later with no schema change.
+- `OrientExpress.Contracts.Jobs`: `JobId`/`JobManifest` (immutable manifest.json shape)/`JobHandle`/`PlanAction`/`PlannedFile` (identity fields for stale-input refusal + WP-010 transform fields)/`PlanSeal`/`PlanQuery`/`JobEvent`/`IntegrityReport`.
+- `OrientExpress.Application.Jobs`: `IJobStore` port; `StaleInputCheck` — pure drift detection with named stable reasons (SIZE/LAST_WRITE/CONTENT_PREFIX/CONTENT/VOLUME/FILE_ID) plus the fingerprint-strength rule (weaker cannot satisfy stronger).
+- `OrientExpress.Infrastructure.Sqlite`: `SqliteJobStore` on the SPIKE-008-proven settings (WAL + NORMAL + batched single-writer + triggers as the constraint of record): one directory per job (manifest.json written once, job.db canonical, plan.digest human echo); schema v1 triggers enforce append-only events, sealed-plan immutability, write-once seals, forward-only journal checkpoints; batched scan upserts; streaming canonical-order plan reads; integrity backing (PRAGMA integrity_check + seal verify + unresolved-intent count). Design decision proven by test: the seal digests recomputed row content, never the stored row-digest column — a tampered row cannot hide behind a stale digest.
+- Typed errors: JOB_NOT_FOUND, JOB_ALREADY_EXISTS, JOB_MANIFEST_INVALID, JOB_SCHEMA_UNSUPPORTED (newer versions diagnosed, never guessed), PLAN_SEALED, PLAN_ALREADY_SEALED, PLAN_SEAL_MISMATCH.
+- Doctor: `job-store` now reports implemented. Tests: 7 hermetic store tests (create/reopen/duplicate, 50-row batch+seal+filtered stream round-trip preserving every field, sealed-mutation and re-seal refusal, append-only events, tamper detection after trigger drop, future-schema refusal, stale-input drift). 232 tests green.
+- Honest scope: `scan`/`apply` still refuse — the store connects to them through WP-011..WP-014; `jobs` CLI commands are WP-017; `assessments`/`review_decisions` tables arrive as forward-only migrations with WP-007/008/016.
+- Affected IDs: WP-009, PRD-FR-007, PRD-FR-008, PRD-FR-014, PRD-FR-028, NFR-REL-003, AC-012, AC-013, AC-015, ADR-0008, DEP-017, DEP-018, COMP-JOBSTORE, COMP-PLANNER, DOC-DATAMODEL, DOC-STATUS, DOC-CHANGELOG. Packages now referenced by src (already centrally pinned): Microsoft.Data.Sqlite 10.0.10, SQLitePCLRaw.bundle_e_sqlite3 2.1.12. No schema text changes.
 
 ## 0.1.16 — 2026-07-24
 
