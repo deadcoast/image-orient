@@ -1,16 +1,16 @@
 {
   "schema_version": "1.0",
   "package": "orient-express dev-spec",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "as_of": "2026-07-23",
   "document_count": 59,
   "documents": [
     {
       "document_id": "DOC-CHANGELOG",
       "title": "Development Specification Changelog",
-      "version": "0.1.14",
+      "version": "0.1.15",
       "status": "baseline",
-      "as_of": "2026-07-23",
+      "as_of": "2026-07-24",
       "owner": "Architecture",
       "depends_on": [],
       "traces_to": [],
@@ -96,9 +96,9 @@
     {
       "document_id": "DOC-STATUS",
       "title": "orient-express Planning Status",
-      "version": "0.1.14",
+      "version": "0.1.15",
       "status": "baseline",
-      "as_of": "2026-07-23",
+      "as_of": "2026-07-24",
       "owner": "Program",
       "depends_on": [
         "DOC-DEVPLAN",
@@ -539,9 +539,9 @@
     {
       "document_id": "DOC-CLI",
       "title": "CLI User Experience and Command Contract",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "status": "baseline",
-      "as_of": "2026-07-23",
+      "as_of": "2026-07-24",
       "owner": "Product",
       "depends_on": [
         "DOC-WORKFLOWS",

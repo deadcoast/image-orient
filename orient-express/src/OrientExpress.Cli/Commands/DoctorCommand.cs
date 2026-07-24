@@ -21,12 +21,13 @@ public static class DoctorCommand
         OutputContext context,
         string? probeTarget,
         OrientExpress.Application.Metadata.IMetadataService metadataService,
+        OrientExpress.Application.Inference.IModelRegistry? modelRegistry,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(metadataService);
         cancellationToken.ThrowIfCancellationRequested();
-        var report = BuildReport(metadataService);
+        var report = BuildReport(metadataService, modelRegistry);
         if (probeTarget is not null)
         {
             if (!Directory.Exists(probeTarget))
@@ -111,10 +112,14 @@ public static class DoctorCommand
         }
     }
 
-    private static CapabilityReport BuildReport(OrientExpress.Application.Metadata.IMetadataService metadataService)
+    private static CapabilityReport BuildReport(
+        OrientExpress.Application.Metadata.IMetadataService metadataService,
+        OrientExpress.Application.Inference.IModelRegistry? modelRegistry)
     {
         var exifToolIdentity = metadataService.Identify();
         var metadataAvailable = exifToolIdentity.IsSuccess;
+        var activeModel = modelRegistry?.GetActive();
+        var activeInstalled = activeModel is { IsSuccess: true } && activeModel.Value.Value is not null;
         return new CapabilityReport
         {
             GeneratedUtc = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
@@ -147,8 +152,17 @@ public static class DoctorCommand
                     Version = metadataAvailable ? exifToolIdentity.Require().Version : null,
                 },
                 new ComponentCapability { Id = "format-prober", Available = true, Status = "implemented (WP-005); header probe, no pixel decode" },
-                new ComponentCapability { Id = "inference-runtime", Available = false, Status = "gated: SPIKE-003 + WP-006" },
-                new ComponentCapability { Id = "orientation-model", Available = false, Status = "gated: SPIKE-001/002 corpus and proof" },
+                new ComponentCapability { Id = "inference-runtime", Available = true, Status = "implemented (WP-006); onnxruntime cpu (ADR-0004 baseline)" },
+                new ComponentCapability
+                {
+                    Id = "orientation-model",
+                    Available = activeInstalled,
+                    Status = activeInstalled
+                        ? $"active: {activeModel!.Value.Value!.Manifest.ModelId} {activeModel.Value.Value.Manifest.Version} "
+                            + $"(sha256 {activeModel.Value.Value.Manifest.Artifact!.Sha256![..16]}…); decision engine gated (WP-007/008)"
+                        : "no active model; install and activate one via 'upright models'",
+                    Version = activeInstalled ? activeModel!.Value.Value!.Manifest.Version : null,
+                },
                 new ComponentCapability { Id = "job-store", Available = false, Status = "gated: WP-009 (SPIKE-008 evidence recorded)" },
             ],
             Formats =

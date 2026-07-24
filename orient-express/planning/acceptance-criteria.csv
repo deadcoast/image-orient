@@ -36,8 +36,8 @@ AC-034,PRD-FR-017,"With machine output selected, stdout contains no progress bar
 AC-035,PRD-FR-018,All documented result classes map to stable exit codes tested on Windows PowerShell and cmd.exe.,partially-implemented (WP-002: registry frozen + in-process tests; shell-level sweep at WP-018/CI)
 AC-036,PRD-FR-019,Configuration precedence is CLI > environment > explicit file > user file > defaults.,implemented (WP-003: merger + provenance + golden tests)
 AC-037,PRD-FR-019,Unknown or invalid configuration fields fail before file processing unless forward-compatible mode is explicitly selected.,implemented (WP-003: strict is the only mode; no forward-compatible consumer exists yet)
-AC-038,PRD-FR-020,"A model bundle with wrong digest, unsupported schema, or incompatible runtime is quarantined and never activated.",planned
-AC-039,PRD-FR-020,Model activation is atomic and rollback restores the prior verified model.,planned
+AC-038,PRD-FR-020,"A model bundle with wrong digest, unsupported schema, or incompatible runtime is quarantined and never activated.",implemented (WP-006: digest/schema/runtime failures quarantine with typed reasons; quarantined bundles are unlistable and unactivatable)
+AC-039,PRD-FR-020,Model activation is atomic and rollback restores the prior verified model.,implemented (WP-006: temp+ReplaceFileW pointer write; rollback restores the prior model only after re-verification)
 AC-040,PRD-FR-021,Format support is reported per operation; unsupported write/metadata combinations fail during planning rather than mid-commit.,planned
 AC-041,PRD-FR-022,"Configured queue and worker limits bound memory under a 100,000-file synthetic workload.",planned
 AC-042,PRD-FR-022,Ctrl+C first requests graceful cancellation; a second interrupt terminates promptly with durable state.,planned

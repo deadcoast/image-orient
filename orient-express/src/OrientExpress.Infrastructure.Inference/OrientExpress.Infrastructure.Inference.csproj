@@ -2,7 +2,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OrientExpress.Application\OrientExpress.Application.csproj" />
+    <ProjectReference Include="..\OrientExpress.Contracts\OrientExpress.Contracts.csproj" />
     <ProjectReference Include="..\OrientExpress.Domain\OrientExpress.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- DEP-005, qualified by SPIKE-003. -->
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" />
   </ItemGroup>
 
 </Project>

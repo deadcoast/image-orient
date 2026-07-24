@@ -60,6 +60,34 @@ public sealed class CommandLineModel
 
     public required Command ConfigValidate { get; init; }
 
+    public required Command ModelsList { get; init; }
+
+    public required Command ModelsInstall { get; init; }
+
+    public required Argument<string> ModelsInstallArtifact { get; init; }
+
+    public required Option<string> ModelsInstallManifest { get; init; }
+
+    public required Command ModelsVerify { get; init; }
+
+    public required Argument<string> ModelsVerifyId { get; init; }
+
+    public required Argument<string> ModelsVerifyVersion { get; init; }
+
+    public required Command ModelsActivate { get; init; }
+
+    public required Argument<string> ModelsActivateId { get; init; }
+
+    public required Argument<string> ModelsActivateVersion { get; init; }
+
+    public required Command ModelsRollback { get; init; }
+
+    public required Command ModelsRemove { get; init; }
+
+    public required Argument<string> ModelsRemoveId { get; init; }
+
+    public required Argument<string> ModelsRemoveVersion { get; init; }
+
     public required IReadOnlyDictionary<Command, GatedCommandSpec> Gated { get; init; }
 
     private static readonly GatedCommandSpec[] GatedSpecs =
@@ -78,11 +106,6 @@ public sealed class CommandLineModel
         new("jobs show", "Show one job.", "WP-017"),
         new("jobs integrity", "Run job integrity checks.", "WP-017"),
         new("jobs prune", "Prune eligible jobs (dry-run by default).", "WP-017"),
-        new("models list", "List installed models.", "WP-006"),
-        new("models verify", "Verify model digests.", "WP-006"),
-        new("models install", "Install a model artifact.", "WP-006"),
-        new("models activate", "Activate an installed model.", "WP-006"),
-        new("models remove", "Remove an installed model.", "WP-006"),
         new("benchmark", "Measure local throughput and latency.", "WP-021"),
     ];
 
@@ -170,6 +193,46 @@ public sealed class CommandLineModel
 
         var configValidate = new Command("validate", "Validate the effective configuration; exits 21 on issues.");
 
+        var modelsList = new Command("list", "List installed model bundles; the active one is marked.");
+        var modelsInstallArtifact = new Argument<string>("artifact") { Description = "Path to the local .onnx artifact." };
+        var modelsInstallManifest = new Option<string>("--manifest")
+        {
+            Description = "Path to the bundle manifest (model-manifest.schema.json).",
+            Required = true,
+        };
+        var modelsInstall = new Command(
+            "install", "Install a digest-pinned local model bundle; failures quarantine, never activate.");
+        modelsInstall.Arguments.Add(modelsInstallArtifact);
+        modelsInstall.Options.Add(modelsInstallManifest);
+
+        var modelsVerifyId = new Argument<string>("model-id") { Arity = ArgumentArity.ZeroOrOne };
+        var modelsVerifyVersion = new Argument<string>("version") { Arity = ArgumentArity.ZeroOrOne };
+        var modelsVerify = new Command("verify", "Re-verify installed bundle digests (all, or one id + version).");
+        modelsVerify.Arguments.Add(modelsVerifyId);
+        modelsVerify.Arguments.Add(modelsVerifyVersion);
+
+        var modelsActivateId = new Argument<string>("model-id");
+        var modelsActivateVersion = new Argument<string>("version");
+        var modelsActivate = new Command("activate", "Atomically activate a verified bundle (prior model is recorded).");
+        modelsActivate.Arguments.Add(modelsActivateId);
+        modelsActivate.Arguments.Add(modelsActivateVersion);
+
+        var modelsRollback = new Command("rollback", "Restore the previously active verified bundle.");
+
+        var modelsRemoveId = new Argument<string>("model-id");
+        var modelsRemoveVersion = new Argument<string>("version");
+        var modelsRemove = new Command("remove", "Remove an installed bundle (the active model is refused).");
+        modelsRemove.Arguments.Add(modelsRemoveId);
+        modelsRemove.Arguments.Add(modelsRemoveVersion);
+
+        var modelsCommand = new Command("models", "Model bundle lifecycle: digest-pinned, quarantining, rollback-safe.");
+        modelsCommand.Subcommands.Add(modelsList);
+        modelsCommand.Subcommands.Add(modelsInstall);
+        modelsCommand.Subcommands.Add(modelsVerify);
+        modelsCommand.Subcommands.Add(modelsActivate);
+        modelsCommand.Subcommands.Add(modelsRollback);
+        modelsCommand.Subcommands.Add(modelsRemove);
+
         var configCommand = new Command("config", "Configuration operations (precedence: CLI > env > --config > user file > defaults).");
         configCommand.Subcommands.Add(configInit);
         configCommand.Subcommands.Add(configShow);
@@ -192,6 +255,7 @@ public sealed class CommandLineModel
         root.Subcommands.Add(inspect);
         root.Subcommands.Add(completion);
         root.Subcommands.Add(configCommand);
+        root.Subcommands.Add(modelsCommand);
 
         var gated = new Dictionary<Command, GatedCommandSpec>();
         var parents = new Dictionary<string, Command>(StringComparer.Ordinal);
@@ -250,6 +314,20 @@ public sealed class CommandLineModel
             ConfigShow = configShow,
             ConfigShowRedacted = configShowRedacted,
             ConfigValidate = configValidate,
+            ModelsList = modelsList,
+            ModelsInstall = modelsInstall,
+            ModelsInstallArtifact = modelsInstallArtifact,
+            ModelsInstallManifest = modelsInstallManifest,
+            ModelsVerify = modelsVerify,
+            ModelsVerifyId = modelsVerifyId,
+            ModelsVerifyVersion = modelsVerifyVersion,
+            ModelsActivate = modelsActivate,
+            ModelsActivateId = modelsActivateId,
+            ModelsActivateVersion = modelsActivateVersion,
+            ModelsRollback = modelsRollback,
+            ModelsRemove = modelsRemove,
+            ModelsRemoveId = modelsRemoveId,
+            ModelsRemoveVersion = modelsRemoveVersion,
             Gated = gated,
         };
     }

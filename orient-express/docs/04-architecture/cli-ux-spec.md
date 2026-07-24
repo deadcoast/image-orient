@@ -1,9 +1,9 @@
 ---
 document_id: DOC-CLI
 title: CLI User Experience and Command Contract
-version: 0.2.0
+version: 0.2.1
 status: baseline
-as_of: 2026-07-23
+as_of: 2026-07-24
 owner: Product
 depends_on: [DOC-WORKFLOWS, DOC-ARCH, DOC-CONFIG]
 traces_to: [PRD-FR-002, PRD-FR-016, PRD-FR-017, PRD-FR-018, PRD-FR-019, PRD-FR-027, NFR-UX-001, NFR-UX-002]
@@ -38,6 +38,7 @@ upright
     verify
     install
     activate
+    rollback                     # additive (WP-006): PRD-FR-020 rollback-safe activation
     remove
   config
     init

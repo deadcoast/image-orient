@@ -80,8 +80,8 @@ public sealed class CliHostContractTests : IDisposable
             .ToDictionary(
                 component => component.GetProperty("id").GetString()!,
                 component => component.GetProperty("available").GetBoolean());
-        string[] implemented = ["cli-host", "configuration", "filesystem-identity", "format-prober"];
-        string[] machineDependent = ["metadata-exiftool"];
+        string[] implemented = ["cli-host", "configuration", "filesystem-identity", "format-prober", "inference-runtime"];
+        string[] machineDependent = ["metadata-exiftool", "orientation-model"];
         Assert.All(implemented, id => Assert.True(availability[id], id));
         Assert.All(
             availability.Where(pair => !implemented.Contains(pair.Key) && !machineDependent.Contains(pair.Key)),
@@ -152,7 +152,7 @@ public sealed class CliHostContractTests : IDisposable
     [InlineData("undo")]
     [InlineData("review", "decide")]
     [InlineData("jobs", "prune")]
-    [InlineData("models", "install")]
+    [InlineData("review", "export")]
     [InlineData("verify")]
     [InlineData("benchmark")]
     public void Gated_commands_refuse_with_capability_unavailable(params string[] command)

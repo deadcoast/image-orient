@@ -96,7 +96,14 @@ public static class CliHost
         if (command == model.Doctor)
         {
             using var metadata = CreateMetadataService(hostEnvironment);
-            return DoctorCommand.Run(context, parse.GetValue(model.DoctorProbeTarget), metadata, cancellationToken);
+            var doctorConfig = ConfigLoader.Load(
+                hostEnvironment, parse.GetValue(model.ConfigPath), parse.GetValue(model.Profile));
+            var doctorRegistry = doctorConfig.Effective is null
+                ? null
+                : new OrientExpress.Infrastructure.Inference.FileModelRegistry(
+                    doctorConfig.Effective.Config.Paths!.ModelRoot!);
+            return DoctorCommand.Run(
+                context, parse.GetValue(model.DoctorProbeTarget), metadata, doctorRegistry, cancellationToken);
         }
 
         if (command == model.Inspect)
@@ -133,6 +140,65 @@ public static class CliHost
             return command == model.ConfigShow
                 ? ConfigCommands.Show(context, load, parse.GetValue(model.ConfigShowRedacted))
                 : ConfigCommands.Validate(context, load);
+        }
+
+        if (command == model.ModelsList || command == model.ModelsInstall || command == model.ModelsVerify
+            || command == model.ModelsActivate || command == model.ModelsRollback || command == model.ModelsRemove)
+        {
+            var load = ConfigLoader.Load(
+                hostEnvironment, parse.GetValue(model.ConfigPath), parse.GetValue(model.Profile));
+            if (load.Effective is null)
+            {
+                foreach (var issue in load.Issues)
+                {
+                    context.WriteError(
+                        CliExitCode.InvalidConfiguration, issue.Code, $"{issue.Path}: {issue.Message}",
+                        "fix the configuration and re-run 'upright config validate'");
+                }
+
+                return (int)CliExitCode.InvalidConfiguration;
+            }
+
+            var registry = new OrientExpress.Infrastructure.Inference.FileModelRegistry(
+                load.Effective.Config.Paths!.ModelRoot!);
+            if (command == model.ModelsList)
+            {
+                return ModelsCommands.List(context, registry);
+            }
+
+            if (command == model.ModelsInstall)
+            {
+                return ModelsCommands.Install(
+                    context, registry,
+                    parse.GetValue(model.ModelsInstallArtifact)!,
+                    parse.GetValue(model.ModelsInstallManifest)!);
+            }
+
+            if (command == model.ModelsVerify)
+            {
+                return ModelsCommands.Verify(
+                    context, registry,
+                    parse.GetValue(model.ModelsVerifyId),
+                    parse.GetValue(model.ModelsVerifyVersion));
+            }
+
+            if (command == model.ModelsActivate)
+            {
+                return ModelsCommands.Activate(
+                    context, registry,
+                    parse.GetValue(model.ModelsActivateId)!,
+                    parse.GetValue(model.ModelsActivateVersion)!);
+            }
+
+            if (command == model.ModelsRollback)
+            {
+                return ModelsCommands.Rollback(context, registry);
+            }
+
+            return ModelsCommands.Remove(
+                context, registry,
+                parse.GetValue(model.ModelsRemoveId)!,
+                parse.GetValue(model.ModelsRemoveVersion)!);
         }
 
         if (model.Gated.TryGetValue(command, out var spec))
