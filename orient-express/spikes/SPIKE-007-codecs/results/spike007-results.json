@@ -1,0 +1,83 @@
+{
+  "spike": "SPIKE-007",
+  "environment": {
+    "osDescription": "Microsoft Windows 10.0.26200",
+    "framework": ".NET 10.0.8",
+    "dependency": "Windows Imaging Component (DEP-009, OS-provided)",
+    "harnessVersion": "0.1.0",
+    "fixturePolicy": "synthetic WPF-encoded bitmaps; no user photos",
+    "runUtc": "2026-07-24T06:24:50.4864123\u002B00:00"
+  },
+  "safety": {
+    "jpeg_and_png_codecs_engage_on_headers": true,
+    "jpeg_encode_decode_roundtrip": true,
+    "jpeg_orientation_metadata_readable": true,
+    "optional_formats_have_tested_diagnostics": true,
+    "png_encode_decode_roundtrip": true
+  },
+  "comEnumeratorDecoders": [],
+  "comEnumeratorEncoders": [],
+  "comEnumeratorFinding": "managed ComImport enumeration returned empty on this machine; header-engagement probes are the reliable capability source",
+  "baselineEngagement": {
+    "jpeg": "present: CODEC_ENGAGED_TRUNCATED_SAMPLE_REJECTED",
+    "png": "present: CODEC_ENGAGED_TRUNCATED_SAMPLE_REJECTED"
+  },
+  "operationalProbes": [
+    {
+      "Format": "jpeg",
+      "EncodeSupported": true,
+      "DecodeSupported": true,
+      "RoundTripDimensionsExact": true,
+      "MetadataOrientationReadable": false,
+      "Diagnostic": null
+    },
+    {
+      "Format": "png",
+      "EncodeSupported": true,
+      "DecodeSupported": true,
+      "RoundTripDimensionsExact": true,
+      "MetadataOrientationReadable": false,
+      "Diagnostic": null
+    },
+    {
+      "Format": "tiff",
+      "EncodeSupported": true,
+      "DecodeSupported": true,
+      "RoundTripDimensionsExact": true,
+      "MetadataOrientationReadable": false,
+      "Diagnostic": null
+    },
+    {
+      "Format": "bmp",
+      "EncodeSupported": true,
+      "DecodeSupported": true,
+      "RoundTripDimensionsExact": true,
+      "MetadataOrientationReadable": false,
+      "Diagnostic": null
+    },
+    {
+      "Format": "gif",
+      "EncodeSupported": true,
+      "DecodeSupported": true,
+      "RoundTripDimensionsExact": true,
+      "MetadataOrientationReadable": false,
+      "Diagnostic": null
+    }
+  ],
+  "jpegOrientationRead": {
+    "Readable": true,
+    "Value": 6,
+    "Diagnostic": null
+  },
+  "optionalFormatGates": {
+    "avif": "present: CODEC_ENGAGED_HRESULT_C00D36BE",
+    "heic": "present: CODEC_ENGAGED_HRESULT_C00D36BE",
+    "jxl": "absent: CODEC_NOT_INSTALLED",
+    "webp": "present: CODEC_ENGAGED_HRESULT_C00D36BE"
+  },
+  "summary": {
+    "decoderCount": 0,
+    "encoderCount": 0,
+    "safetyHeld": true
+  }
+}

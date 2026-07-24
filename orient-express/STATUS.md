@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.11
+version: 0.1.12
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -33,6 +33,8 @@ SPIKE-005 is **complete** ([report](spikes/SPIKE-005-jpeg-edge/report.md)): the 
 
 SPIKE-004 is **complete for baseline formats** ([report](spikes/SPIKE-004-metadata/report.md)): the ExifTool 13.59 `-stay_open` adapter (DEP-007 installed and digest-pinned) passed the round-trip matrix — an orientation write changes exactly one tag with EXIF/GPS/XMP/IPTC families byte-stable, `-P` preserves timestamps, and errors are attributable per command via an `-echo4` stderr sentinel with the process surviving bad input. ExifTool's rewrite drops ADS and changes the file id, folding into the commit protocol's identity re-baseline. ADR-0006 is **accepted**; maker-note guarantees stay capability-gated on the SPIKE-001 corpus tranche. WP-005's metadata spike gate is satisfied for baseline formats.
 
+SPIKE-007 is **complete** ([report](spikes/SPIKE-007-codecs/report.md)): JPEG/PNG (plus TIFF/BMP/GIF) are guaranteed on the WIC baseline with dimension-exact encode/decode round-trips and WIC-readable EXIF orientation; optional formats are gated per machine by header-engagement probes with stable diagnostics (this machine: HEIC/AVIF/WebP present-engaged, JPEG XL absent). Method finding: enumeration (registry or COM) is unreliable — decode-attempt probing is the capability mechanism. DEP-009 selected; Magick.NET stays a candidate behind a delegate-license review. Decode proof of optional formats awaits corpus samples. WP-005's codec spike gate is satisfied.
+
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 
 ## Approved to begin
@@ -52,7 +54,7 @@ The project operates under single-operator governance: the documentation gates (
 | Metadata guarantee language | Settled for baseline formats (SPIKE-004 complete 2026-07-23); maker notes await the corpus tranche |
 | Default JPEG edge policy | Settled: abort-by-default via -perfect (SPIKE-005 complete 2026-07-23) |
 | In-place mode | Full fault suite across supported compatibility classes plus undo-path evidence (SPIKE-006 NTFS pilot complete 2026-07-23) |
-| HEIC/AVIF claims | SPIKE-007 capability matrix |
+| HEIC/AVIF claims | Gated per machine by engagement probes (SPIKE-007 complete 2026-07-23); decode proof awaits corpus samples |
 | Final job-store settings | Settled: WAL + NORMAL + batched single-writer + trigger constraints (SPIKE-008 complete 2026-07-23) |
 | Frozen CLI v1 contract | Numeric registry freeze at WP-002 entry (SPIKE-009 automation evidence complete 2026-07-23; usability feedback accumulates from the M1 alpha) |
 | Signed distribution shape | SPIKE-010 clean-VM proof |

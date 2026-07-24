@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.11
+version: 0.1.12
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,17 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.12 — 2026-07-23
+
+SPIKE-007 format and codec capability matrix (complete):
+
+- Harness under `spikes/SPIKE-007-codecs/` (the one Windows-TFM/WPF spike project): operational encode/decode/round-trip probes for JPEG/PNG/TIFF/BMP/GIF via WIC-backed WPF, a WIC metadata-query orientation read against an ExifTool-authored value, and header-engagement presence probes for optional formats.
+- All safety expectations pass. Baseline matrix approved: JPEG/PNG guaranteed on WIC. This machine: HEIC/AVIF/WebP present-engaged; JPEG XL absent — reported with stable reason codes (`CODEC_PRESENT_UNVERIFIED` / `CODEC_NOT_INSTALLED`).
+- Method findings (binding on WP-005): capability is determined by decode-attempt/header-engagement probes; registry Instance categories list only add-on codecs and managed COM enumeration returned empty — enumeration is not trusted.
+- Licensing inventory recorded for WP-022: WIC has no redistribution burden; Store codec extensions are never bundled; Magick.NET remains a candidate behind a delegate-license review.
+- DEP-009 selected; DEP-010 annotated; DOC-WBS 0.1.5 design note added.
+- Affected IDs: SPIKE-007, DEP-009, DEP-010, DOC-WBS, DOC-STATUS, DOC-CHANGELOG, WP-005, WP-010, WP-022, NFR-COMP-001. No new packages; no schema or migration impact.
 
 ## 0.1.11 — 2026-07-23
 

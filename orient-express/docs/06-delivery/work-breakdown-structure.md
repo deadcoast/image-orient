@@ -1,7 +1,7 @@
 ---
 document_id: DOC-WBS
 title: Work Breakdown Structure and Backlog Dependencies
-version: 0.1.4
+version: 0.1.5
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -59,6 +59,14 @@ Work packages are vertical outcomes, not folders or generic engineering activiti
   argument per line); grammar errors keep machine stdout empty. Registry
   numerics freeze at WP-002 entry. See the
   [SPIKE-009 report](../../spikes/SPIKE-009-cli-contract/report.md).
+- **WP-005 / WP-010 / WP-022 (from SPIKE-007):** codec capability is
+  determined by header-engagement probes (feed the decoder a truncated real
+  header; component-not-found = absent, format rejection = engaged), never by
+  registry or COM enumeration (both proven unreliable). JPEG/PNG are the
+  guaranteed baseline via WIC; HEIC/AVIF/WebP report per-machine
+  `CODEC_PRESENT_UNVERIFIED`/`CODEC_NOT_INSTALLED` until corpus samples prove
+  decode. WIC carries no redistribution burden; codec extensions are never
+  bundled. See the [SPIKE-007 report](../../spikes/SPIKE-007-codecs/report.md).
 - **WP-005 / WP-010 / WP-014 (from SPIKE-004):** the metadata adapter is the
   typed `-stay_open` protocol with per-command `{ready<id>}` **and** `-echo4`
   stderr sentinels (diagnostics must be attributable); reads use
