@@ -106,6 +106,8 @@ public sealed class CommandLineModel
 
     public required Option<string> ScanBackupRoot { get; init; }
 
+    public required Option<bool> ScanDetect { get; init; }
+
     public required Command Apply { get; init; }
 
     public required Argument<string> ApplyJob { get; init; }
@@ -295,6 +297,11 @@ public sealed class CommandLineModel
         {
             Description = "Backup destination; required for --mode in-place.",
         };
+        var scanDetect = new Option<bool>("--detect")
+        {
+            Description = "Also analyze clean-tag photos with the active face model; "
+                + "uncalibrated - rotates only when every signal agrees, parks the rest for review.",
+        };
         var scan = new Command(
             "scan",
             "Read-only planning; seals an immutable job plan. Deterministic mode: only files whose "
@@ -306,6 +313,7 @@ public sealed class CommandLineModel
         scan.Options.Add(scanMaxFiles);
         scan.Options.Add(scanMode);
         scan.Options.Add(scanBackupRoot);
+        scan.Options.Add(scanDetect);
 
         var applyJob = new Argument<string>("job") { Description = "Job id from a sealed scan." };
         var applyResume = new Option<bool>("--resume")
@@ -467,6 +475,7 @@ public sealed class CommandLineModel
             ApplyAcknowledgeInPlace = applyAcknowledgeInPlace,
             ScanMode = scanMode,
             ScanBackupRoot = scanBackupRoot,
+            ScanDetect = scanDetect,
             Undo = undo,
             UndoJob = undoJob,
             UndoYes = undoYes,

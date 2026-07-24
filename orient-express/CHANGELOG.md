@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.21
+version: 0.1.22
 status: baseline
 as_of: 2026-07-24
 owner: Architecture
@@ -10,6 +10,19 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.22 — 2026-07-24
+
+WP-007 orientation engine and WP-008 provisional decision policy (implemented; recorded abstention-until-calibrated deviation) — `scan --detect` fixes sideways photos with clean tags:
+
+- Context packet at `planning/context-packets/WP-007-008-context-packet.md` (records the deviation: WP-008 ships PROVISIONAL and UNCALIBRATED; rotates only when the confident-face vote winner, upright landmark geometry, and relative margin all agree; parks everything else for Review; every assessment says `calibrated: false`; calibration constants live in one place for WP-020).
+- `Contracts.Orientation`: PixelRaster, FaceObservation (five landmarks, eyes-above-mouth), CandidateSummary, OrientationDecision, OrientationAssessment (four candidates + margins + reasons + model/runtime/policy provenance).
+- `Application.Orientation`: IPixelDecoder/IFaceDetector ports; PixelRasterOperations (SPIKE-002 exact math); FourCandidatePolicy (pure decision matrix); FourCandidateOrientationEngine (one decode, four candidate presentations).
+- `Infrastructure.Imaging.DjpegPixelDecoder` (bounded analysis decode via DEP-008 djpeg, 960 edge, read-only) and `Infrastructure.Inference.YuNetFaceDetector` (SPIKE-002/003 decode behind the WP-006 IInferenceRuntime — digest-verified at load).
+- `scan --detect` (opt-in, never default): clean-tag Keep rows are assessed; confident → Normalize (`ML_DECIDED`); confident-upright → Keep (`ML_CONFIRMED_UPRIGHT`); unsure → Review rows with named reasons. Upfront refusals without an active model or djpeg (22). Manifest records model+policy identity; scan output states the uncalibrated scope plainly. Doctor: orientation-model row now says the decision engine is provisional.
+- Tests: 6 pure policy decision-matrix tests + the end-to-end proof — the digest-pinned pilot portrait rotated 90 cw with a CLEAN tag is planned via the production registry/runtime and applied to a verified upright output (skips without the pinned cache/tools). 258+ tests green.
+- Honest scope: UNCALIBRATED — corpus accuracy is measured, never promised; the >=99 percent precision gate still needs the operator corpus (WP-020); Review rows have no workflow yet (WP-016); apply ignores them; multi-face weighting/metadata priors/OOD are WP-020.
+- Affected IDs: WP-007, WP-008, PRD-FR-004, PRD-FR-005, PRD-FR-006, PRD-FR-024, PRD-FR-025, NFR-ML-001..004, AC-006, AC-011, ADR-0004, ADR-0005, COMP-ORIENTATION, COMP-FEATURES, COMP-CALIBRATION, COMP-POLICY, COMP-INFERENCE, DOC-CLI, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema text changes.
 
 ## 0.1.21 — 2026-07-24
 
