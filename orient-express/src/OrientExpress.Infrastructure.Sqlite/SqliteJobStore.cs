@@ -54,8 +54,8 @@ public sealed class SqliteJobStore(string jobRoot) : IJobStore
             {
                 command.CommandText = """
                     INSERT INTO jobs(job_id, contract_version, created_utc, tool_version, mode,
-                                     source_root, config_digest, model_identity, policy_identity, state)
-                    VALUES ($id, $contract, $created, $tool, $mode, $root, $config, $model, $policy, 'created')
+                                     source_root, output_root, config_digest, model_identity, policy_identity, state)
+                    VALUES ($id, $contract, $created, $tool, $mode, $root, $output, $config, $model, $policy, 'created')
                     """;
                 command.Parameters.AddWithValue("$id", manifest.JobIdValue);
                 command.Parameters.AddWithValue("$contract", ContractVersion);
@@ -63,6 +63,7 @@ public sealed class SqliteJobStore(string jobRoot) : IJobStore
                 command.Parameters.AddWithValue("$tool", manifest.ToolVersion);
                 command.Parameters.AddWithValue("$mode", manifest.Mode);
                 command.Parameters.AddWithValue("$root", manifest.SourceRoot);
+                command.Parameters.AddWithValue("$output", manifest.OutputRoot);
                 command.Parameters.AddWithValue("$config", manifest.ConfigDigest);
                 command.Parameters.AddWithValue("$model", (object?)manifest.ModelIdentity ?? DBNull.Value);
                 command.Parameters.AddWithValue("$policy", (object?)manifest.PolicyIdentity ?? DBNull.Value);
@@ -386,6 +387,39 @@ public sealed class SqliteJobStore(string jobRoot) : IJobStore
         ReasonCode = reader.IsDBNull(19) ? null : reader.GetString(19),
     };
 
+    /// <summary>Sequences that already carry the given event type — the resume ledger (AC-028).</summary>
+    public async ValueTask<Result<IReadOnlySet<long>>> ReadEventSequencesAsync(
+        JobId job, string eventType, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(job);
+        await _writer.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var opened = Connection(job);
+            if (!opened.IsSuccess)
+            {
+                return Result.Fail<IReadOnlySet<long>>(opened.Error!);
+            }
+
+            var sequences = new HashSet<long>();
+            using var command = opened.Require().CreateCommand();
+            command.CommandText =
+                "SELECT DISTINCT file_seq FROM events WHERE event_type = $type AND file_seq IS NOT NULL";
+            command.Parameters.AddWithValue("$type", eventType);
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                _ = sequences.Add(reader.GetInt64(0));
+            }
+
+            return Result.Ok<IReadOnlySet<long>>(sequences);
+        }
+        finally
+        {
+            _ = _writer.Release();
+        }
+    }
+
     public async ValueTask<Result<IntegrityReport>> CheckIntegrityAsync(JobId job, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(job);
@@ -618,6 +652,7 @@ public sealed class SqliteJobStore(string jobRoot) : IJobStore
             tool_version TEXT NOT NULL,
             mode TEXT NOT NULL,
             source_root TEXT NOT NULL,
+            output_root TEXT NOT NULL,
             config_digest TEXT NOT NULL,
             model_identity TEXT,
             policy_identity TEXT,

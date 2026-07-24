@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.18
+version: 0.1.19
 status: baseline
 as_of: 2026-07-24
 owner: Architecture
@@ -10,6 +10,20 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.19 — 2026-07-24
+
+WP-013 independent verification and WP-014 safe-copy end-to-end mode (implemented) — **`upright scan` and `upright apply` work for the first time**, for the deterministic EXIF path:
+
+- Shared context packet at `planning/context-packets/WP-014-context-packet.md`.
+- WP-013: `Contracts.Verify` (plan-authored `VerificationContract`, stable failure codes, `VerificationResult`); `IOutputVerifier` port; `ProbeOutputVerifier` — reopens staged output with the bounded managed prober (independent of jpegtran/ExifTool which produced it) and rejects missing/truncated/non-image/wrong-format/wrong-dimensions/wrong-orientation, collecting every failure (AC-025). Failed verification never commits and never touches the source (AC-026).
+- WP-014 `scan`: canonical-ordered enumeration, handle identity + fingerprints, bounded-pipeline planning, deterministic decisions (EXIF tag 2..8 → Normalize via the WP-010 planner; tag 1/absent → Keep; anything else → recorded Unsupported), sealed plan + events + scan-summary report. Read-only proven (AC-014). Machine `--json` document includes the deterministic-scope note.
+- WP-014 `apply` (safe-copy only): per row — stale-input refusal by recorded identity with named drift (AC-015), lossless transform into an exclusive stage beside the destination, tag=1 via the metadata adapter, independent verification, atomic create-path move; failed rows are recorded events and the run continues; `--resume` consumes the commit-event ledger (AC-028); exits 0/11/12/30. In-place refuses (WP-012/WP-015).
+- CLI: `scan`/`apply` leave the gated list (DOC-CLI additive: working option subset `--output`, `--no-recurse`, `--fingerprint`, `--max-files`, `--resume`); upfront capability refusals when jpegtran/ExifTool are absent; golden gated-command tests updated.
+- Store: `manifest.json`/`jobs` gain `outputRoot`; `ReadEventSequencesAsync` is the resume ledger.
+- Tests: 5 verifier tests + 3 end-to-end CLI tests (real tagged JPEGs: rotate 90/180, verified dimensions + tag 1 through the independent prober, sources untouched, resume idempotence, stale refusal exits 30, collision refusal exits 11, empty scan exits 12). ~247 tests green.
+- Honest scope: photos stored sideways with a CLEAN tag are planned Keep — the ML decision engine (WP-007/008) stays gated on corpus evidence; safe-copy only; Keep rows are not copied; failed stages are deleted not quarantine-preserved; standalone `upright verify`, include/exclude globs, collision modes beyond error, and Ctrl+C double-interrupt wiring are follow-ups.
+- Affected IDs: WP-013, WP-014, PRD-FR-007, PRD-FR-008, PRD-FR-009, PRD-FR-011, PRD-FR-012, PRD-FR-013, PRD-FR-014, PRD-FR-023, AC-014, AC-015, AC-021, AC-023, AC-025, AC-026, AC-027, AC-028, COMP-VERIFY, COMP-PLANNER, COMP-EXECUTOR, COMP-REPORTING, DOC-CLI, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema text changes.
 
 ## 0.1.18 — 2026-07-24
 

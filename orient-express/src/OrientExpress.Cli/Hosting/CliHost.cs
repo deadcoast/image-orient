@@ -206,6 +206,82 @@ public static class CliHost
                 parse.GetValue(model.ModelsRemoveVersion)!);
         }
 
+        if (command == model.Scan || command == model.Apply)
+        {
+            var load = ConfigLoader.Load(
+                hostEnvironment, parse.GetValue(model.ConfigPath), parse.GetValue(model.Profile));
+            if (load.Effective is null)
+            {
+                foreach (var issue in load.Issues)
+                {
+                    context.WriteError(
+                        CliExitCode.InvalidConfiguration, issue.Code, $"{issue.Path}: {issue.Message}",
+                        "fix the configuration and re-run 'upright config validate'");
+                }
+
+                return (int)CliExitCode.InvalidConfiguration;
+            }
+
+            var jobStore = new OrientExpress.Infrastructure.Sqlite.SqliteJobStore(
+                load.Effective.Config.Paths!.JobRoot!);
+            try
+            {
+                var identity = new OrientExpress.Infrastructure.Windows.WindowsFileIdentityService();
+                if (command == model.Scan)
+                {
+                    return ScanCommand.RunAsync(
+                        context,
+                        load,
+                        identity,
+                        new OrientExpress.Infrastructure.Imaging.ManagedFormatProber(),
+                        jobStore,
+                        parse.GetValue(model.ScanSource)!,
+                        parse.GetValue(model.ScanOutput)!,
+                        recurse: !parse.GetValue(model.ScanNoRecurse),
+                        parse.GetValue(model.ScanFingerprint) ?? "standard",
+                        parse.GetValue(model.ScanMaxFiles),
+                        cancellationToken).GetAwaiter().GetResult();
+                }
+
+                var jpegtranPath = OrientExpress.Infrastructure.Imaging.JpegtranLocator.Locate(
+                    hostEnvironment.EnvironmentVariables);
+                if (jpegtranPath is null)
+                {
+                    context.WriteError(
+                        CliExitCode.CapabilityUnavailable, "JPEGTRAN_NOT_FOUND",
+                        "the lossless JPEG tool is not installed",
+                        "install libjpeg-turbo (DEP-008); see 'upright doctor'");
+                    return (int)CliExitCode.CapabilityUnavailable;
+                }
+
+                using var metadata = CreateMetadataService(hostEnvironment);
+                if (!metadata.Identify().IsSuccess)
+                {
+                    context.WriteError(
+                        CliExitCode.CapabilityUnavailable, "EXIFTOOL_NOT_FOUND",
+                        "the metadata tool is not installed",
+                        "install ExifTool (DEP-007); see 'upright doctor'");
+                    return (int)CliExitCode.CapabilityUnavailable;
+                }
+
+                return ApplyCommand.RunAsync(
+                    context,
+                    jobStore,
+                    identity,
+                    new OrientExpress.Infrastructure.Imaging.JpegtranTransformer(jpegtranPath, metadata),
+                    new OrientExpress.Infrastructure.Imaging.ProbeOutputVerifier(
+                        new OrientExpress.Infrastructure.Imaging.ManagedFormatProber()),
+                    new OrientExpress.Infrastructure.Windows.WindowsAtomicFileOperations(),
+                    parse.GetValue(model.ApplyJob)!,
+                    parse.GetValue(model.ApplyResume),
+                    cancellationToken).GetAwaiter().GetResult();
+            }
+            finally
+            {
+                jobStore.DisposeAsync().AsTask().GetAwaiter().GetResult();
+            }
+        }
+
         if (model.Gated.TryGetValue(command, out var spec))
         {
             return RefuseGated(context, spec);

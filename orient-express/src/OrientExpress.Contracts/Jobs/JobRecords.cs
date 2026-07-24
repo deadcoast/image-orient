@@ -39,6 +39,10 @@ public sealed record JobManifest
     [JsonPropertyName("sourceRoot")]
     public required string SourceRoot { get; init; }
 
+    /// <summary>Safe-copy destination root; outputs mirror the source-relative layout beneath it.</summary>
+    [JsonPropertyName("outputRoot")]
+    public required string OutputRoot { get; init; }
+
     [JsonPropertyName("configDigest")]
     public required string ConfigDigest { get; init; }
 

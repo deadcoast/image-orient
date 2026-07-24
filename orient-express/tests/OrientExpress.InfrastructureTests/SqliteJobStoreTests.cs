@@ -38,6 +38,7 @@ public sealed class SqliteJobStoreTests : IAsyncLifetime
         ToolVersion = "0.1.0-test",
         Mode = "safe-copy",
         SourceRoot = @"C:\photos",
+        OutputRoot = @"C:\photos-upright",
         ConfigDigest = new string('a', 64),
     };
 

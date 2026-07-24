@@ -18,6 +18,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\OrientExpress.Cli\OrientExpress.Cli.csproj" />
     <ProjectReference Include="..\..\src\OrientExpress.Contracts\OrientExpress.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\OrientExpress.Application\OrientExpress.Application.csproj" />
+    <ProjectReference Include="..\..\src\OrientExpress.Infrastructure.Imaging\OrientExpress.Infrastructure.Imaging.csproj" />
+    <ProjectReference Include="..\..\src\OrientExpress.Infrastructure.Metadata.ExifTool\OrientExpress.Infrastructure.Metadata.ExifTool.csproj" />
   </ItemGroup>
 
 </Project>
