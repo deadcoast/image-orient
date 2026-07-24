@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "modelId": "yunet-baseline",
+  "version": "2023mar",
+  "task": "face-detection-five-landmarks",
+  "artifact": {
+    "file": "face_detection_yunet_2023mar.onnx",
+    "sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+    "bytes": 232589,
+    "format": "onnx"
+  },
+  "inputs": [
+    {
+      "name": "input",
+      "shape": [1, 3, 640, 640],
+      "dataType": "float32"
+    }
+  ],
+  "outputs": [
+    { "name": "cls_8" }, { "name": "cls_16" }, { "name": "cls_32" },
+    { "name": "obj_8" }, { "name": "obj_16" }, { "name": "obj_32" },
+    { "name": "bbox_8" }, { "name": "bbox_16" }, { "name": "bbox_32" },
+    { "name": "kps_8" }, { "name": "kps_16" }, { "name": "kps_32" }
+  ],
+  "preprocessing": {
+    "id": "yunet-bgr-raw-v1",
+    "colorOrder": "BGR",
+    "resize": "stretch",
+    "normalization": { "scale": 1.0, "mean": [0, 0, 0] }
+  },
+  "postprocessing": {
+    "id": "yunet-fdyn-decode-v1",
+    "strides": [8, 16, 32],
+    "nmsIou": 0.3
+  },
+  "compatibility": {
+    "appVersion": ">=0.1.0",
+    "runtimeApi": "onnxruntime",
+    "allowedProviders": ["cpu"]
+  },
+  "provenance": "OpenCV Zoo face_detection_yunet_2023mar (SPIKE-002/SPIKE-003 qualified, digests recorded in spike results)",
+  "license": "MIT (c) 2020 Shiqi Yu"
+}

@@ -1,15 +1,29 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.14
+version: 0.1.15
 status: baseline
-as_of: 2026-07-23
+as_of: 2026-07-24
 owner: Architecture
 depends_on: []
 traces_to: []
 ---
 
 # Changelog
+
+## 0.1.15 — 2026-07-24
+
+WP-006 model registry and inference runtime (implemented) — M1 component roster complete:
+
+- Context packet at `planning/context-packets/WP-006-context-packet.md`.
+- `OrientExpress.Contracts`: manifest records per `model-manifest.schema.json` (permissive parse, code-validated required fields/enums), `RuntimeDescriptor`/`ModelHandle`/tensor IO records.
+- `OrientExpress.Application`: `IModelRegistry` and `IInferenceRuntime` ports (DOC-COMPONENTS shapes).
+- `OrientExpress.Infrastructure.Inference`: `FileModelRegistry` — bundles at `<modelRoot>/<id>/<version>/`, quarantine directory with recorded reasons for digest/schema/runtime failures (AC-038), atomic `active.json` pointer via temp+`File.Replace` with the prior model recorded, rollback restores only after re-verification (AC-039), active model refuses removal; `OnnxInferenceRuntime` — SPIKE-003 CPU baseline, session cache keyed by digest, artifact digest re-verified at load (DEP-006 rule in production).
+- `upright models list|install|verify|activate|rollback|remove` implemented with stable error→exit mapping (digest → 32, manifest/runtime → 23, active/duplicate → 34); `rollback` recorded as an additive DOC-CLI 0.2.1 command per PRD-FR-020. Model root comes from the WP-003 effective configuration. Doctor: inference-runtime available; orientation-model shows the active bundle.
+- Shipped `models/manifests/yunet-baseline.2023mar.json`; the qualified YuNet artifact installs, verifies, and activates end to end through the CLI.
+- Tests: 6 registry integration tests (quarantine, tamper, atomic activate/rollback, active-remove refusal), 4 CLI lifecycle golden tests; 199 tests green.
+- Honest scope: provider fallback beyond CPU is gated to WP-021; bundle signatures to WP-023; the decision engine (WP-007/008) remains gated on corpus evidence.
+- Affected IDs: WP-006, PRD-FR-020, NFR-SEC-002, NFR-PRIV-001, AC-038, AC-039, ADR-0004, DEP-005, DEP-006, COMP-MODELS, COMP-INFERENCE, DOC-CLI, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema text changes.
 
 ## 0.1.14 — 2026-07-23
 

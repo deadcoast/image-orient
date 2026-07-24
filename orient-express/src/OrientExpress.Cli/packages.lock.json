@@ -8,6 +8,19 @@
         "resolved": "2.0.10",
         "contentHash": "6i1D6/U3i1f/PiXTt9pDvbJwdXEe0F2DZPup6BHzeIu5yPk/lkFzgtrJnPbj54JWUh8Y9vJeKG/TZIT6MkF8TA=="
       },
+      "Microsoft.ML.OnnxRuntime.Managed": {
+        "type": "Transitive",
+        "resolved": "1.27.1",
+        "contentHash": "7vZTjZzuSP6XC47lbRN0xI9+6YDOChxKjmUmb80q7YC8Nb7zQUVrETFGLXlFfYWjvlb8/4J+w+L33gBTCpLMKA==",
+        "dependencies": {
+          "System.Numerics.Tensors": "9.0.0"
+        }
+      },
+      "System.Numerics.Tensors": {
+        "type": "Transitive",
+        "resolved": "9.0.0",
+        "contentHash": "hyJB4UlpAi19Xr9AXzu2NuagKC4lPfHObNMEAA0HmqFz2rX7wKgzeYzO/jM/eBHDhnUGFFEjk5cOoJaxqg5J4A=="
+      },
       "orientexpress.application": {
         "type": "Project",
         "dependencies": {
@@ -32,7 +45,9 @@
       "orientexpress.infrastructure.inference": {
         "type": "Project",
         "dependencies": {
+          "Microsoft.ML.OnnxRuntime": "[1.27.1, )",
           "OrientExpress.Application": "[1.0.0, )",
+          "OrientExpress.Contracts": "[1.0.0, )",
           "OrientExpress.Domain": "[1.0.0, )"
         }
       },
@@ -57,6 +72,15 @@
           "OrientExpress.Application": "[1.0.0, )",
           "OrientExpress.Contracts": "[1.0.0, )",
           "OrientExpress.Domain": "[1.0.0, )"
+        }
+      },
+      "Microsoft.ML.OnnxRuntime": {
+        "type": "CentralTransitive",
+        "requested": "[1.27.1, )",
+        "resolved": "1.27.1",
+        "contentHash": "lVD57zo77erw9oLC2obkKkMOM+CqbtwZuztfXQxEy3oJBOWmDKweto+c+N/Mh/FUoVRRFfsR9KaMX+aM+XLh+Q==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.27.1"
         }
       }
     }
