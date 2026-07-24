@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.17
+version: 0.1.18
 status: baseline
 as_of: 2026-07-24
 owner: Architecture
@@ -10,6 +10,17 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.18 — 2026-07-24
+
+WP-011 bounded execution pipeline (implemented — engine level):
+
+- Context packet at `planning/context-packets/WP-011-context-packet.md`.
+- `OrientExpress.Contracts.Pipeline`: `IProgressSink` (ephemeral UI; events stay the durable facts), `PipelineProgress`, `StageLimits` (sanitized from DOC-CONFIG `performance.*`), `RetryPolicy`.
+- `OrientExpress.Application.Pipeline`: `BoundedPipeline` on BCL channels (Application stays package-free): ordered stages, each with a bounded queue and worker count (backpressure, AC-041 mechanism); completed items stream to a terminal consumer — no unbounded accumulation; a failing item is recorded with stage + typed error and leaves the run (one bad file never stops the batch); retry only when the typed error is `IsRetryable`, bounded attempts with exponential backoff; two-token cancellation — soft stops intake and finishes admitted items (resumable, AC-042 mechanism), hard abandons promptly.
+- Tests: 6 engine tests (ordered flow, concurrency/in-flight bounds actually measured, failure isolation, retry taxonomy honoring one-attempt non-retryables, graceful-drain cancellation, per-stage progress counts). 238 tests green.
+- Honest scope: `scan`/`apply` still refuse — this is the engine, not the commands; the stage implementations, Ctrl+C wiring, and the AC-041 100k-file memory measurement land with WP-013/WP-014.
+- Affected IDs: WP-011, PRD-FR-014, PRD-FR-022, NFR-PERF-001..003, AC-041, AC-042, COMP-PIPELINE, COMP-EXECUTOR, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema text changes.
 
 ## 0.1.17 — 2026-07-24
 

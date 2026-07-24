@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.17
+version: 0.1.18
 status: baseline
 as_of: 2026-07-24
 owner: Program
@@ -44,6 +44,8 @@ SPIKE-003 is **complete** ([report](spikes/SPIKE-003-inference-runtime/report.md
 **WP-010 (transform engine) is implemented** ([context packet](planning/context-packets/WP-010-context-packet.md)) — the first M3 package, unblocked because its gates (SPIKE-004/005/007, WP-005) are all evidence-complete: the `IImageTransformer` port executes policy-authored plans verbatim through jpegtran (DEP-008) into exclusive same-volume stage files with `-copy all`, maps the four `output.jpegEdge` policies per the approved SPIKE-005 matrix (`abort` = `-perfect` refusing with `JPEG_EDGE_NOT_PERFECT`; `reencode` is a typed refusal until a raster encoder exists), and sets the orientation tag to 1 on the stage copy through the ExifTool adapter (PRD-FR-012). The pure `OrientationNormalizationPlanner` maps every EXIF orientation 1..8 to its single lossless operation — the deterministic no-ML normalization path. Tests against the real tool prove the byte-exact inverse-rotation round-trip (AC-021) and every refusal path (AC-022); doctor reports jpegtran presence and digest. The CLI still cannot rotate a photo: this engine reaches `scan`/`apply` only through the pipeline packages (WP-009, WP-011..WP-014). SPIKE-002's operator-run evaluation now also scores a second decision rule (summed confident faces + landmark geometry + relative margin, abstaining with recorded reasons) so rule changes are measured on the operator's own corpus, never asserted.
 
 **WP-009 (job store and immutable planning) is implemented** ([context packet](planning/context-packets/WP-009-context-packet.md)): SQLite-canonical job state on the SPIKE-008-proven settings — one directory per job with an immutable `manifest.json`, schema-trigger-enforced append-only events, write-once content-addressed plan seals (the seal digests recomputed row content, so a tampered row cannot hide behind a stale digest column — proven by test), forward-only journal checkpoints, batched scan writes, streaming canonical-order plan reads, and integrity diagnostics. `StaleInputCheck` yields the stable drift reasons apply will refuse with (PRD-FR-008). Recorded deviation: WP-007/008 stay corpus-gated, so plans carry model/policy identity as nullable columns — null is the honest record for the deterministic no-ML path. The store connects to `scan`/`apply` only through the pipeline packages (WP-011..WP-014); `jobs` CLI commands are WP-017.
+
+**WP-011 (bounded execution pipeline) is implemented at engine level** ([context packet](planning/context-packets/WP-011-context-packet.md)): ordered bounded stages on BCL channels with per-stage worker/queue limits from `performance.*` (backpressure proven in tests — concurrency and in-flight items measurably bounded), per-item failure isolation with typed errors (one bad file never stops the batch), retry only when the typed error says so, and two-token cancellation (soft = stop intake and finish admitted items for a resumable state; hard = abandon promptly). The stages themselves — scan planning, transform execution, verification — connect through WP-013/WP-014, which is when `scan`/`apply` stop refusing.
 
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 
