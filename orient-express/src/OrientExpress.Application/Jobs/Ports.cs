@@ -35,6 +35,18 @@ public interface IJobStore : IAsyncDisposable
 
     public ValueTask<Result<IReadOnlyList<JobHandle>>> ListAsync(CancellationToken cancellationToken);
 
+    /// <summary>Opens a durable intent at checkpoint Prepared (journal transaction commits before any replacement).</summary>
+    public ValueTask<Result<bool>> OpenIntentAsync(
+        JobId job, JournalIntent intent, CancellationToken cancellationToken);
+
+    /// <summary>Advances an intent to a strictly later checkpoint; regression is refused by the schema.</summary>
+    public ValueTask<Result<bool>> AdvanceIntentAsync(
+        JobId job, string intentId, string checkpoint, string? detailsJson, CancellationToken cancellationToken);
+
+    /// <summary>All intents, or only unresolved ones (checkpoint before Committed/Reconciled).</summary>
+    public ValueTask<Result<IReadOnlyList<JournalIntent>>> ReadIntentsAsync(
+        JobId job, bool unresolvedOnly, CancellationToken cancellationToken);
+
     /// <summary>
     /// Removes a job directory. Dry-run reports what would be removed;
     /// unresolved journal intents refuse with JOB_RECOVERY_PENDING (AC-050).

@@ -203,6 +203,43 @@ public sealed class SqliteJobStoreTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Journal_intents_advance_forward_only_and_block_prune_until_resolved()
+    {
+        var job = new JobId("job-journal");
+        _ = (await _store.CreateAsync(Manifest(job.Value), CancellationToken.None)).Require();
+
+        _ = (await _store.OpenIntentAsync(
+            job,
+            new JournalIntent("replace-1", 1, "replace", JournalCheckpoints.Prepared, "{}", ""),
+            CancellationToken.None)).Require();
+        var duplicate = await _store.OpenIntentAsync(
+            job,
+            new JournalIntent("replace-1", 1, "replace", JournalCheckpoints.Prepared, "{}", ""),
+            CancellationToken.None);
+        Assert.Equal("JOURNAL_INTENT_DUPLICATE", duplicate.Error!.Code);
+
+        _ = (await _store.AdvanceIntentAsync(
+            job, "replace-1", JournalCheckpoints.Replaced, null, CancellationToken.None)).Require();
+
+        // The schema trigger, not politeness, refuses regression.
+        var regression = await _store.AdvanceIntentAsync(
+            job, "replace-1", JournalCheckpoints.Prepared, null, CancellationToken.None);
+        Assert.Equal("JOURNAL_CHECKPOINT_REGRESSION", regression.Error!.Code);
+
+        var unresolved = (await _store.ReadIntentsAsync(job, unresolvedOnly: true, CancellationToken.None)).Require();
+        Assert.Equal("replace-1", unresolved.Single().IntentId);
+
+        // AC-050: recovery-pending jobs refuse pruning, even with --yes.
+        var prune = await _store.PruneAsync(job, dryRun: false, CancellationToken.None);
+        Assert.Equal("JOB_RECOVERY_PENDING", prune.Error!.Code);
+
+        _ = (await _store.AdvanceIntentAsync(
+            job, "replace-1", JournalCheckpoints.Reconciled, null, CancellationToken.None)).Require();
+        Assert.Empty((await _store.ReadIntentsAsync(job, unresolvedOnly: true, CancellationToken.None)).Require());
+        Assert.True((await _store.PruneAsync(job, dryRun: false, CancellationToken.None)).IsSuccess);
+    }
+
+    [Fact]
     public void Stale_input_check_names_every_drift_and_passes_identical_state()
     {
         var planned = Row(1);

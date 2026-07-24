@@ -521,6 +521,127 @@ public sealed class SqliteJobStore(string jobRoot) : IJobStore
         return Result.Ok<IReadOnlyList<JobHandle>>(handles);
     }
 
+    public async ValueTask<Result<bool>> OpenIntentAsync(
+        JobId job, JournalIntent intent, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(job);
+        ArgumentNullException.ThrowIfNull(intent);
+        await _writer.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var opened = Connection(job);
+            if (!opened.IsSuccess)
+            {
+                return Result.Fail<bool>(opened.Error!);
+            }
+
+            using var command = opened.Require().CreateCommand();
+            command.CommandText = """
+                INSERT INTO journal(intent_id, file_seq, operation, checkpoint, details_json, updated_utc)
+                VALUES ($id, $seq, $operation, $checkpoint, $details, $utc)
+                """;
+            command.Parameters.AddWithValue("$id", intent.IntentId);
+            command.Parameters.AddWithValue("$seq", intent.FileSequence);
+            command.Parameters.AddWithValue("$operation", intent.Operation);
+            command.Parameters.AddWithValue("$checkpoint", JournalCheckpoints.Prepared);
+            command.Parameters.AddWithValue("$details", (object?)intent.DetailsJson ?? DBNull.Value);
+            command.Parameters.AddWithValue("$utc", NowUtc());
+            _ = command.ExecuteNonQuery();
+            return Result.Ok(true);
+        }
+        catch (SqliteException exception) when (exception.SqliteErrorCode == 19)
+        {
+            return Fail<bool>("JOURNAL_INTENT_DUPLICATE", ErrorCategory.InvalidInput,
+                $"intent '{intent.IntentId}' already exists");
+        }
+        finally
+        {
+            _ = _writer.Release();
+        }
+    }
+
+    public async ValueTask<Result<bool>> AdvanceIntentAsync(
+        JobId job, string intentId, string checkpoint, string? detailsJson, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(job);
+        await _writer.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var opened = Connection(job);
+            if (!opened.IsSuccess)
+            {
+                return Result.Fail<bool>(opened.Error!);
+            }
+
+            using var command = opened.Require().CreateCommand();
+            command.CommandText = detailsJson is null
+                ? "UPDATE journal SET checkpoint = $checkpoint, updated_utc = $utc WHERE intent_id = $id"
+                : "UPDATE journal SET checkpoint = $checkpoint, details_json = $details, updated_utc = $utc WHERE intent_id = $id";
+            command.Parameters.AddWithValue("$checkpoint", checkpoint);
+            command.Parameters.AddWithValue("$utc", NowUtc());
+            command.Parameters.AddWithValue("$id", intentId);
+            if (detailsJson is not null)
+            {
+                command.Parameters.AddWithValue("$details", detailsJson);
+            }
+
+            return command.ExecuteNonQuery() == 1
+                ? Result.Ok(true)
+                : Fail<bool>("JOURNAL_INTENT_NOT_FOUND", ErrorCategory.NotFound,
+                    $"no journal intent '{intentId}'");
+        }
+        catch (SqliteException exception) when (
+            exception.Message.Contains("journal checkpoint must advance", StringComparison.Ordinal))
+        {
+            return Fail<bool>("JOURNAL_CHECKPOINT_REGRESSION", ErrorCategory.InvalidInput,
+                $"checkpoint '{checkpoint}' does not advance intent '{intentId}'");
+        }
+        finally
+        {
+            _ = _writer.Release();
+        }
+    }
+
+    public async ValueTask<Result<IReadOnlyList<JournalIntent>>> ReadIntentsAsync(
+        JobId job, bool unresolvedOnly, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(job);
+        await _writer.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var opened = Connection(job);
+            if (!opened.IsSuccess)
+            {
+                return Result.Fail<IReadOnlyList<JournalIntent>>(opened.Error!);
+            }
+
+            var intents = new List<JournalIntent>();
+            using var command = opened.Require().CreateCommand();
+            command.CommandText = unresolvedOnly
+                ? "SELECT intent_id, file_seq, operation, checkpoint, details_json, updated_utc FROM journal "
+                    + "WHERE checkpoint NOT IN ('Committed', 'Reconciled') ORDER BY intent_id"
+                : "SELECT intent_id, file_seq, operation, checkpoint, details_json, updated_utc FROM journal "
+                    + "ORDER BY intent_id";
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                intents.Add(new JournalIntent(
+                    reader.GetString(0),
+                    reader.GetInt64(1),
+                    reader.GetString(2),
+                    reader.GetString(3),
+                    reader.IsDBNull(4) ? null : reader.GetString(4),
+                    reader.GetString(5)));
+            }
+
+            return Result.Ok<IReadOnlyList<JournalIntent>>(intents);
+        }
+        finally
+        {
+            _ = _writer.Release();
+        }
+    }
+
     public async ValueTask<Result<string>> PruneAsync(JobId job, bool dryRun, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(job);

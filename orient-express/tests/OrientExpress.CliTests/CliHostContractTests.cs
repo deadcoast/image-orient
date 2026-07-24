@@ -147,7 +147,6 @@ public sealed class CliHostContractTests : IDisposable
 
     [Theory]
     [InlineData("run")]
-    [InlineData("undo")]
     [InlineData("review", "decide")]
     [InlineData("review", "export")]
     [InlineData("benchmark")]
@@ -162,7 +161,7 @@ public sealed class CliHostContractTests : IDisposable
     [Fact]
     public void Gated_commands_accept_arguments_and_still_refuse_honestly()
     {
-        var result = Invoke("undo", "some-job", "--json");
+        var result = Invoke("review", "decide", "file-1", "--json");
         Assert.Equal((int)CliExitCode.CapabilityUnavailable, result.ExitCode);
 
         using var document = JsonDocument.Parse(result.Stdout);

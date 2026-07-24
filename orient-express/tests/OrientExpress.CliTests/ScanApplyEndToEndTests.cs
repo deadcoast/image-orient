@@ -172,6 +172,73 @@ public sealed class ScanApplyEndToEndTests : IDisposable
     }
 
     [Fact]
+    public async Task In_place_apply_rewrites_the_original_with_backup_and_undo_restores_it()
+    {
+        RequireTools();
+        var environment = Environment();
+        var photo = await CreatePhotoAsync("inplace.jpg", 96, 64, orientation: 6);
+        var originalBytes = File.ReadAllBytes(photo);
+        var backupRoot = Path.Combine(_directory, "backups");
+
+        var scan = Invoke(
+            environment, "scan", SourceRoot, "--output", OutputRoot,
+            "--mode", "in-place", "--backup-root", backupRoot, "--json");
+        Assert.Equal(0, scan.ExitCode);
+        var jobId = JobIdFrom(scan.Stdout);
+
+        // PRD-FR-010: no acknowledgement, no rewrite.
+        var refused = Invoke(environment, "apply", jobId);
+        Assert.Equal((int)CliExitCode.SafetyPreflightFailed, refused.ExitCode);
+        Assert.Equal(originalBytes, File.ReadAllBytes(photo));
+
+        var apply = Invoke(environment, "apply", jobId, "--acknowledge-in-place", "--json");
+        Assert.Equal(0, apply.ExitCode);
+
+        // The ORIGINAL file is now upright (64x96, tag 1); the backup is the
+        // byte-exact pre-apply original.
+        var rewritten = ManagedFormatProber.ProbeBytesSpan(File.ReadAllBytes(photo));
+        Assert.Equal(64, rewritten.Width);
+        Assert.Equal(96, rewritten.Height);
+        Assert.Equal(1, rewritten.ExifOrientation ?? 1);
+        Assert.Equal(originalBytes, File.ReadAllBytes(Path.Combine(backupRoot, "inplace.jpg")));
+
+        // Undo needs its own confirmation, then restores byte-exactly.
+        Assert.Equal((int)CliExitCode.SafetyPreflightFailed, Invoke(environment, "undo", jobId).ExitCode);
+        Assert.Equal(0, Invoke(environment, "undo", jobId, "--yes").ExitCode);
+        Assert.Equal(originalBytes, File.ReadAllBytes(photo));
+
+        // Undo again: idempotent, nothing double-restored (AC-030).
+        var again = Invoke(environment, "undo", jobId, "--yes", "--json");
+        Assert.Equal(0, again.ExitCode);
+        using var againDocument = JsonDocument.Parse(again.Stdout);
+        Assert.Equal(0, againDocument.RootElement.GetProperty("counts").GetProperty("restored").GetInt64());
+        Assert.Equal(1, againDocument.RootElement.GetProperty("counts").GetProperty("alreadyUndone").GetInt64());
+    }
+
+    [Fact]
+    public async Task Undo_abstains_when_the_file_changed_after_apply()
+    {
+        RequireTools();
+        var environment = Environment();
+        var photo = await CreatePhotoAsync("conflict.jpg", 96, 64, orientation: 6);
+        var backupRoot = Path.Combine(_directory, "backups");
+
+        var scan = Invoke(
+            environment, "scan", SourceRoot, "--output", OutputRoot,
+            "--mode", "in-place", "--backup-root", backupRoot, "--json");
+        var jobId = JobIdFrom(scan.Stdout);
+        Assert.Equal(0, Invoke(environment, "apply", jobId, "--acknowledge-in-place").ExitCode);
+
+        // Someone edits the file after apply: undo must refuse it (AC-029).
+        var editedBytes = File.ReadAllBytes(photo).Concat(new byte[] { 0 }).ToArray();
+        File.WriteAllBytes(photo, editedBytes);
+        var undo = Invoke(environment, "undo", jobId, "--yes", "--json");
+        Assert.Equal((int)CliExitCode.Conflict, undo.ExitCode);
+        Assert.Contains("UNDO_STATE_MISMATCH", undo.Stdout, StringComparison.Ordinal);
+        Assert.Equal(editedBytes, File.ReadAllBytes(photo));
+    }
+
+    [Fact]
     public async Task Apply_refuses_a_source_changed_after_scan_and_leaves_it_untouched()
     {
         RequireTools();

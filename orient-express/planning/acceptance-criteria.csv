@@ -16,9 +16,9 @@ AC-014,PRD-FR-008,"`scan` creates no image output and does not modify source tim
 AC-015,PRD-FR-008,`apply` refuses a source changed after scan and emits a stable stale-plan result.,implemented (WP-014: row-level PLAN_INPUT_STALE with named drift; all-stale runs exit 30 STALE_PLAN; proven end to end)
 AC-016,PRD-FR-009,Safe-copy mode preserves relative paths and never overwrites an unrelated existing destination.,planned
 AC-017,PRD-FR-009,"Collision behavior is deterministic, logged, and configurable as error, skip, or content-aware rename.",planned
-AC-018,PRD-FR-010,In-place mode cannot begin without explicit acknowledgement and a writable verified backup target.,planned
-AC-019,PRD-FR-010,Fault injection before atomic replacement leaves the source unchanged and a recoverable journal.,planned
-AC-020,PRD-FR-010,Fault injection after replacement but before final checkpoint is reconciled safely on restart.,planned
+AC-018,PRD-FR-010,In-place mode cannot begin without explicit acknowledgement and a writable verified backup target.,implemented (WP-012: --acknowledge-in-place required with 31 otherwise; backups byte-verified against the scanned fingerprint before any intent opens)
+AC-019,PRD-FR-010,Fault injection before atomic replacement leaves the source unchanged and a recoverable journal.,partially implemented (WP-012: intents durable before the swap; reconcile closes pre-replace crashes with the source verified unchanged; the systematic kernel-kill matrix is WP-015)
+AC-020,PRD-FR-010,Fault injection after replacement but before final checkpoint is reconciled safely on restart.,partially implemented (WP-012: Replaced-state intents complete on restart when the file matches the staged digest; unmatched state stops with 33; the systematic matrix is WP-015)
 AC-021,PRD-FR-011,Eligible JPEG rotations use the DCT-domain path without generation loss.,implemented (WP-010: jpegtran -copy all; -perfect successes byte-exact on inverse-rotation round-trip in tests)
 AC-022,PRD-FR-011,Non-MCU-aligned JPEG behavior follows the selected abort/reencode/trim/preserve-partial policy and is never silent.,implemented (WP-010: abort=JPEG_EDGE_NOT_PERFECT refusal; trim/preserve-partial per SPIKE-005; reencode is a typed refusal until the raster path exists)
 AC-023,PRD-FR-012,Successful normalization writes display-equivalent upright pixels and sets orientation metadata to 1.,implemented (WP-014 end-to-end: rotated dimensions and tag=1 verified through the independent prober before commit)
@@ -27,8 +27,8 @@ AC-025,PRD-FR-013,"Verification reopens output and rejects decode failure, wrong
 AC-026,PRD-FR-013,A verification failure prevents commit or triggers recovery without deleting the last known-good source.,implemented (WP-013/014 safe-copy: failed verification deletes only the staged output and records the typed failure; the source is never written)
 AC-027,PRD-FR-014,Cancellation produces a resumable state and a documented partial-completion exit code.,partially implemented (WP-011/014: soft-cancel drains admitted rows and committed work resumes via the event ledger; console double-interrupt wiring remains)
 AC-028,PRD-FR-014,Replaying a completed operation does not duplicate output or corrupt journal state.,implemented (WP-014 safe-copy: --resume consumes the commit-event ledger; replay applies nothing and exits NOTHING_TO_DO — proven end to end)
-AC-029,PRD-FR-015,Undo restores a byte-verified backup when the current file matches the expected applied state.,planned
-AC-030,PRD-FR-015,Undo refuses and reports conflict when the current file was independently changed.,planned
+AC-029,PRD-FR-015,Undo restores a byte-verified backup when the current file matches the expected applied state.,implemented (WP-012: both digests verified before restore; restore itself journaled; byte-exact restoration proven end to end)
+AC-030,PRD-FR-015,Undo refuses and reports conflict when the current file was independently changed.,implemented (WP-012: UNDO_STATE_MISMATCH conflict exits 34 and leaves the file untouched; re-running undo is idempotent — proven end to end)
 AC-031,PRD-FR-016,"Review decisions can be exported, edited with documented values, imported, validated, and appended to the job.",planned
 AC-032,PRD-FR-016,"Review thumbnails are orientation-labeled, bounded in size, and stored only when explicitly enabled.",planned
 AC-033,PRD-FR-017,`--json` emits one schema-valid document; `--jsonl` emits independently parseable event lines.,implemented (WP-002 golden tests)
