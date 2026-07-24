@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.13
+version: 0.1.14
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -37,6 +37,8 @@ SPIKE-007 is **complete** ([report](spikes/SPIKE-007-codecs/report.md)): JPEG/PN
 
 **WP-005 (metadata and codec adapters) is implemented** ([context packet](planning/context-packets/WP-005-context-packet.md)): the production ExifTool `-stay_open` adapter (typed operations, per-command stdout **and** `-echo4` stderr sentinels, lazy start, thread-safe, digest-identified, degrades to typed `EXIFTOOL_NOT_FOUND` capability errors) behind the COMP-METADATA port; the bounded managed format prober (signatures, JPEG SOF + EXIF orientation both endiannesses, PNG IHDR) behind COMP-CODEC; capability truth-telling in doctor (metadata/format components, per-format read/metadata abilities with reason codes); and the **`upright inspect <file>` alpha** — identity, format, dimensions, and EXIF orientation with the decision engine explicitly gated (`DECISION_ENGINE_GATED`). With WP-002/003/004/005 implemented, **M1's component roster is complete except inference** (WP-006, gated on SPIKE-003 + model artifacts).
 
+SPIKE-003 is **complete** ([report](spikes/SPIKE-003-inference-runtime/report.md)) and **face detection now runs locally**: ONNX Runtime 1.27.1 CPU is the selected v1 baseline (1.64 ms median warm inference at 640x640, bitwise-deterministic across sessions, 15.5 MB native footprint, offline) with the YuNet 2023mar model digest-pinned under the DEP-006 rule (MIT license recorded). ADR-0004 is **accepted**. SPIKE-002 is **in progress with its pilot passing** ([report](spikes/SPIKE-002-orientation-proof/report.md)): the four-candidate approach recovered 4/4 rotations on a public-domain portrait with the landmark geometry agreeing 4/4; the decisive finding — inverted faces score 0.841 vs 0.947 upright — confirms ADR-0005's margin-plus-abstention design. The ≥99% precision gate awaits the SPIKE-001 corpus tranche, which is now the only input blocking WP-006/007/008 and the M2 scan planner.
+
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 
 ## Approved to begin
@@ -51,8 +53,8 @@ The project operates under single-operator governance: the documentation gates (
 
 | Capability | Blocking evidence |
 |---|---|
-| Production orientation thresholds | SPIKE-001 and SPIKE-002 reports |
-| Selected inference provider | SPIKE-003 report and ADR update |
+| Production orientation thresholds | SPIKE-001 corpus + SPIKE-002 precision evaluation (mechanics pilot passed 2026-07-23) |
+| Selected inference provider | Settled: ONNX Runtime CPU baseline (SPIKE-003 complete 2026-07-23; DirectML/WindowsML gated for WP-021) |
 | Metadata guarantee language | Settled for baseline formats (SPIKE-004 complete 2026-07-23); maker notes await the corpus tranche |
 | Default JPEG edge policy | Settled: abort-by-default via -perfect (SPIKE-005 complete 2026-07-23) |
 | In-place mode | Full fault suite across supported compatibility classes plus undo-path evidence (SPIKE-006 NTFS pilot complete 2026-07-23) |

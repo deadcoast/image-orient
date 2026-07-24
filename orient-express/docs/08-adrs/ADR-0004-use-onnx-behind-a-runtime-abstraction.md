@@ -34,6 +34,14 @@ Provider/runtime can change behind contracts; preprocessing/postprocessing/model
 
 SPIKE-003 measures package size, latency, cold start, failure fallback, offline setup, and decision equivalence.
 
+**Evidence (2026-07-23, [report](../../spikes/SPIKE-003-inference-runtime/report.md)):**
+SPIKE-003 gate met on Microsoft.ML.OnnxRuntime 1.27.1: CPU execution
+provider selected as the v1 baseline — 1.64 ms median warm inference at
+640x640, bitwise-deterministic within and across sessions, 15.5 MB native
+footprint, fully offline with the digest-pinned YuNet model. DirectML and
+Windows ML remain gated alternatives for WP-021 hardware benchmarks; v1
+does not require them.
+
 ## Revisit triggers
 
 - The named proof gate fails or a materially better supported alternative appears.

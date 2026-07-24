@@ -4,6 +4,8 @@
        inventoried in planning/technology-dependencies.csv before use. -->
   <ItemGroup>
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <!-- DEP-005 (SRC-005, ADR-0004): inference runtime under SPIKE-003 qualification. -->
+    <PackageVersion Include="Microsoft.ML.OnnxRuntime" Version="1.27.1" />
     <!-- DEP-011 (SRC-016/SRC-017, ADR-0008): job store under SPIKE-008 qualification.
          SQLitePCLRaw is pinned above the transitive 2.1.11, which NuGet audit
          flags for GHSA-2m69-gcr7-jv3q (SPIKE-008 dependency-intake finding). -->

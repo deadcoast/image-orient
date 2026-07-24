@@ -1,0 +1,113 @@
+{
+  "spikes": [
+    "SPIKE-003",
+    "SPIKE-002 (pilot)"
+  ],
+  "environment": {
+    "osDescription": "Microsoft Windows 10.0.26200",
+    "framework": ".NET 10.0.8",
+    "processArchitecture": "X64",
+    "onnxRuntime": "Microsoft.ML.OnnxRuntime 1.27.1 (DEP-005), CPU execution provider",
+    "model": {
+      "FileName": "yunet.onnx",
+      "Url": "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
+      "Sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+      "Provenance": "OpenCV Zoo face_detection_yunet_2023mar; MIT License (c) 2020 Shiqi Yu (LICENSE retrieved 2026-07-23)"
+    },
+    "pilotImage": {
+      "FileName": "portrait1.jpg",
+      "Url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg",
+      "Sha256": "744dd848fbb0584229169e01c4944664957c62495fb9e8af514a088ebca43e19",
+      "Provenance": "Official 2012 presidential portrait; US federal government work, public domain"
+    },
+    "harnessVersion": "0.1.0",
+    "runUtc": "2026-07-24T06:55:18.7090525\u002B00:00"
+  },
+  "safety": {
+    "all_four_rotations_recovered": true,
+    "geometric_check_agrees": true,
+    "inference_deterministic_within_and_across_sessions": true,
+    "model_digest_verified": true,
+    "upright_face_detected_on_pilot": true
+  },
+  "runtime": {
+    "coldInferenceMs": 14,
+    "deterministic": true,
+    "inputName": "input",
+    "modelLoadMs": 69,
+    "nativeRuntimeBytes": 15497568,
+    "outputHeads": 12,
+    "providerPolicy": "CPU EP baseline (deterministic, offline, zero extra native deps); DirectML and Windows ML remain gated alternatives pending WP-021 hardware benchmarks",
+    "warmLatencyMedianMs": 1.64,
+    "warmLatencyP95Ms": 1.96
+  },
+  "pilot": {
+    "allRotationsRecovered": true,
+    "fourRotationCases": [
+      {
+        "presentedRotation": 0,
+        "expectedCandidate": 0,
+        "chosenCandidate": 0,
+        "recovered": true,
+        "candidateScores": [
+          0.9469,
+          0,
+          0.841,
+          0.5425
+        ],
+        "margin": 0.1059,
+        "eyesAboveMouthInChosen": true
+      },
+      {
+        "presentedRotation": 90,
+        "expectedCandidate": 270,
+        "chosenCandidate": 270,
+        "recovered": true,
+        "candidateScores": [
+          0,
+          0.841,
+          0.5425,
+          0.9469
+        ],
+        "margin": 0.1059,
+        "eyesAboveMouthInChosen": true
+      },
+      {
+        "presentedRotation": 180,
+        "expectedCandidate": 180,
+        "chosenCandidate": 180,
+        "recovered": true,
+        "candidateScores": [
+          0.841,
+          0.5425,
+          0.9469,
+          0
+        ],
+        "margin": 0.1059,
+        "eyesAboveMouthInChosen": true
+      },
+      {
+        "presentedRotation": 270,
+        "expectedCandidate": 90,
+        "chosenCandidate": 90,
+        "recovered": true,
+        "candidateScores": [
+          0.5425,
+          0.9469,
+          0,
+          0.841
+        ],
+        "margin": 0.1059,
+        "eyesAboveMouthInChosen": true
+      }
+    ],
+    "geometricCheckAgrees": true,
+    "pilotImageDims": "2687x3356",
+    "uprightFaceDetected": true,
+    "uprightFaces": 1,
+    "uprightTopScore": 0.9469
+  },
+  "summary": {
+    "safetyHeld": true
+  }
+}

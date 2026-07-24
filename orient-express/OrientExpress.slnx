@@ -18,6 +18,8 @@
   </Folder>
   <Folder Name="/spikes/">
     <Project Path="spikes/SPIKE-001-corpus/OrientExpress.Spike001/OrientExpress.Spike001.csproj" />
+    <Project Path="spikes/SPIKE-002-orientation-proof/OrientExpress.Spike002/OrientExpress.Spike002.csproj" />
+    <Project Path="spikes/SPIKE-002-orientation-proof/OrientExpress.Spike002.Tests/OrientExpress.Spike002.Tests.csproj" />
     <Project Path="spikes/SPIKE-001-corpus/OrientExpress.Spike001.Tests/OrientExpress.Spike001.Tests.csproj" />
     <Project Path="spikes/SPIKE-004-metadata/OrientExpress.Spike004/OrientExpress.Spike004.csproj" />
     <Project Path="spikes/SPIKE-004-metadata/OrientExpress.Spike004.Tests/OrientExpress.Spike004.Tests.csproj" />
