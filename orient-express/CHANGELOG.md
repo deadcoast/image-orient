@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.19
+version: 0.1.20
 status: baseline
 as_of: 2026-07-24
 owner: Architecture
@@ -10,6 +10,18 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.20 — 2026-07-24
+
+WP-017 job operations and integrity (implemented) — the housekeeping surface for the jobs scan/apply now create:
+
+- Context packet at `planning/context-packets/WP-017-context-packet.md` (records the WP-012 dependency deviation: retention/undo holds follow the journal work).
+- `jobs list` (stable-order manifests), `jobs show <job>` (manifest, seal digest, plan counts, committed rows), `jobs integrity [<job>]` (SQLite check + recomputed-content seal verify + unresolved intents + missing manifest.json/plan.digest findings, AC-049; problems exit 32), `jobs prune <job>` (dry-run default; `--yes` removes; JOB_RECOVERY_PENDING refuses with 34, AC-050).
+- `upright verify <job>` — WP-013's standalone command: re-verifies every committed output through the independent prober against plan expectations; corruption/deletion found later exits 32 with per-row reasons. Read-only.
+- Store: `PruneAsync` (dry-run + recovery-pending refusal); integrity gains missing-artifact findings. `verify` and all four `jobs` commands leave the gated list.
+- Tests: 4 hermetic jobs-command golden tests (no external tools) + end-to-end verify coverage (committed outputs re-verify; a corrupted output is detected through the independent reopen). 245+ tests green.
+- Honest scope: retention windows and undo-retention holds await WP-012/015; orphaned-stage sweeps land with the journal work; remaining gated commands: run, undo, review *, benchmark.
+- Affected IDs: WP-017, WP-013, PRD-FR-028, PRD-FR-013, NFR-OBS-001, NFR-OBS-002, AC-049, AC-050, COMP-JOBSTORE, COMP-VERIFY, COMP-REPORTING, DOC-CLI, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema text changes.
 
 ## 0.1.19 — 2026-07-24
 

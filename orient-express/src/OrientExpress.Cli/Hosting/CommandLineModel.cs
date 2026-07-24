@@ -108,20 +108,35 @@ public sealed class CommandLineModel
 
     public required Option<bool> ApplyResume { get; init; }
 
+    public required Command Verify { get; init; }
+
+    public required Argument<string> VerifyJob { get; init; }
+
+    public required Command JobsList { get; init; }
+
+    public required Command JobsShow { get; init; }
+
+    public required Argument<string> JobsShowJob { get; init; }
+
+    public required Command JobsIntegrity { get; init; }
+
+    public required Argument<string> JobsIntegrityJob { get; init; }
+
+    public required Command JobsPrune { get; init; }
+
+    public required Argument<string> JobsPruneJob { get; init; }
+
+    public required Option<bool> JobsPruneYes { get; init; }
+
     private static readonly GatedCommandSpec[] GatedSpecs =
     [
         new("run", "Scan then apply when policy permits (provisional).", "WP-009;WP-014"),
-        new("verify", "Independently re-verify job outputs.", "WP-013"),
         new("undo", "Restore from verified backups for an in-place job.", "WP-012;WP-015"),
         new("review list", "List review-queue items with filters.", "WP-016"),
         new("review show", "Show one review item.", "WP-016"),
         new("review decide", "Record an append-only review override.", "WP-016"),
         new("review export", "Export review decisions.", "WP-016"),
         new("review import", "Import validated review decisions.", "WP-016"),
-        new("jobs list", "List jobs.", "WP-017"),
-        new("jobs show", "Show one job.", "WP-017"),
-        new("jobs integrity", "Run job integrity checks.", "WP-017"),
-        new("jobs prune", "Prune eligible jobs (dry-run by default).", "WP-017"),
         new("benchmark", "Measure local throughput and latency.", "WP-021"),
     ];
 
@@ -283,6 +298,29 @@ public sealed class CommandLineModel
         apply.Arguments.Add(applyJob);
         apply.Options.Add(applyResume);
 
+        var verifyJob = new Argument<string>("job") { Description = "Job whose committed outputs to re-verify." };
+        var verify = new Command(
+            "verify", "Independently re-verify committed outputs through the independent read path (read-only).");
+        verify.Arguments.Add(verifyJob);
+
+        var jobsList = new Command("list", "List jobs under the configured job root.");
+        var jobsShowJob = new Argument<string>("job");
+        var jobsShow = new Command("show", "Show one job: manifest, seal, plan counts, committed rows.");
+        jobsShow.Arguments.Add(jobsShowJob);
+        var jobsIntegrityJob = new Argument<string>("job") { Arity = ArgumentArity.ZeroOrOne };
+        var jobsIntegrity = new Command("integrity", "Integrity-check one job, or every job when none is named.");
+        jobsIntegrity.Arguments.Add(jobsIntegrityJob);
+        var jobsPruneJob = new Argument<string>("job");
+        var jobsPruneYes = new Option<bool>("--yes") { Description = "Actually remove; dry-run is the default." };
+        var jobsPrune = new Command("prune", "Remove a job directory (dry-run by default; recovery-pending jobs refuse).");
+        jobsPrune.Arguments.Add(jobsPruneJob);
+        jobsPrune.Options.Add(jobsPruneYes);
+        var jobsCommand = new Command("jobs", "Job inspection and maintenance; never applies image changes.");
+        jobsCommand.Subcommands.Add(jobsList);
+        jobsCommand.Subcommands.Add(jobsShow);
+        jobsCommand.Subcommands.Add(jobsIntegrity);
+        jobsCommand.Subcommands.Add(jobsPrune);
+
         var configCommand = new Command("config", "Configuration operations (precedence: CLI > env > --config > user file > defaults).");
         configCommand.Subcommands.Add(configInit);
         configCommand.Subcommands.Add(configShow);
@@ -305,6 +343,8 @@ public sealed class CommandLineModel
         root.Subcommands.Add(inspect);
         root.Subcommands.Add(scan);
         root.Subcommands.Add(apply);
+        root.Subcommands.Add(verify);
+        root.Subcommands.Add(jobsCommand);
         root.Subcommands.Add(completion);
         root.Subcommands.Add(configCommand);
         root.Subcommands.Add(modelsCommand);
@@ -389,6 +429,16 @@ public sealed class CommandLineModel
             Apply = apply,
             ApplyJob = applyJob,
             ApplyResume = applyResume,
+            Verify = verify,
+            VerifyJob = verifyJob,
+            JobsList = jobsList,
+            JobsShow = jobsShow,
+            JobsShowJob = jobsShowJob,
+            JobsIntegrity = jobsIntegrity,
+            JobsIntegrityJob = jobsIntegrityJob,
+            JobsPrune = jobsPrune,
+            JobsPruneJob = jobsPruneJob,
+            JobsPruneYes = jobsPruneYes,
             Gated = gated,
         };
     }

@@ -206,7 +206,9 @@ public static class CliHost
                 parse.GetValue(model.ModelsRemoveVersion)!);
         }
 
-        if (command == model.Scan || command == model.Apply)
+        if (command == model.Scan || command == model.Apply || command == model.Verify
+            || command == model.JobsList || command == model.JobsShow
+            || command == model.JobsIntegrity || command == model.JobsPrune)
         {
             var load = ConfigLoader.Load(
                 hostEnvironment, parse.GetValue(model.ConfigPath), parse.GetValue(model.Profile));
@@ -226,6 +228,44 @@ public static class CliHost
                 load.Effective.Config.Paths!.JobRoot!);
             try
             {
+                if (command == model.JobsList)
+                {
+                    return JobsCommands.ListAsync(context, jobStore, cancellationToken).GetAwaiter().GetResult();
+                }
+
+                if (command == model.JobsShow)
+                {
+                    return JobsCommands.ShowAsync(
+                        context, jobStore, parse.GetValue(model.JobsShowJob)!, cancellationToken)
+                        .GetAwaiter().GetResult();
+                }
+
+                if (command == model.JobsIntegrity)
+                {
+                    return JobsCommands.IntegrityAsync(
+                        context, jobStore, parse.GetValue(model.JobsIntegrityJob), cancellationToken)
+                        .GetAwaiter().GetResult();
+                }
+
+                if (command == model.JobsPrune)
+                {
+                    return JobsCommands.PruneAsync(
+                        context, jobStore, parse.GetValue(model.JobsPruneJob)!,
+                        parse.GetValue(model.JobsPruneYes), cancellationToken)
+                        .GetAwaiter().GetResult();
+                }
+
+                if (command == model.Verify)
+                {
+                    return VerifyCommand.RunAsync(
+                        context,
+                        jobStore,
+                        new OrientExpress.Infrastructure.Imaging.ProbeOutputVerifier(
+                            new OrientExpress.Infrastructure.Imaging.ManagedFormatProber()),
+                        parse.GetValue(model.VerifyJob)!,
+                        cancellationToken).GetAwaiter().GetResult();
+                }
+
                 var identity = new OrientExpress.Infrastructure.Windows.WindowsFileIdentityService();
                 if (command == model.Scan)
                 {

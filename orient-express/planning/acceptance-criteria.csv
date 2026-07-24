@@ -47,5 +47,5 @@ AC-045,PRD-FR-024,Sequence consensus can break a bounded tie but cannot override
 AC-046,PRD-FR-025,Scene fallback remains disabled unless its evaluation report demonstrates statistically supported net benefit.,planned
 AC-047,PRD-FR-026,"Benchmark output records hardware, OS, runtime, model, configuration, corpus descriptor, throughput, latency, and memory.",planned
 AC-048,PRD-FR-027,"Generated PowerShell completion and UTF-8 response files handle spaces, Unicode, and long paths.",partially-implemented (WP-002: completion + response files; long-path/Unicode process sweep pending)
-AC-049,PRD-FR-028,"Job integrity detects missing artifacts, invalid schema, digest mismatch, illegal state transition, and orphaned temporary files.",planned
-AC-050,PRD-FR-028,Prune defaults to dry-run and cannot remove jobs with pending recovery or undo retention.,planned
+AC-049,PRD-FR-028,"Job integrity detects missing artifacts, invalid schema, digest mismatch, illegal state transition, and orphaned temporary files.",partially implemented (WP-017: missing artifacts + recomputed-content seal mismatch + unresolved intents detected; illegal transitions refused by schema triggers; orphaned-stage sweeps land with WP-012)
+AC-050,PRD-FR-028,Prune defaults to dry-run and cannot remove jobs with pending recovery or undo retention.,implemented (WP-017: dry-run default; JOB_RECOVERY_PENDING refuses with exit 34; undo retention holds arrive with WP-012/015)

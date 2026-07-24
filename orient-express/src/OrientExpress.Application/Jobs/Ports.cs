@@ -34,4 +34,10 @@ public interface IJobStore : IAsyncDisposable
     public ValueTask<Result<IntegrityReport>> CheckIntegrityAsync(JobId job, CancellationToken cancellationToken);
 
     public ValueTask<Result<IReadOnlyList<JobHandle>>> ListAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Removes a job directory. Dry-run reports what would be removed;
+    /// unresolved journal intents refuse with JOB_RECOVERY_PENDING (AC-050).
+    /// </summary>
+    public ValueTask<Result<string>> PruneAsync(JobId job, bool dryRun, CancellationToken cancellationToken);
 }

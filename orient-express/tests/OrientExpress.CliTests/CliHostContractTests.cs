@@ -149,9 +149,7 @@ public sealed class CliHostContractTests : IDisposable
     [InlineData("run")]
     [InlineData("undo")]
     [InlineData("review", "decide")]
-    [InlineData("jobs", "prune")]
     [InlineData("review", "export")]
-    [InlineData("verify")]
     [InlineData("benchmark")]
     public void Gated_commands_refuse_with_capability_unavailable(params string[] command)
     {

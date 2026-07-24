@@ -459,6 +459,18 @@ public sealed class SqliteJobStore(string jobRoot) : IJobStore
                 problems.Add("UNRESOLVED_JOURNAL_INTENTS");
             }
 
+            // AC-049: missing on-disk artifacts are integrity findings too.
+            var jobDirectory = Path.Combine(jobRoot, job.Value);
+            if (!File.Exists(Path.Combine(jobDirectory, "manifest.json")))
+            {
+                problems.Add("MANIFEST_MISSING");
+            }
+
+            if (sealPresent && !File.Exists(Path.Combine(jobDirectory, "plan.digest")))
+            {
+                problems.Add("PLAN_DIGEST_FILE_MISSING");
+            }
+
             return Result.Ok(new IntegrityReport(
                 databaseOk,
                 sealPresent,
@@ -507,6 +519,52 @@ public sealed class SqliteJobStore(string jobRoot) : IJobStore
         }
 
         return Result.Ok<IReadOnlyList<JobHandle>>(handles);
+    }
+
+    public async ValueTask<Result<string>> PruneAsync(JobId job, bool dryRun, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(job);
+        await _writer.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var jobDirectory = Path.Combine(jobRoot, job.Value);
+            if (!Directory.Exists(jobDirectory))
+            {
+                return Fail<string>("JOB_NOT_FOUND", ErrorCategory.NotFound,
+                    $"No job directory for '{job.Value}' under the job root.");
+            }
+
+            // AC-050: a job with pending recovery work cannot be removed.
+            var opened = Connection(job);
+            if (opened.IsSuccess)
+            {
+                var unresolved = ScalarLong(
+                    opened.Require(),
+                    "SELECT COUNT(*) FROM journal WHERE checkpoint NOT IN ('Committed', 'Reconciled')");
+                if (unresolved > 0)
+                {
+                    return Fail<string>("JOB_RECOVERY_PENDING", ErrorCategory.InvalidInput,
+                        $"{unresolved} journal intent(s) are unresolved; recover before pruning.");
+                }
+            }
+
+            if (dryRun)
+            {
+                return Result.Ok($"dry-run: would remove '{jobDirectory}'");
+            }
+
+            if (_connections.Remove(job.Value, out var connection))
+            {
+                connection.Dispose();
+            }
+
+            Directory.Delete(jobDirectory, recursive: true);
+            return Result.Ok($"removed '{jobDirectory}'");
+        }
+        finally
+        {
+            _ = _writer.Release();
+        }
     }
 
     public ValueTask DisposeAsync()
