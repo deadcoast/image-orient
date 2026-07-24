@@ -22,12 +22,14 @@ public static class DoctorCommand
         string? probeTarget,
         OrientExpress.Application.Metadata.IMetadataService metadataService,
         OrientExpress.Application.Inference.IModelRegistry? modelRegistry,
+        IReadOnlyDictionary<string, string> environmentVariables,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(metadataService);
+        ArgumentNullException.ThrowIfNull(environmentVariables);
         cancellationToken.ThrowIfCancellationRequested();
-        var report = BuildReport(metadataService, modelRegistry);
+        var report = BuildReport(metadataService, modelRegistry, environmentVariables);
         if (probeTarget is not null)
         {
             if (!Directory.Exists(probeTarget))
@@ -114,10 +116,12 @@ public static class DoctorCommand
 
     private static CapabilityReport BuildReport(
         OrientExpress.Application.Metadata.IMetadataService metadataService,
-        OrientExpress.Application.Inference.IModelRegistry? modelRegistry)
+        OrientExpress.Application.Inference.IModelRegistry? modelRegistry,
+        IReadOnlyDictionary<string, string> environmentVariables)
     {
         var exifToolIdentity = metadataService.Identify();
         var metadataAvailable = exifToolIdentity.IsSuccess;
+        var jpegtranPath = OrientExpress.Infrastructure.Imaging.JpegtranLocator.Locate(environmentVariables);
         var activeModel = modelRegistry?.GetActive();
         var activeInstalled = activeModel is { IsSuccess: true } && activeModel.Value.Value is not null;
         return new CapabilityReport
@@ -162,6 +166,15 @@ public static class DoctorCommand
                             + $"(sha256 {activeModel.Value.Value.Manifest.Artifact!.Sha256![..16]}…); decision engine gated (WP-007/008)"
                         : "no active model; install and activate one via 'upright models'",
                     Version = activeInstalled ? activeModel!.Value.Value!.Manifest.Version : null,
+                },
+                new ComponentCapability
+                {
+                    Id = "transform-jpegtran",
+                    Available = jpegtranPath is not null,
+                    Status = jpegtranPath is not null
+                        ? "implemented (WP-010); lossless DCT path; sha256 "
+                            + OrientExpress.Infrastructure.Imaging.JpegtranLocator.Sha256Of(jpegtranPath)[..16]
+                        : "gated: JPEGTRAN_NOT_FOUND (install libjpeg-turbo; see DEP-008)",
                 },
                 new ComponentCapability { Id = "job-store", Available = false, Status = "gated: WP-009 (SPIKE-008 evidence recorded)" },
             ],

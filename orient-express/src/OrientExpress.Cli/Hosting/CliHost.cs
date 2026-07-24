@@ -103,7 +103,12 @@ public static class CliHost
                 : new OrientExpress.Infrastructure.Inference.FileModelRegistry(
                     doctorConfig.Effective.Config.Paths!.ModelRoot!);
             return DoctorCommand.Run(
-                context, parse.GetValue(model.DoctorProbeTarget), metadata, doctorRegistry, cancellationToken);
+                context,
+                parse.GetValue(model.DoctorProbeTarget),
+                metadata,
+                doctorRegistry,
+                hostEnvironment.EnvironmentVariables,
+                cancellationToken);
         }
 
         if (command == model.Inspect)
