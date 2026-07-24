@@ -17,11 +17,16 @@ public static class DoctorCommand
 {
     private const string NotImplemented = "NOT_YET_IMPLEMENTED";
 
-    public static int Run(OutputContext context, string? probeTarget, CancellationToken cancellationToken)
+    public static int Run(
+        OutputContext context,
+        string? probeTarget,
+        OrientExpress.Application.Metadata.IMetadataService metadataService,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(metadataService);
         cancellationToken.ThrowIfCancellationRequested();
-        var report = BuildReport();
+        var report = BuildReport(metadataService);
         if (probeTarget is not null)
         {
             if (!Directory.Exists(probeTarget))
@@ -87,13 +92,29 @@ public static class DoctorCommand
             context.Out.WriteLine($"  {component.Id}: {(component.Available ? "available" : component.Status)}");
         }
 
-        context.Out.WriteLine(
-            "  formats: none enabled yet (codec, metadata, and transform evidence pending; see STATUS.md)");
+        foreach (var format in report.Formats)
+        {
+            var abilities = new List<string>();
+            if (format.Read)
+            {
+                abilities.Add("read");
+            }
+
+            if (format.MetadataRead)
+            {
+                abilities.Add("metadata");
+            }
+
+            context.Out.WriteLine(
+                $"  format.{format.Format}: {(abilities.Count > 0 ? string.Join('+', abilities) : "gated")}"
+                + $" [{string.Join(',', format.ReasonCodes ?? [])}]");
+        }
     }
 
-    private static CapabilityReport BuildReport()
+    private static CapabilityReport BuildReport(OrientExpress.Application.Metadata.IMetadataService metadataService)
     {
-        string[] gatedFormats = ["jpeg", "png", "heic", "avif", "tiff"];
+        var exifToolIdentity = metadataService.Identify();
+        var metadataAvailable = exifToolIdentity.IsSuccess;
         return new CapabilityReport
         {
             GeneratedUtc = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
@@ -116,24 +137,56 @@ public static class DoctorCommand
                 new ComponentCapability { Id = "cli-host", Available = true, Status = "implemented (WP-002)", Version = VersionCommand.ToolVersion },
                 new ComponentCapability { Id = "configuration", Available = true, Status = "implemented (WP-003)" },
                 new ComponentCapability { Id = "filesystem-identity", Available = true, Status = "implemented (WP-004); guarded execution gated (WP-012/WP-015)" },
-                new ComponentCapability { Id = "metadata-exiftool", Available = false, Status = "gated: SPIKE-004 + WP-005" },
-                new ComponentCapability { Id = "codecs", Available = false, Status = "gated: SPIKE-007 + WP-005" },
+                new ComponentCapability
+                {
+                    Id = "metadata-exiftool",
+                    Available = metadataAvailable,
+                    Status = metadataAvailable
+                        ? "implemented (WP-005); sha256 " + exifToolIdentity.Require().Sha256[..16]
+                        : "gated: EXIFTOOL_NOT_FOUND (install ExifTool; see DEP-007)",
+                    Version = metadataAvailable ? exifToolIdentity.Require().Version : null,
+                },
+                new ComponentCapability { Id = "format-prober", Available = true, Status = "implemented (WP-005); header probe, no pixel decode" },
                 new ComponentCapability { Id = "inference-runtime", Available = false, Status = "gated: SPIKE-003 + WP-006" },
                 new ComponentCapability { Id = "orientation-model", Available = false, Status = "gated: SPIKE-001/002 corpus and proof" },
                 new ComponentCapability { Id = "job-store", Available = false, Status = "gated: WP-009 (SPIKE-008 evidence recorded)" },
             ],
-            Formats = [.. gatedFormats.Select(format => new FormatCapability
-            {
-                Format = format,
-                Read = false,
-                MetadataRead = false,
-                Transform = false,
-                MetadataWrite = false,
-                Verify = false,
-                ReasonCodes = [NotImplemented],
-            })],
+            Formats =
+            [
+                BaselineFormat("jpeg", metadataAvailable),
+                BaselineFormat("png", metadataAvailable),
+                GatedFormat("tiff", "NOT_YET_IMPLEMENTED"),
+                GatedFormat("heic", "CODEC_PRESENT_UNVERIFIED_OR_ABSENT"),
+                GatedFormat("avif", "CODEC_PRESENT_UNVERIFIED_OR_ABSENT"),
+            ],
         };
     }
+
+    private static FormatCapability BaselineFormat(string format, bool metadataAvailable)
+        => new()
+        {
+            Format = format,
+            Read = true,
+            MetadataRead = metadataAvailable,
+            Transform = false,
+            MetadataWrite = metadataAvailable,
+            Verify = false,
+            ReasonCodes = metadataAvailable
+                ? ["TRANSFORM_GATED_WP-010", "VERIFY_GATED_WP-013"]
+                : ["EXIFTOOL_NOT_FOUND", "TRANSFORM_GATED_WP-010", "VERIFY_GATED_WP-013"],
+        };
+
+    private static FormatCapability GatedFormat(string format, string reason)
+        => new()
+        {
+            Format = format,
+            Read = false,
+            MetadataRead = false,
+            Transform = false,
+            MetadataWrite = false,
+            Verify = false,
+            ReasonCodes = [reason],
+        };
 
     private static string ProbeLongPaths()
     {

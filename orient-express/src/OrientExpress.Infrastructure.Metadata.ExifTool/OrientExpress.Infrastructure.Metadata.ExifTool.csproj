@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OrientExpress.Application\OrientExpress.Application.csproj" />
+    <ProjectReference Include="..\OrientExpress.Contracts\OrientExpress.Contracts.csproj" />
     <ProjectReference Include="..\OrientExpress.Domain\OrientExpress.Domain.csproj" />
   </ItemGroup>
 

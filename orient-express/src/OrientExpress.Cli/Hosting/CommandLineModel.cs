@@ -40,6 +40,10 @@ public sealed class CommandLineModel
 
     public required Option<string> DoctorProbeTarget { get; init; }
 
+    public required Command Inspect { get; init; }
+
+    public required Argument<string> InspectFile { get; init; }
+
     public required Command Completion { get; init; }
 
     public required Argument<string> CompletionShell { get; init; }
@@ -60,8 +64,7 @@ public sealed class CommandLineModel
 
     private static readonly GatedCommandSpec[] GatedSpecs =
     [
-        new("inspect", "Explain identity, orientation evidence, and the proposed action for one file.", "WP-004;WP-005;WP-007"),
-        new("scan", "Read-only planning; seals an immutable job plan.", "WP-004;WP-007;WP-008;WP-009"),
+        new("scan", "Read-only planning; seals an immutable job plan.", "WP-007;WP-008;WP-009"),
         new("apply", "Execute a sealed plan; never re-decides transforms.", "WP-009;WP-010;WP-011;WP-012"),
         new("run", "Scan then apply when policy permits (provisional).", "WP-009;WP-014"),
         new("verify", "Independently re-verify job outputs.", "WP-013"),
@@ -140,6 +143,11 @@ public sealed class CommandLineModel
             "doctor", "Environment and capability diagnostics; never reads or modifies images.");
         doctor.Options.Add(doctorProbeTarget);
 
+        var inspectFile = new Argument<string>("file") { Description = "Image file to inspect (read-only)." };
+        var inspect = new Command(
+            "inspect", "Read-only diagnostic view: identity, format, and EXIF orientation. Decisions are gated until WP-007.");
+        inspect.Arguments.Add(inspectFile);
+
         var completionShell = new Argument<string>("shell") { Description = "Target shell (powershell)." };
         var completion = new Command("completion", "Emit a shell completion script from the command model.");
         completion.Arguments.Add(completionShell);
@@ -181,6 +189,7 @@ public sealed class CommandLineModel
         root.Options.Add(profile);
         root.Subcommands.Add(version);
         root.Subcommands.Add(doctor);
+        root.Subcommands.Add(inspect);
         root.Subcommands.Add(completion);
         root.Subcommands.Add(configCommand);
 
@@ -231,6 +240,8 @@ public sealed class CommandLineModel
             Version = version,
             Doctor = doctor,
             DoctorProbeTarget = doctorProbeTarget,
+            Inspect = inspect,
+            InspectFile = inspectFile,
             Completion = completion,
             CompletionShell = completionShell,
             ConfigInit = configInit,

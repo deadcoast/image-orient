@@ -182,6 +182,22 @@
       "orientexpress.domain": {
         "type": "Project"
       },
+      "orientexpress.infrastructure.imaging": {
+        "type": "Project",
+        "dependencies": {
+          "OrientExpress.Application": "[1.0.0, )",
+          "OrientExpress.Contracts": "[1.0.0, )",
+          "OrientExpress.Domain": "[1.0.0, )"
+        }
+      },
+      "orientexpress.infrastructure.metadata.exiftool": {
+        "type": "Project",
+        "dependencies": {
+          "OrientExpress.Application": "[1.0.0, )",
+          "OrientExpress.Contracts": "[1.0.0, )",
+          "OrientExpress.Domain": "[1.0.0, )"
+        }
+      },
       "orientexpress.infrastructure.windows": {
         "type": "Project",
         "dependencies": {

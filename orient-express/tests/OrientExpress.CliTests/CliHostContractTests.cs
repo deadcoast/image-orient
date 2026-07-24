@@ -80,10 +80,11 @@ public sealed class CliHostContractTests : IDisposable
             .ToDictionary(
                 component => component.GetProperty("id").GetString()!,
                 component => component.GetProperty("available").GetBoolean());
-        string[] implemented = ["cli-host", "configuration", "filesystem-identity"];
+        string[] implemented = ["cli-host", "configuration", "filesystem-identity", "format-prober"];
+        string[] machineDependent = ["metadata-exiftool"];
         Assert.All(implemented, id => Assert.True(availability[id], id));
         Assert.All(
-            availability.Where(pair => !implemented.Contains(pair.Key)),
+            availability.Where(pair => !implemented.Contains(pair.Key) && !machineDependent.Contains(pair.Key)),
             pair => Assert.False(pair.Value, pair.Key));
     }
 
@@ -147,7 +148,7 @@ public sealed class CliHostContractTests : IDisposable
     [Theory]
     [InlineData("scan")]
     [InlineData("apply")]
-    [InlineData("inspect")]
+    [InlineData("run")]
     [InlineData("undo")]
     [InlineData("review", "decide")]
     [InlineData("jobs", "prune")]
