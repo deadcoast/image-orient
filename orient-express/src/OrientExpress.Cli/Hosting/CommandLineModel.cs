@@ -90,10 +90,26 @@ public sealed class CommandLineModel
 
     public required IReadOnlyDictionary<Command, GatedCommandSpec> Gated { get; init; }
 
+    public required Command Scan { get; init; }
+
+    public required Argument<string> ScanSource { get; init; }
+
+    public required Option<string> ScanOutput { get; init; }
+
+    public required Option<bool> ScanNoRecurse { get; init; }
+
+    public required Option<string> ScanFingerprint { get; init; }
+
+    public required Option<int?> ScanMaxFiles { get; init; }
+
+    public required Command Apply { get; init; }
+
+    public required Argument<string> ApplyJob { get; init; }
+
+    public required Option<bool> ApplyResume { get; init; }
+
     private static readonly GatedCommandSpec[] GatedSpecs =
     [
-        new("scan", "Read-only planning; seals an immutable job plan.", "WP-007;WP-008;WP-009"),
-        new("apply", "Execute a sealed plan; never re-decides transforms.", "WP-009;WP-010;WP-011;WP-012"),
         new("run", "Scan then apply when policy permits (provisional).", "WP-009;WP-014"),
         new("verify", "Independently re-verify job outputs.", "WP-013"),
         new("undo", "Restore from verified backups for an in-place job.", "WP-012;WP-015"),
@@ -233,6 +249,40 @@ public sealed class CommandLineModel
         modelsCommand.Subcommands.Add(modelsRollback);
         modelsCommand.Subcommands.Add(modelsRemove);
 
+        var scanSource = new Argument<string>("source") { Description = "Folder of photos to scan (read-only)." };
+        var scanOutput = new Option<string>("--output")
+        {
+            Description = "Destination root for the safe-copy outputs (required).",
+            Required = true,
+        };
+        var scanNoRecurse = new Option<bool>("--no-recurse") { Description = "Scan only the top directory." };
+        var scanFingerprint = new Option<string>("--fingerprint")
+        {
+            Description = "standard (size+time+prefix digest) or strong (full SHA-256).",
+        };
+        var scanMaxFiles = new Option<int?>("--max-files") { Description = "Guardrail on files considered." };
+        var scan = new Command(
+            "scan",
+            "Read-only planning; seals an immutable job plan. Deterministic mode: only files whose "
+            + "EXIF orientation tag proves a rotation are planned; ML decisions stay gated (WP-007/008).");
+        scan.Arguments.Add(scanSource);
+        scan.Options.Add(scanOutput);
+        scan.Options.Add(scanNoRecurse);
+        scan.Options.Add(scanFingerprint);
+        scan.Options.Add(scanMaxFiles);
+
+        var applyJob = new Argument<string>("job") { Description = "Job id from a sealed scan." };
+        var applyResume = new Option<bool>("--resume")
+        {
+            Description = "Idempotently skip rows whose commit event already exists.",
+        };
+        var apply = new Command(
+            "apply",
+            "Execute a sealed plan (safe-copy): stale inputs refused, outputs verified before the atomic "
+            + "commit, sources never written.");
+        apply.Arguments.Add(applyJob);
+        apply.Options.Add(applyResume);
+
         var configCommand = new Command("config", "Configuration operations (precedence: CLI > env > --config > user file > defaults).");
         configCommand.Subcommands.Add(configInit);
         configCommand.Subcommands.Add(configShow);
@@ -253,6 +303,8 @@ public sealed class CommandLineModel
         root.Subcommands.Add(version);
         root.Subcommands.Add(doctor);
         root.Subcommands.Add(inspect);
+        root.Subcommands.Add(scan);
+        root.Subcommands.Add(apply);
         root.Subcommands.Add(completion);
         root.Subcommands.Add(configCommand);
         root.Subcommands.Add(modelsCommand);
@@ -328,6 +380,15 @@ public sealed class CommandLineModel
             ModelsRemove = modelsRemove,
             ModelsRemoveId = modelsRemoveId,
             ModelsRemoveVersion = modelsRemoveVersion,
+            Scan = scan,
+            ScanSource = scanSource,
+            ScanOutput = scanOutput,
+            ScanNoRecurse = scanNoRecurse,
+            ScanFingerprint = scanFingerprint,
+            ScanMaxFiles = scanMaxFiles,
+            Apply = apply,
+            ApplyJob = applyJob,
+            ApplyResume = applyResume,
             Gated = gated,
         };
     }

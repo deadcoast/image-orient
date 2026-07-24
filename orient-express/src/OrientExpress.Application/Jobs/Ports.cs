@@ -28,6 +28,9 @@ public interface IJobStore : IAsyncDisposable
 
     public IAsyncEnumerable<PlannedFile> ReadPlanAsync(JobId job, PlanQuery query, CancellationToken cancellationToken);
 
+    public ValueTask<Result<IReadOnlySet<long>>> ReadEventSequencesAsync(
+        JobId job, string eventType, CancellationToken cancellationToken);
+
     public ValueTask<Result<IntegrityReport>> CheckIntegrityAsync(JobId job, CancellationToken cancellationToken);
 
     public ValueTask<Result<IReadOnlyList<JobHandle>>> ListAsync(CancellationToken cancellationToken);

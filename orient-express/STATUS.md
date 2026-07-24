@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.18
+version: 0.1.19
 status: baseline
 as_of: 2026-07-24
 owner: Program
@@ -46,6 +46,8 @@ SPIKE-003 is **complete** ([report](spikes/SPIKE-003-inference-runtime/report.md
 **WP-009 (job store and immutable planning) is implemented** ([context packet](planning/context-packets/WP-009-context-packet.md)): SQLite-canonical job state on the SPIKE-008-proven settings — one directory per job with an immutable `manifest.json`, schema-trigger-enforced append-only events, write-once content-addressed plan seals (the seal digests recomputed row content, so a tampered row cannot hide behind a stale digest column — proven by test), forward-only journal checkpoints, batched scan writes, streaming canonical-order plan reads, and integrity diagnostics. `StaleInputCheck` yields the stable drift reasons apply will refuse with (PRD-FR-008). Recorded deviation: WP-007/008 stay corpus-gated, so plans carry model/policy identity as nullable columns — null is the honest record for the deterministic no-ML path. The store connects to `scan`/`apply` only through the pipeline packages (WP-011..WP-014); `jobs` CLI commands are WP-017.
 
 **WP-011 (bounded execution pipeline) is implemented at engine level** ([context packet](planning/context-packets/WP-011-context-packet.md)): ordered bounded stages on BCL channels with per-stage worker/queue limits from `performance.*` (backpressure proven in tests — concurrency and in-flight items measurably bounded), per-item failure isolation with typed errors (one bad file never stops the batch), retry only when the typed error says so, and two-token cancellation (soft = stop intake and finish admitted items for a resumable state; hard = abandon promptly). The stages themselves — scan planning, transform execution, verification — connect through WP-013/WP-014, which is when `scan`/`apply` stop refusing.
+
+**WP-013 (independent verification) and WP-014 (safe-copy end-to-end mode) are implemented — `upright scan` and `upright apply` work for the first time** ([context packet](planning/context-packets/WP-014-context-packet.md)), for the deterministic EXIF path: scan enumerates in canonical order, plans from the stored EXIF orientation tag alone (2..8 proves a rotation; 1/absent is Keep; everything else is a recorded Unsupported row), and seals the immutable plan; apply refuses stale inputs by recorded identity, rotates losslessly into an exclusive stage file, sets the tag to 1, verifies through the independent prober (a read path unrelated to the tools that produced the output), commits with the atomic create-path move, and resumes idempotently from the commit-event ledger. Proven end to end by CLI tests on real tagged JPEGs. **What the product still cannot do:** photos stored sideways with a clean orientation tag are planned Keep — deciding those needs the ML engine (WP-007/008), which stays gated on the operator's corpus evidence; in-place mode, undo, review workflow, and `jobs`/`verify` commands remain gated (WP-012/015/016/017).
 
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 
