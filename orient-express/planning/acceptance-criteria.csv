@@ -4,12 +4,12 @@ AC-002,PRD-FR-001,"Loops, inaccessible paths, reparse points, aliases, and dupli
 AC-003,PRD-FR-002,`doctor --json` emits a schema-valid capability report and performs no source writes.,partially-implemented (WP-002: report emitted and structurally tested; automated JSON-schema validation pending)
 AC-004,PRD-FR-002,"`inspect` explains stored dimensions, EXIF transform, candidate evidence, proposed action, and blockers for one file.",planned
 AC-005,PRD-FR-003,Golden images for all EXIF Orientation values 1–8 render to the same intended upright view.,implemented (WP-005: prober + adapter read 1-8 incl. mirrored; display-vs-stored distinction arrives with the transform engine)
-AC-006,PRD-FR-004,Candidate generation composes EXIF display transforms before additional rotational hypotheses.,planned
+AC-006,PRD-FR-004,Candidate generation composes EXIF display transforms before additional rotational hypotheses.,implemented (WP-014/007: the deterministic EXIF path plans first; only clean-tag Keep rows reach the four-candidate engine)
 AC-007,PRD-FR-004,"Candidate scoring is deterministic for a pinned model, runtime, policy, and input.",planned
 AC-008,PRD-FR-005,"Face detections expose bounding boxes, confidence, and five landmarks for each candidate.",planned
 AC-009,PRD-FR-005,No persisted artifact contains an identity embedding or cross-file face identifier.,planned
 AC-010,PRD-FR-006,"Automation requires configured score, top-two margin, and minimum-evidence gates.",planned
-AC-011,PRD-FR-006,"Ambiguous, no-face, contradictory multi-face, or out-of-distribution cases become REVIEW rather than forced rotations.",planned
+AC-011,PRD-FR-006,"Ambiguous, no-face, contradictory multi-face, or out-of-distribution cases become REVIEW rather than forced rotations.",partially implemented (WP-008 provisional: no-face/weak-face/geometry-disagreement/thin-margin all park for Review with named reasons; contradictory multi-face weighting and OOD detection are WP-020 calibration scope)
 AC-012,PRD-FR-007,"A job plan validates against its schema and records tool, policy, model, runtime, and source fingerprints.",partially implemented (WP-009: tool/config/source fingerprints recorded; model/policy identity nullable until WP-007/008; export-schema validation with the export contract)
 AC-013,PRD-FR-007,"Once sealed, plan rows cannot be edited through normal commands; review overrides are append-only decisions.",implemented (WP-009: schema triggers refuse sealed-row mutation and re-sealing; seal digests recomputed row content; review overlays land with WP-016)
 AC-014,PRD-FR-008,"`scan` creates no image output and does not modify source timestamps, data streams, or metadata.",implemented (WP-014: end-to-end test proves no outputs exist after scan and sources are unchanged)

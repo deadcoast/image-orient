@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.21
+version: 0.1.22
 status: baseline
 as_of: 2026-07-24
 owner: Program
@@ -52,6 +52,8 @@ SPIKE-003 is **complete** ([report](spikes/SPIKE-003-inference-runtime/report.md
 **WP-017 (job operations and integrity) is implemented** ([context packet](planning/context-packets/WP-017-context-packet.md)): `jobs list/show/integrity/prune` and the standalone `upright verify <job>` re-check work — jobs are inspectable, integrity-checkable (database, recomputed-content seal, unresolved intents, missing artifacts), and prunable with a dry-run default that refuses recovery-pending jobs; committed outputs re-verify through the independent read path at any later time. Remaining gated commands: `run`, `undo`, `review *`, `benchmark` (WP-012/015/016/021).
 
 **WP-012 (journal, commit, recovery, and undo) is implemented — guarded in-place mode works**: `scan --mode in-place --backup-root <dir>` then `apply --acknowledge-in-place` rewrites originals through the SPIKE-006 protocol (byte-verified backup, journal intent durable before the swap, same-directory stage, independent verification, write-through ReplaceFileW, post-replace digest check), reconciles the journal before any new work, and `undo <job> --yes` restores byte-verified backups only where the file still matches the journal — conflicts abstain and report, never force. In-place remains **guarded-alpha** until WP-015's systematic fault-injection matrix passes; safe-copy stays the default.
+
+**WP-007 (orientation engine) and WP-008 (decision policy) are implemented with the recorded abstention-until-calibrated deviation — `scan --detect` now fixes sideways photos with clean tags**: the SPIKE-002 four-candidate approach productionized behind the WP-006 model registry and runtime (digest-verified YuNet, five-landmark geometry), with a provisional UNCALIBRATED policy that rotates only when the confident-face vote winner, its upright landmark geometry, and the relative margin all agree — everything else becomes a recorded Review row with named reasons, never a forced rotation. Detection is opt-in, the manifest records model and policy identity, and every assessment says `calibrated: false`. Proven end to end on the digest-pinned pilot portrait. The >=99 percent precision gate still requires the operator's corpus evidence (WP-020); the SPIKE-002 evaluate harness remains the measurement tool.
 
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 

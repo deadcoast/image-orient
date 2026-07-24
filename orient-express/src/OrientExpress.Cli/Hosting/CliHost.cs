@@ -280,20 +280,74 @@ public static class CliHost
                 var identity = new OrientExpress.Infrastructure.Windows.WindowsFileIdentityService();
                 if (command == model.Scan)
                 {
-                    return ScanCommand.RunAsync(
-                        context,
-                        load,
-                        identity,
-                        new OrientExpress.Infrastructure.Imaging.ManagedFormatProber(),
-                        jobStore,
-                        parse.GetValue(model.ScanSource)!,
-                        parse.GetValue(model.ScanOutput)!,
-                        recurse: !parse.GetValue(model.ScanNoRecurse),
-                        parse.GetValue(model.ScanFingerprint) ?? "standard",
-                        parse.GetValue(model.ScanMaxFiles),
-                        parse.GetValue(model.ScanMode) ?? "safe-copy",
-                        parse.GetValue(model.ScanBackupRoot),
-                        cancellationToken).GetAwaiter().GetResult();
+                    OrientExpress.Application.Orientation.FourCandidateOrientationEngine? mlEngine = null;
+                    string? modelIdentity = null;
+                    OrientExpress.Infrastructure.Inference.OnnxInferenceRuntime? mlRuntime = null;
+                    try
+                    {
+                        if (parse.GetValue(model.ScanDetect))
+                        {
+                            var registry = new OrientExpress.Infrastructure.Inference.FileModelRegistry(
+                                load.Effective.Config.Paths!.ModelRoot!);
+                            var active = registry.GetActive();
+                            if (!active.IsSuccess || active.Value is null)
+                            {
+                                context.WriteError(
+                                    CliExitCode.CapabilityUnavailable, "NO_ACTIVE_MODEL",
+                                    "--detect needs an active face model",
+                                    "install and activate one via 'upright models' (see models/manifests)");
+                                return (int)CliExitCode.CapabilityUnavailable;
+                            }
+
+                            var scanJpegtran = OrientExpress.Infrastructure.Imaging.JpegtranLocator.Locate(
+                                hostEnvironment.EnvironmentVariables);
+                            var djpegPath = scanJpegtran is null
+                                ? null
+                                : System.IO.Path.Combine(System.IO.Path.GetDirectoryName(scanJpegtran)!, "djpeg.exe");
+                            if (djpegPath is null || !File.Exists(djpegPath))
+                            {
+                                context.WriteError(
+                                    CliExitCode.CapabilityUnavailable, "DJPEG_NOT_FOUND",
+                                    "--detect needs the libjpeg-turbo decoder", "install libjpeg-turbo (DEP-008)");
+                                return (int)CliExitCode.CapabilityUnavailable;
+                            }
+
+                            var installed = active.Value;
+                            var manifest = installed.Manifest;
+                            var handle = new OrientExpress.Contracts.Models.ModelHandle(
+                                manifest.ModelId!, manifest.Version!, manifest.Artifact!.Sha256!,
+                                installed.ArtifactPath);
+                            mlRuntime = new OrientExpress.Infrastructure.Inference.OnnxInferenceRuntime();
+                            modelIdentity =
+                                $"{manifest.ModelId} {manifest.Version} sha256:{manifest.Artifact.Sha256![..16]}";
+                            mlEngine = new OrientExpress.Application.Orientation.FourCandidateOrientationEngine(
+                                new OrientExpress.Infrastructure.Imaging.DjpegPixelDecoder(djpegPath),
+                                new OrientExpress.Infrastructure.Inference.YuNetFaceDetector(mlRuntime, handle),
+                                modelIdentity,
+                                $"{mlRuntime.Descriptor.Runtime} {mlRuntime.Descriptor.Version} {mlRuntime.Descriptor.Provider}");
+                        }
+
+                        return ScanCommand.RunAsync(
+                            context,
+                            load,
+                            identity,
+                            new OrientExpress.Infrastructure.Imaging.ManagedFormatProber(),
+                            jobStore,
+                            parse.GetValue(model.ScanSource)!,
+                            parse.GetValue(model.ScanOutput)!,
+                            recurse: !parse.GetValue(model.ScanNoRecurse),
+                            parse.GetValue(model.ScanFingerprint) ?? "standard",
+                            parse.GetValue(model.ScanMaxFiles),
+                            parse.GetValue(model.ScanMode) ?? "safe-copy",
+                            parse.GetValue(model.ScanBackupRoot),
+                            mlEngine,
+                            modelIdentity,
+                            cancellationToken).GetAwaiter().GetResult();
+                    }
+                    finally
+                    {
+                        mlRuntime?.DisposeAsync().AsTask().GetAwaiter().GetResult();
+                    }
                 }
 
                 var jpegtranPath = OrientExpress.Infrastructure.Imaging.JpegtranLocator.Locate(

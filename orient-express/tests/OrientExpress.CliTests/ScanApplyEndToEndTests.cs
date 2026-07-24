@@ -17,6 +17,8 @@ public sealed class ScanApplyEndToEndTests : IDisposable
 {
     private const string ToolsDirectory = @"C:\libjpeg-turbo64\bin";
 
+    private static readonly string[] CpuProviders = ["cpu"];
+
     private readonly string _directory =
         Directory.CreateTempSubdirectory("upright-e2e-tests-").FullName;
 
@@ -169,6 +171,92 @@ public sealed class ScanApplyEndToEndTests : IDisposable
             Assert.Equal(0, document.RootElement.GetProperty("counts").GetProperty("applied").GetInt64());
             Assert.Equal(2, document.RootElement.GetProperty("counts").GetProperty("resumeSkipped").GetInt64());
         }
+    }
+
+    [Fact]
+    public async Task Scan_with_detect_rotates_a_sideways_clean_tag_photo_via_the_face_model()
+    {
+        RequireTools();
+        var fixtures = Path.Combine(
+            System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
+            "orient-express", "spike-fixtures");
+        var modelPath = Path.Combine(fixtures, "yunet.onnx");
+        var portraitPath = Path.Combine(fixtures, "portrait1.jpg");
+        if (!File.Exists(modelPath) || !File.Exists(portraitPath))
+        {
+            Assert.Skip("the digest-pinned YuNet model / pilot portrait are not cached on this machine");
+        }
+
+        var environment = Environment();
+
+        // Real photos are rarely MCU-aligned; the operator picks the
+        // reversible edge policy instead of the strict default (ADR-0007).
+        _ = Directory.CreateDirectory(Path.Combine(_directory, "user"));
+        File.WriteAllText(
+            Path.Combine(_directory, "user", "config.json"),
+            """{ "output": { "jpegEdge": "preserve-partial" } }""");
+
+        // Install and activate the model through the CLI itself.
+        var manifestPath = Path.Combine(_directory, "yunet-manifest.json");
+        File.WriteAllText(manifestPath, JsonSerializer.Serialize(new
+        {
+            schemaVersion = "1.0",
+            modelId = "yunet-baseline",
+            version = "2023mar",
+            task = "face-detection-five-landmarks",
+            artifact = new
+            {
+                file = "model.onnx",
+                sha256 = Convert.ToHexStringLower(
+                    System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(modelPath))),
+                bytes = new FileInfo(modelPath).Length,
+                format = "onnx",
+            },
+            inputs = new[] { new { name = "input" } },
+            outputs = new[] { new { name = "cls_8" } },
+            preprocessing = new { id = "yunet-640-bgr", colorOrder = "BGR", resize = "stretch" },
+            postprocessing = new { id = "yunet-fdyn-nms" },
+            compatibility = new { appVersion = ">=0.1.0", runtimeApi = "onnxruntime", allowedProviders = CpuProviders },
+            provenance = "OpenCV Zoo face_detection_yunet_2023mar (test install from the pinned cache)",
+            license = "MIT",
+        }));
+        Assert.Equal(0, Invoke(environment, "models", "install", modelPath, "--manifest", manifestPath).ExitCode);
+        Assert.Equal(0, Invoke(environment, "models", "activate", "yunet-baseline", "2023mar").ExitCode);
+
+        // A real face photo stored sideways with a CLEAN tag — the case the
+        // deterministic path cannot fix. Rotate the upright portrait 90 cw.
+        _ = Directory.CreateDirectory(SourceRoot);
+        var sideways = Path.Combine(SourceRoot, "sideways-face.jpg");
+        using (var process = Process.Start(new ProcessStartInfo
+        {
+            FileName = Path.Combine(ToolsDirectory, "jpegtran.exe"),
+            ArgumentList = { "-copy", "all", "-rotate", "90", "-outfile", sideways, portraitPath },
+            UseShellExecute = false,
+            RedirectStandardError = true,
+        }))
+        {
+            Assert.True(process!.WaitForExit(30_000));
+            Assert.Equal(0, process.ExitCode);
+        }
+
+        var original = ManagedFormatProber.ProbeBytesSpan(File.ReadAllBytes(portraitPath));
+        var scan = Invoke(environment, "scan", SourceRoot, "--output", OutputRoot, "--detect", "--json");
+        Assert.Equal(0, scan.ExitCode);
+        using (var document = JsonDocument.Parse(scan.Stdout))
+        {
+            Assert.Equal(1, document.RootElement.GetProperty("counts").GetProperty("normalize").GetInt64());
+            Assert.Contains("uncalibrated", document.RootElement.GetProperty("detection").GetString());
+        }
+
+        var apply = Invoke(environment, "apply", JobIdFrom(scan.Stdout), "--json");
+        Assert.Equal(0, apply.ExitCode);
+
+        // The output must be physically upright again: original dimensions.
+        var fixedPhoto = ManagedFormatProber.ProbeBytesSpan(
+            File.ReadAllBytes(Path.Combine(OutputRoot, "sideways-face.jpg")));
+        Assert.Equal(original.Width, fixedPhoto.Width);
+        Assert.Equal(original.Height, fixedPhoto.Height);
+        Assert.Equal(1, fixedPhoto.ExifOrientation ?? 1);
     }
 
     [Fact]

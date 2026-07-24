@@ -163,7 +163,7 @@ public static class DoctorCommand
                     Available = activeInstalled,
                     Status = activeInstalled
                         ? $"active: {activeModel!.Value.Value!.Manifest.ModelId} {activeModel.Value.Value.Manifest.Version} "
-                            + $"(sha256 {activeModel.Value.Value.Manifest.Artifact!.Sha256![..16]}…); decision engine gated (WP-007/008)"
+                            + $"(sha256 {activeModel.Value.Value.Manifest.Artifact!.Sha256![..16]}…); decision engine provisional: scan --detect (uncalibrated, abstains when unsure)"
                         : "no active model; install and activate one via 'upright models'",
                     Version = activeInstalled ? activeModel!.Value.Value!.Manifest.Version : null,
                 },

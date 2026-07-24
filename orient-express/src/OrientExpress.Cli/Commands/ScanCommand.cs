@@ -3,6 +3,7 @@ using System.Text.Json;
 using OrientExpress.Application.Filesystem;
 using OrientExpress.Application.Jobs;
 using OrientExpress.Application.Metadata;
+using OrientExpress.Application.Orientation;
 using OrientExpress.Application.Pipeline;
 using OrientExpress.Application.Transform;
 using OrientExpress.Cli.Config;
@@ -11,6 +12,7 @@ using OrientExpress.Contracts.Cli;
 using OrientExpress.Contracts.Common;
 using OrientExpress.Contracts.Filesystem;
 using OrientExpress.Contracts.Jobs;
+using OrientExpress.Contracts.Orientation;
 using OrientExpress.Contracts.Pipeline;
 using OrientExpress.Contracts.Transform;
 
@@ -41,6 +43,8 @@ public static class ScanCommand
         int? maxFilesOverride,
         string mode,
         string? backupRoot,
+        FourCandidateOrientationEngine? mlEngine,
+        string? modelIdentity,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -124,6 +128,8 @@ public static class ScanCommand
             SourceRoot = sourceCanonical.Display,
             OutputRoot = outputCanonical.Display,
             ConfigDigest = config.Effective.Digest,
+            ModelIdentity = mlEngine is null ? null : modelIdentity,
+            PolicyIdentity = mlEngine is null ? null : FourCandidatePolicy.Identity,
         };
         var created = await store.CreateAsync(manifest, cancellationToken).ConfigureAwait(false);
         if (!created.IsSuccess)
@@ -140,7 +146,7 @@ public static class ScanCommand
         var limits = StageLimits.Sanitize(
             effective.Resources?.DecodeWorkers, effective.Resources?.QueueCapacity);
         var pending = new List<PlannedFile>();
-        long keep = 0, normalize = 0, unsupported = 0;
+        long keep = 0, normalize = 0, unsupported = 0, review = 0;
 
         var summary = await BoundedPipeline.RunAsync(
             Enumerate(files),
@@ -158,15 +164,19 @@ public static class ScanCommand
                         }
 
                         var probe = prober.Probe(snapshot.Require().Path);
-                        return Result.Ok(item with
+                        var planned = Plan(
+                            item.Sequence,
+                            snapshot.Require(),
+                            probe.IsSuccess ? probe.Require() : null,
+                            sourceCanonical.Display,
+                            edgePolicy.Require());
+                        if (mlEngine is not null && planned.Action == PlanAction.Keep && planned.Width > 0)
                         {
-                            Planned = Plan(
-                                item.Sequence,
-                                snapshot.Require(),
-                                probe.IsSuccess ? probe.Require() : null,
-                                sourceCanonical.Display,
-                                edgePolicy.Require()),
-                        });
+                            planned = await DetectAsync(mlEngine, planned, snapshot.Require().Path, ct)
+                                .ConfigureAwait(false);
+                        }
+
+                        return Result.Ok(item with { Planned = planned });
                     }),
             ],
             async (item, ct) =>
@@ -178,6 +188,9 @@ public static class ScanCommand
                         break;
                     case PlanAction.Normalize:
                         normalize++;
+                        break;
+                    case PlanAction.Review:
+                        review++;
                         break;
                     default:
                         unsupported++;
@@ -225,12 +238,15 @@ public static class ScanCommand
                 planned = seal.Require().RowCount,
                 normalize,
                 keep,
+                review,
                 unsupported,
                 readErrors = summary.Failed,
             },
-            deterministicScopeNote =
-                "only files whose EXIF orientation tag proves a rotation are normalized; "
-                + "sideways photos with a clean tag await the gated ML decision engine (WP-007/008)",
+            detection = mlEngine is null
+                ? "off: only files whose EXIF orientation tag proves a rotation are normalized; "
+                    + "re-run with --detect to also analyze clean-tag photos with the face model"
+                : $"on ({modelIdentity}; {FourCandidatePolicy.Identity}): uncalibrated - rotates only when every "
+                    + "signal agrees, parks the rest for review",
         };
         await File.WriteAllTextAsync(
             Path.Combine(created.Require().JobDirectory, "reports", "scan-summary.json"),
@@ -244,14 +260,62 @@ public static class ScanCommand
         else
         {
             context.Out.WriteLine($"scan {job.Value} [{mode}] sealed {seal.Require().RowCount} planned rows");
-            context.Out.WriteLine($"  will rotate (EXIF tag proves it) : {normalize}");
-            context.Out.WriteLine($"  already upright per tag          : {keep}");
+            context.Out.WriteLine(mlEngine is null
+                ? $"  will rotate (EXIF tag proves it) : {normalize}"
+                : $"  will rotate (tag or face model)  : {normalize}");
+            context.Out.WriteLine($"  left as-is                       : {keep}");
+            if (mlEngine is not null)
+            {
+                context.Out.WriteLine($"  parked for review (model unsure) : {review}");
+            }
             context.Out.WriteLine($"  unsupported (recorded, skipped)  : {unsupported}");
             context.Out.WriteLine($"  unreadable (recorded, skipped)   : {summary.Failed}");
             context.Out.WriteLine($"  next: upright apply {job.Value}");
         }
 
         return (int)CliExitCode.Success;
+    }
+
+    private static async ValueTask<PlannedFile> DetectAsync(
+        FourCandidateOrientationEngine engine,
+        PlannedFile planned,
+        Contracts.Filesystem.NormalizedPath path,
+        CancellationToken cancellationToken)
+    {
+        var assessed = await engine.AssessAsync(path, cancellationToken).ConfigureAwait(false);
+        if (!assessed.IsSuccess)
+        {
+            return planned with { Action = PlanAction.Review, ReasonCode = assessed.Error!.Code };
+        }
+
+        var assessment = assessed.Require();
+        switch (assessment.Decision)
+        {
+            case OrientationDecision.Upright:
+                return planned with { ReasonCode = "ML_CONFIRMED_UPRIGHT" };
+            case OrientationDecision.Review:
+                return planned with
+                {
+                    Action = PlanAction.Review,
+                    ReasonCode = string.Join('+', assessment.ReasonCodes),
+                };
+            default:
+                var swap = assessment.Decision is OrientationDecision.Rotate90Cw or OrientationDecision.Rotate270Cw;
+                return planned with
+                {
+                    Action = PlanAction.Normalize,
+                    Operation = assessment.Decision switch
+                    {
+                        OrientationDecision.Rotate90Cw => JpegOperation.Rotate90,
+                        OrientationDecision.Rotate180 => JpegOperation.Rotate180,
+                        _ => JpegOperation.Rotate270,
+                    },
+                    ExpectedWidth = swap ? planned.Height : planned.Width,
+                    ExpectedHeight = swap ? planned.Width : planned.Height,
+                    ExpectedOrientation = 1,
+                    ReasonCode = "ML_DECIDED",
+                };
+        }
     }
 
     private sealed record ScanItem(long Sequence, string Path, PlannedFile? Planned = null);
