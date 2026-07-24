@@ -25,6 +25,7 @@
     <Project Path="spikes/SPIKE-005-jpeg-edge/OrientExpress.Spike005.Tests/OrientExpress.Spike005.Tests.csproj" />
     <Project Path="spikes/SPIKE-006-atomic-replace/OrientExpress.Spike006/OrientExpress.Spike006.csproj" />
     <Project Path="spikes/SPIKE-006-atomic-replace/OrientExpress.Spike006.Tests/OrientExpress.Spike006.Tests.csproj" />
+    <Project Path="spikes/SPIKE-007-codecs/OrientExpress.Spike007/OrientExpress.Spike007.csproj" />
     <Project Path="spikes/SPIKE-008-job-store/OrientExpress.Spike008/OrientExpress.Spike008.csproj" />
     <Project Path="spikes/SPIKE-008-job-store/OrientExpress.Spike008.Tests/OrientExpress.Spike008.Tests.csproj" />
     <Project Path="spikes/SPIKE-009-cli-contract/OrientExpress.Spike009/OrientExpress.Spike009.csproj" />

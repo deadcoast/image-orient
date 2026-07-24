@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- SPIKE-007 decision harness (DOC-SPIKES): WIC codec capability matrix
+         (DEP-009). Uses the Windows TFM + WPF imaging (WIC-backed) for
+         operational probes; evidence tooling, not the WP-005 codec adapter. -->
+    <AssemblyName>spike007</AssemblyName>
+    <RootNamespace>OrientExpress.Spike007</RootNamespace>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+</Project>
