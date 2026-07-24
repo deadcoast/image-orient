@@ -176,7 +176,12 @@ public static class DoctorCommand
                             + OrientExpress.Infrastructure.Imaging.JpegtranLocator.Sha256Of(jpegtranPath)[..16]
                         : "gated: JPEGTRAN_NOT_FOUND (install libjpeg-turbo; see DEP-008)",
                 },
-                new ComponentCapability { Id = "job-store", Available = false, Status = "gated: WP-009 (SPIKE-008 evidence recorded)" },
+                new ComponentCapability
+                {
+                    Id = "job-store",
+                    Available = true,
+                    Status = "implemented (WP-009); WAL sealed-plan store; execution pipeline gated (WP-011..WP-014)",
+                },
             ],
             Formats =
             [

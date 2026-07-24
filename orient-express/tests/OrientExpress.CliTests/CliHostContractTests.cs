@@ -80,7 +80,7 @@ public sealed class CliHostContractTests : IDisposable
             .ToDictionary(
                 component => component.GetProperty("id").GetString()!,
                 component => component.GetProperty("available").GetBoolean());
-        string[] implemented = ["cli-host", "configuration", "filesystem-identity", "format-prober", "inference-runtime"];
+        string[] implemented = ["cli-host", "configuration", "filesystem-identity", "format-prober", "inference-runtime", "job-store"];
         string[] machineDependent = ["metadata-exiftool", "orientation-model", "transform-jpegtran"];
         Assert.All(implemented, id => Assert.True(availability[id], id));
         Assert.All(

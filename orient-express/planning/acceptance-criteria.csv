@@ -10,10 +10,10 @@ AC-008,PRD-FR-005,"Face detections expose bounding boxes, confidence, and five l
 AC-009,PRD-FR-005,No persisted artifact contains an identity embedding or cross-file face identifier.,planned
 AC-010,PRD-FR-006,"Automation requires configured score, top-two margin, and minimum-evidence gates.",planned
 AC-011,PRD-FR-006,"Ambiguous, no-face, contradictory multi-face, or out-of-distribution cases become REVIEW rather than forced rotations.",planned
-AC-012,PRD-FR-007,"A job plan validates against its schema and records tool, policy, model, runtime, and source fingerprints.",planned
-AC-013,PRD-FR-007,"Once sealed, plan rows cannot be edited through normal commands; review overrides are append-only decisions.",planned
+AC-012,PRD-FR-007,"A job plan validates against its schema and records tool, policy, model, runtime, and source fingerprints.",partially implemented (WP-009: tool/config/source fingerprints recorded; model/policy identity nullable until WP-007/008; export-schema validation with the export contract)
+AC-013,PRD-FR-007,"Once sealed, plan rows cannot be edited through normal commands; review overrides are append-only decisions.",implemented (WP-009: schema triggers refuse sealed-row mutation and re-sealing; seal digests recomputed row content; review overlays land with WP-016)
 AC-014,PRD-FR-008,"`scan` creates no image output and does not modify source timestamps, data streams, or metadata.",planned
-AC-015,PRD-FR-008,`apply` refuses a source changed after scan and emits a stable stale-plan result.,planned
+AC-015,PRD-FR-008,`apply` refuses a source changed after scan and emits a stable stale-plan result.,partially implemented (WP-009: StaleInputCheck yields the stable drift reasons; the apply refusal wiring is WP-011/WP-012)
 AC-016,PRD-FR-009,Safe-copy mode preserves relative paths and never overwrites an unrelated existing destination.,planned
 AC-017,PRD-FR-009,"Collision behavior is deterministic, logged, and configurable as error, skip, or content-aware rename.",planned
 AC-018,PRD-FR-010,In-place mode cannot begin without explicit acknowledgement and a writable verified backup target.,planned
