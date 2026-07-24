@@ -207,7 +207,7 @@ public static class CliHost
         }
 
         if (command == model.Scan || command == model.Apply || command == model.Verify
-            || command == model.JobsList || command == model.JobsShow
+            || command == model.Undo || command == model.JobsList || command == model.JobsShow
             || command == model.JobsIntegrity || command == model.JobsPrune)
         {
             var load = ConfigLoader.Load(
@@ -255,6 +255,17 @@ public static class CliHost
                         .GetAwaiter().GetResult();
                 }
 
+                if (command == model.Undo)
+                {
+                    return UndoCommand.RunAsync(
+                        context,
+                        jobStore,
+                        new OrientExpress.Infrastructure.Windows.WindowsAtomicFileOperations(),
+                        parse.GetValue(model.UndoJob)!,
+                        parse.GetValue(model.UndoYes),
+                        cancellationToken).GetAwaiter().GetResult();
+                }
+
                 if (command == model.Verify)
                 {
                     return VerifyCommand.RunAsync(
@@ -280,6 +291,8 @@ public static class CliHost
                         recurse: !parse.GetValue(model.ScanNoRecurse),
                         parse.GetValue(model.ScanFingerprint) ?? "standard",
                         parse.GetValue(model.ScanMaxFiles),
+                        parse.GetValue(model.ScanMode) ?? "safe-copy",
+                        parse.GetValue(model.ScanBackupRoot),
                         cancellationToken).GetAwaiter().GetResult();
                 }
 
@@ -312,8 +325,10 @@ public static class CliHost
                     new OrientExpress.Infrastructure.Imaging.ProbeOutputVerifier(
                         new OrientExpress.Infrastructure.Imaging.ManagedFormatProber()),
                     new OrientExpress.Infrastructure.Windows.WindowsAtomicFileOperations(),
+                    new OrientExpress.Infrastructure.Windows.WindowsVolumeCapabilityProbe(),
                     parse.GetValue(model.ApplyJob)!,
                     parse.GetValue(model.ApplyResume),
+                    parse.GetValue(model.ApplyAcknowledgeInPlace),
                     cancellationToken).GetAwaiter().GetResult();
             }
             finally

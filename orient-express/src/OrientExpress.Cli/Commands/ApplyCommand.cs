@@ -26,7 +26,7 @@ namespace OrientExpress.Cli.Commands;
 /// </summary>
 public static class ApplyCommand
 {
-    private const string CommitEvent = "apply.commit";
+    public const string CommitEventName = "apply.commit";
 
     private static readonly JsonSerializerOptions ReportJson = new() { WriteIndented = true };
 
@@ -37,8 +37,10 @@ public static class ApplyCommand
         IImageTransformer transformer,
         IOutputVerifier verifier,
         IAtomicFileOperations atomicOperations,
+        IVolumeCapabilityProbe volumeProbe,
         string jobIdValue,
         bool resume,
+        bool acknowledgeInPlace,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -53,12 +55,49 @@ public static class ApplyCommand
         }
 
         var manifest = opened.Require().Manifest;
-        if (manifest.Mode != "safe-copy")
+        var inPlace = manifest.Mode == "in-place";
+        if (!inPlace && manifest.Mode != "safe-copy")
         {
             context.WriteError(
-                CliExitCode.CapabilityUnavailable, "IN_PLACE_GATED",
-                "in-place apply is gated until WP-012/WP-015 evidence exists", "use a safe-copy job");
+                CliExitCode.CapabilityUnavailable, "MODE_UNSUPPORTED",
+                $"job mode '{manifest.Mode}' is not supported", "re-run scan");
             return (int)CliExitCode.CapabilityUnavailable;
+        }
+
+        if (inPlace)
+        {
+            // PRD-FR-010: explicit acknowledgement, supported volume class,
+            // and journal reconciliation before any new destructive work.
+            if (!acknowledgeInPlace)
+            {
+                context.WriteError(
+                    CliExitCode.SafetyPreflightFailed, "ACKNOWLEDGE_REQUIRED",
+                    "in-place apply rewrites originals (verified backups are kept)",
+                    "re-run with --acknowledge-in-place");
+                return (int)CliExitCode.SafetyPreflightFailed;
+            }
+
+            var capability = volumeProbe.Probe(
+                Application.Filesystem.PathCanonicalizer.Normalize(manifest.SourceRoot));
+            if (!capability.IsSuccess
+                || capability.Require().Class != FilesystemCapabilityClass.SupportedNtfs)
+            {
+                context.WriteError(
+                    CliExitCode.SafetyPreflightFailed, "VOLUME_CLASS_UNSUPPORTED",
+                    "in-place mode requires a local fixed NTFS volume (NFR-COMP-001)",
+                    "use safe-copy mode for this volume");
+                return (int)CliExitCode.SafetyPreflightFailed;
+            }
+
+            var reconciled = await InPlaceApplier.ReconcileAsync(store, job, cancellationToken)
+                .ConfigureAwait(false);
+            if (!reconciled.IsSuccess)
+            {
+                context.WriteError(
+                    CliExitCode.RecoveryRequired, reconciled.Error!.Code, reconciled.Error.SafeMessage,
+                    "restore the file or its backup manually, then re-run");
+                return (int)CliExitCode.RecoveryRequired;
+            }
         }
 
         var seal = await store.VerifySealAsync(job, cancellationToken).ConfigureAwait(false);
@@ -79,7 +118,7 @@ public static class ApplyCommand
         }
 
         var committed = resume
-            ? (await store.ReadEventSequencesAsync(job, CommitEvent, cancellationToken).ConfigureAwait(false)).Require()
+            ? (await store.ReadEventSequencesAsync(job, CommitEventName, cancellationToken).ConfigureAwait(false)).Require()
             : new HashSet<long>();
 
         _ = await store.AppendEventsAsync(
@@ -100,9 +139,13 @@ public static class ApplyCommand
                             return Result.Ok(row with { ReasonCode = "RESUME_SKIP" });
                         }
 
-                        return await ApplyRowAsync(
-                            identity, transformer, verifier, atomicOperations, manifest, row, ct)
-                            .ConfigureAwait(false);
+                        return inPlace
+                            ? await InPlaceApplier.ApplyRowAsync(
+                                store, job, identity, transformer, verifier, atomicOperations,
+                                manifest.OutputRoot, row, ct).ConfigureAwait(false)
+                            : await ApplyRowAsync(
+                                identity, transformer, verifier, atomicOperations, manifest, row, ct)
+                                .ConfigureAwait(false);
                     }),
             ],
             async (row, ct) =>
@@ -116,7 +159,7 @@ public static class ApplyCommand
                 applied++;
                 _ = (await store.AppendEventsAsync(
                     job,
-                    [new JobEvent(CommitEvent, "succeeded", row.Sequence)],
+                    [new JobEvent(CommitEventName, "succeeded", row.Sequence)],
                     ct).ConfigureAwait(false)).Require();
             },
             NullProgressSink.Instance,
@@ -147,7 +190,7 @@ public static class ApplyCommand
         {
             command = "apply",
             jobId = job.Value,
-            mode = "safe-copy",
+            mode = manifest.Mode,
             outputRoot = manifest.OutputRoot,
             counts = new
             {
@@ -172,7 +215,9 @@ public static class ApplyCommand
         }
         else
         {
-            context.Out.WriteLine($"apply {job.Value} [safe-copy] into {manifest.OutputRoot}");
+            context.Out.WriteLine(inPlace
+                ? $"apply {job.Value} [in-place] backups under {manifest.OutputRoot}"
+                : $"apply {job.Value} [safe-copy] into {manifest.OutputRoot}");
             context.Out.WriteLine($"  rotated + verified + committed : {applied}");
             if (resumeSkipped > 0)
             {

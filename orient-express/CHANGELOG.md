@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.20
+version: 0.1.21
 status: baseline
 as_of: 2026-07-24
 owner: Architecture
@@ -10,6 +10,20 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.21 — 2026-07-24
+
+WP-012 journal, commit, recovery, and undo (implemented) — guarded in-place mode works:
+
+- Context packet at `planning/context-packets/WP-012-context-packet.md`.
+- Store journal API: OpenIntentAsync/AdvanceIntentAsync/ReadIntentsAsync; the forward-only schema trigger refuses checkpoint regression (JOURNAL_CHECKPOINT_REGRESSION); duplicate intents refuse; unresolved intents block prune (proven).
+- `scan --mode in-place --backup-root <dir>`: strong fingerprints forced; the manifest output root doubles as the backup root for in-place jobs.
+- In-place `apply` (SPIKE-006 protocol per row): byte-verified backup (AC-018) -> intent durable BEFORE the swap -> transform to a same-directory stage -> independent verification -> write-through ReplaceFileW -> post-replace digest check -> commit; refuses without --acknowledge-in-place (31), refuses non-NTFS-fixed volumes (31), reconciles the journal before any new work (unreconcilable exits 33 and nothing runs).
+- Reconcile-first semantics (AC-019/020): pre-replace crashes close with the source verified unchanged and the stage deleted; post-replace crashes complete the commit when the file matches the staged digest; anything else stops loudly.
+- `undo <job> --yes` (PRD-FR-015): restores byte-verified backups only where the current file matches the journal post-apply digest; UNDO_STATE_MISMATCH conflicts exit 34 with the file untouched (AC-030); restores are themselves journaled with fresh undo intents and idempotent (AC-029/030 proven end to end, byte-exact restoration).
+- Tests: journal store test (forward-only, duplicate, prune blocking) + 2 end-to-end in-place tests (rewrite-with-backup + double-confirmation gates + byte-exact undo + idempotent re-undo; post-apply edit means undo abstains). 250+ tests green.
+- Honest scope: the systematic kernel-kill fault-injection matrix across compatibility classes is the WP-015 gate — in-place is guarded-alpha until it passes; ADS re-attachment and retention windows land with WP-015.
+- Affected IDs: WP-012, PRD-FR-010, PRD-FR-014, PRD-FR-015, NFR-REL-001/002/004, AC-018, AC-019, AC-020, AC-029, AC-030, AC-050, COMP-JOURNAL, COMP-EXECUTOR, COMP-FILESYSTEM, DOC-CLI, DOC-FSSAFE, DOC-STATUS, DOC-CHANGELOG. No new packages; no schema text changes.
 
 ## 0.1.20 — 2026-07-24
 

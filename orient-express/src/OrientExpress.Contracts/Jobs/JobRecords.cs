@@ -145,6 +145,29 @@ public sealed record JobEvent(
     string? ReasonCode = null,
     string? DataJson = null);
 
+/// <summary>
+/// DOC-FSSAFE journal checkpoints — strictly forward-only (enforced by a
+/// schema trigger; an unknown checkpoint name can never be written).
+/// </summary>
+public static class JournalCheckpoints
+{
+    public const string Prepared = "Prepared";
+    public const string StagedVerified = "StagedVerified";
+    public const string IntentDurable = "IntentDurable";
+    public const string Replaced = "Replaced";
+    public const string Committed = "Committed";
+    public const string Reconciled = "Reconciled";
+}
+
+/// <summary>One durable intent row (DOC-DATAMODEL `journal`).</summary>
+public sealed record JournalIntent(
+    string IntentId,
+    long FileSequence,
+    string Operation,
+    string Checkpoint,
+    string? DetailsJson,
+    string UpdatedUtc);
+
 public sealed record IntegrityReport(
     bool DatabaseOk,
     bool SealPresent,

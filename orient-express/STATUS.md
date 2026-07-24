@@ -1,7 +1,7 @@
 ---
 document_id: DOC-STATUS
 title: orient-express Planning Status
-version: 0.1.20
+version: 0.1.21
 status: baseline
 as_of: 2026-07-24
 owner: Program
@@ -50,6 +50,8 @@ SPIKE-003 is **complete** ([report](spikes/SPIKE-003-inference-runtime/report.md
 **WP-013 (independent verification) and WP-014 (safe-copy end-to-end mode) are implemented — `upright scan` and `upright apply` work for the first time** ([context packet](planning/context-packets/WP-014-context-packet.md)), for the deterministic EXIF path: scan enumerates in canonical order, plans from the stored EXIF orientation tag alone (2..8 proves a rotation; 1/absent is Keep; everything else is a recorded Unsupported row), and seals the immutable plan; apply refuses stale inputs by recorded identity, rotates losslessly into an exclusive stage file, sets the tag to 1, verifies through the independent prober (a read path unrelated to the tools that produced the output), commits with the atomic create-path move, and resumes idempotently from the commit-event ledger. Proven end to end by CLI tests on real tagged JPEGs. **What the product still cannot do:** photos stored sideways with a clean orientation tag are planned Keep — deciding those needs the ML engine (WP-007/008), which stays gated on the operator's corpus evidence; in-place mode, undo, review workflow, and `jobs`/`verify` commands remain gated (WP-012/015/016/017).
 
 **WP-017 (job operations and integrity) is implemented** ([context packet](planning/context-packets/WP-017-context-packet.md)): `jobs list/show/integrity/prune` and the standalone `upright verify <job>` re-check work — jobs are inspectable, integrity-checkable (database, recomputed-content seal, unresolved intents, missing artifacts), and prunable with a dry-run default that refuses recovery-pending jobs; committed outputs re-verify through the independent read path at any later time. Remaining gated commands: `run`, `undo`, `review *`, `benchmark` (WP-012/015/016/021).
+
+**WP-012 (journal, commit, recovery, and undo) is implemented — guarded in-place mode works**: `scan --mode in-place --backup-root <dir>` then `apply --acknowledge-in-place` rewrites originals through the SPIKE-006 protocol (byte-verified backup, journal intent durable before the swap, same-directory stage, independent verification, write-through ReplaceFileW, post-replace digest check), reconciles the journal before any new work, and `undo <job> --yes` restores byte-verified backups only where the file still matches the journal — conflicts abstain and report, never force. In-place remains **guarded-alpha** until WP-015's systematic fault-injection matrix passes; safe-copy stays the default.
 
 The project operates under single-operator governance: the documentation gates (validator, CI, tests, evidence rules) are the control surface; multi-role review sign-offs are recorded as the operator's own acceptance.
 

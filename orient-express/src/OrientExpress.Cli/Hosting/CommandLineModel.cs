@@ -102,11 +102,23 @@ public sealed class CommandLineModel
 
     public required Option<int?> ScanMaxFiles { get; init; }
 
+    public required Option<string> ScanMode { get; init; }
+
+    public required Option<string> ScanBackupRoot { get; init; }
+
     public required Command Apply { get; init; }
 
     public required Argument<string> ApplyJob { get; init; }
 
     public required Option<bool> ApplyResume { get; init; }
+
+    public required Option<bool> ApplyAcknowledgeInPlace { get; init; }
+
+    public required Command Undo { get; init; }
+
+    public required Argument<string> UndoJob { get; init; }
+
+    public required Option<bool> UndoYes { get; init; }
 
     public required Command Verify { get; init; }
 
@@ -131,7 +143,6 @@ public sealed class CommandLineModel
     private static readonly GatedCommandSpec[] GatedSpecs =
     [
         new("run", "Scan then apply when policy permits (provisional).", "WP-009;WP-014"),
-        new("undo", "Restore from verified backups for an in-place job.", "WP-012;WP-015"),
         new("review list", "List review-queue items with filters.", "WP-016"),
         new("review show", "Show one review item.", "WP-016"),
         new("review decide", "Record an append-only review override.", "WP-016"),
@@ -276,6 +287,14 @@ public sealed class CommandLineModel
             Description = "standard (size+time+prefix digest) or strong (full SHA-256).",
         };
         var scanMaxFiles = new Option<int?>("--max-files") { Description = "Guardrail on files considered." };
+        var scanMode = new Option<string>("--mode")
+        {
+            Description = "safe-copy (default; originals untouched) or in-place (guarded rewrite with verified backups).",
+        };
+        var scanBackupRoot = new Option<string>("--backup-root")
+        {
+            Description = "Backup destination; required for --mode in-place.",
+        };
         var scan = new Command(
             "scan",
             "Read-only planning; seals an immutable job plan. Deterministic mode: only files whose "
@@ -285,6 +304,8 @@ public sealed class CommandLineModel
         scan.Options.Add(scanNoRecurse);
         scan.Options.Add(scanFingerprint);
         scan.Options.Add(scanMaxFiles);
+        scan.Options.Add(scanMode);
+        scan.Options.Add(scanBackupRoot);
 
         var applyJob = new Argument<string>("job") { Description = "Job id from a sealed scan." };
         var applyResume = new Option<bool>("--resume")
@@ -295,8 +316,21 @@ public sealed class CommandLineModel
             "apply",
             "Execute a sealed plan (safe-copy): stale inputs refused, outputs verified before the atomic "
             + "commit, sources never written.");
+        var applyAcknowledgeInPlace = new Option<bool>("--acknowledge-in-place")
+        {
+            Description = "Required for in-place jobs: originals are rewritten (verified backups kept).",
+        };
         apply.Arguments.Add(applyJob);
         apply.Options.Add(applyResume);
+        apply.Options.Add(applyAcknowledgeInPlace);
+
+        var undoJob = new Argument<string>("job") { Description = "In-place job whose backups to restore." };
+        var undoYes = new Option<bool>("--yes") { Description = "Confirm restoring current files from backups." };
+        var undo = new Command(
+            "undo",
+            "Restore verified backups for an in-place job; files that changed since apply are conflicts, never forced.");
+        undo.Arguments.Add(undoJob);
+        undo.Options.Add(undoYes);
 
         var verifyJob = new Argument<string>("job") { Description = "Job whose committed outputs to re-verify." };
         var verify = new Command(
@@ -344,6 +378,7 @@ public sealed class CommandLineModel
         root.Subcommands.Add(scan);
         root.Subcommands.Add(apply);
         root.Subcommands.Add(verify);
+        root.Subcommands.Add(undo);
         root.Subcommands.Add(jobsCommand);
         root.Subcommands.Add(completion);
         root.Subcommands.Add(configCommand);
@@ -429,6 +464,12 @@ public sealed class CommandLineModel
             Apply = apply,
             ApplyJob = applyJob,
             ApplyResume = applyResume,
+            ApplyAcknowledgeInPlace = applyAcknowledgeInPlace,
+            ScanMode = scanMode,
+            ScanBackupRoot = scanBackupRoot,
+            Undo = undo,
+            UndoJob = undoJob,
+            UndoYes = undoYes,
             Verify = verify,
             VerifyJob = verifyJob,
             JobsList = jobsList,

@@ -39,6 +39,8 @@ public static class ScanCommand
         bool recurse,
         string fingerprint,
         int? maxFilesOverride,
+        string mode,
+        string? backupRoot,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -60,7 +62,27 @@ public static class ScanCommand
             return (int)CliExitCode.InvalidArgument;
         }
 
-        var strength = fingerprint == "strong" ? FingerprintStrength.Strong : FingerprintStrength.Standard;
+        if (mode is not ("safe-copy" or "in-place"))
+        {
+            context.WriteError(
+                CliExitCode.InvalidArgument, "MODE_INVALID",
+                $"--mode must be safe-copy or in-place; got '{mode}'", "pick a supported mode");
+            return (int)CliExitCode.InvalidArgument;
+        }
+
+        if (mode == "in-place" && backupRoot is null)
+        {
+            context.WriteError(
+                CliExitCode.InvalidArgument, "BACKUP_ROOT_REQUIRED",
+                "--mode in-place requires --backup-root", "in-place never runs without verified backups");
+            return (int)CliExitCode.InvalidArgument;
+        }
+
+        // In-place plans always carry the strong fingerprint (DOC-DATAMODEL:
+        // full SHA-256 before destructive apply).
+        var strength = mode == "in-place" || fingerprint == "strong"
+            ? FingerprintStrength.Strong
+            : FingerprintStrength.Standard;
         var effective = config.Effective.Config;
         var edgePolicy = OrientationNormalizationPlanner.ParseEdgePolicy(effective.Output!.JpegEdge);
         if (!edgePolicy.IsSuccess)
@@ -72,7 +94,9 @@ public static class ScanCommand
         }
 
         var sourceCanonical = PathCanonicalizer.Normalize(Path.GetFullPath(sourceRoot));
-        var outputCanonical = PathCanonicalizer.Normalize(Path.GetFullPath(outputRoot));
+        // For an in-place job the "output root" IS the backup root.
+        var outputCanonical = PathCanonicalizer.Normalize(Path.GetFullPath(
+            mode == "in-place" ? backupRoot! : outputRoot));
         var maxFiles = (int)Math.Min(int.MaxValue, maxFilesOverride ?? effective.Discovery?.MaxFiles ?? 100_000);
 
         // Canonical ordered set: deterministic across repeated runs (AC-005).
@@ -96,7 +120,7 @@ public static class ScanCommand
             JobIdValue = OrientExpress.Infrastructure.Sqlite.SqliteJobStore.NewJobId(),
             CreatedUtc = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
             ToolVersion = VersionCommand.ToolVersion,
-            Mode = "safe-copy",
+            Mode = mode,
             SourceRoot = sourceCanonical.Display,
             OutputRoot = outputCanonical.Display,
             ConfigDigest = config.Effective.Digest,
@@ -192,7 +216,7 @@ public static class ScanCommand
         {
             command = "scan",
             jobId = job.Value,
-            mode = "safe-copy",
+            mode,
             sourceRoot = sourceCanonical.Display,
             outputRoot = outputCanonical.Display,
             planSeal = seal.Require().Sha256,
@@ -219,7 +243,7 @@ public static class ScanCommand
         }
         else
         {
-            context.Out.WriteLine($"scan {job.Value} [safe-copy] sealed {seal.Require().RowCount} planned rows");
+            context.Out.WriteLine($"scan {job.Value} [{mode}] sealed {seal.Require().RowCount} planned rows");
             context.Out.WriteLine($"  will rotate (EXIF tag proves it) : {normalize}");
             context.Out.WriteLine($"  already upright per tag          : {keep}");
             context.Out.WriteLine($"  unsupported (recorded, skipped)  : {unsupported}");
