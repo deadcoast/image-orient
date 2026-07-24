@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- Shared harness for SPIKE-003 (inference runtime qualification,
+         DEP-005/ADR-0004) and SPIKE-002 (four-rotation YuNet proof,
+         DEP-006/ADR-0005). Evidence tooling, not WP-006/WP-007. -->
+    <AssemblyName>spike002</AssemblyName>
+    <RootNamespace>OrientExpress.Spike002</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" />
+  </ItemGroup>
+
+</Project>

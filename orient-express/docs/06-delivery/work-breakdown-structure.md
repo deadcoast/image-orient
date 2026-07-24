@@ -1,7 +1,7 @@
 ---
 document_id: DOC-WBS
 title: Work Breakdown Structure and Backlog Dependencies
-version: 0.1.5
+version: 0.1.6
 status: baseline
 as_of: 2026-07-23
 owner: Program
@@ -59,6 +59,15 @@ Work packages are vertical outcomes, not folders or generic engineering activiti
   argument per line); grammar errors keep machine stdout empty. Registry
   numerics freeze at WP-002 entry. See the
   [SPIKE-009 report](../../spikes/SPIKE-009-cli-contract/report.md).
+- **WP-006 / WP-007 / WP-008 (from SPIKE-002 pilot + SPIKE-003):** the v1
+  inference baseline is ONNX Runtime CPU (deterministic, 1.64 ms median at
+  640x640, offline); models are digest-verified on every load (DEP-006 rule).
+  The YuNet 2023mar export has a fixed 640x640 input. Inverted faces score
+  high (0.841 vs 0.947 upright, margin 0.106): the decision variable is the
+  calibrated cross-candidate margin with abstention, and the landmark
+  eyes-above-mouth geometry belongs in the WP-007 feature vector. See the
+  [SPIKE-003 report](../../spikes/SPIKE-003-inference-runtime/report.md) and
+  [SPIKE-002 pilot report](../../spikes/SPIKE-002-orientation-proof/report.md).
 - **WP-005 / WP-010 / WP-022 (from SPIKE-007):** codec capability is
   determined by header-engagement probes (feed the decoder a truncated real
   header; component-not-found = absent, format rejection = engaged), never by

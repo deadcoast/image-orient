@@ -1,9 +1,9 @@
 ---
 document_id: ADR-0005
 title: Use face-landmark evidence with calibrated abstention
-version: 0.1.0
+version: 0.1.1
 status: provisional
-as_of: 2026-07-21
+as_of: 2026-07-23
 owner: Architecture
 depends_on: [DOC-RESEARCH, DOC-SRS]
 traces_to: [ADR-0005]
@@ -33,6 +33,15 @@ Four inference passes increase cost; thumbnails/provider acceleration mitigate i
 ## Proof / review gate
 
 SPIKE-001/002 and the governed evaluation gates.
+
+**Pilot evidence (2026-07-23, [report](../../spikes/SPIKE-002-orientation-proof/report.md)):**
+the four-candidate mechanics recovered 4/4 rotations on the public-domain
+pilot portrait, and the landmark eyes-above-mouth check agreed 4/4. Key
+measurement: an inverted face still scores 0.841 vs 0.947 upright (margin
+0.106) — raw thresholds cannot decide orientation; the calibrated
+cross-candidate margin with abstention is the required decision variable,
+confirming this ADR's design. Status stays provisional until the corpus
+precision evaluation.
 
 ## Revisit triggers
 

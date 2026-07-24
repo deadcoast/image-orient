@@ -1,7 +1,7 @@
 ---
 document_id: DOC-CHANGELOG
 title: Development Specification Changelog
-version: 0.1.13
+version: 0.1.14
 status: baseline
 as_of: 2026-07-23
 owner: Architecture
@@ -10,6 +10,17 @@ traces_to: []
 ---
 
 # Changelog
+
+## 0.1.14 — 2026-07-23
+
+SPIKE-003 inference runtime (complete; ADR-0004 accepted) and SPIKE-002 pilot (passing) — face detection runs locally:
+
+- Pinned Microsoft.ML.OnnxRuntime 1.27.1 (DEP-005) centrally; pulled and digest-pinned the YuNet 2023mar model (232,589 B, sha256 `8f2383e4…`, MIT license recorded) and a US-government public-domain pilot portrait — artifacts cached locally, verified on every use, never committed (DEP-006 rule implemented).
+- Shared harness under `spikes/SPIKE-002-orientation-proof/`: full managed YuNet stack — 640×640 BGR preprocessing, twelve-head decode (cls/obj/bbox/kps at strides 8/16/32) per OpenCV FaceDetectorYN, NMS, landmark mapping — plus 6 CI-safe math tests.
+- SPIKE-003 evidence: model load 69 ms; warm inference 1.64 ms median / 1.96 ms p95; bitwise determinism within and across sessions; 15.5 MB native footprint; offline. CPU EP selected as v1 baseline; DirectML/Windows ML gated for WP-021.
+- SPIKE-002 pilot: four-candidate approach recovered 4/4 rotations; eyes-above-mouth landmark check agreed 4/4. Key finding: inverted faces score 0.841 vs 0.947 upright (margin 0.106) — raw thresholds cannot decide orientation; ADR-0005's calibrated margin+abstention design is confirmed and its ADR carries the pilot note (stays provisional pending corpus precision).
+- Findings recorded: the 2023mar export has a fixed 640×640 input; digest-mismatch refusal is enforced at artifact load.
+- Affected IDs: SPIKE-003, SPIKE-002, ADR-0004, ADR-0005, DEP-005, DEP-006, DOC-WBS, DOC-STATUS, DOC-CHANGELOG, WP-006, WP-007, WP-008. New package: Microsoft.ML.OnnxRuntime 1.27.1 (inventoried). No schema or migration impact.
 
 ## 0.1.13 — 2026-07-23
 
