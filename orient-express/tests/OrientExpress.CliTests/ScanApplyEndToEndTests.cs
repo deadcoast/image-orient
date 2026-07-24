@@ -156,6 +156,14 @@ public sealed class ScanApplyEndToEndTests : IDisposable
         // AC-028: replaying with --resume duplicates nothing and says so.
         var resume = Invoke(environment, "apply", jobId, "--resume", "--json");
         Assert.Equal((int)CliExitCode.NothingToDo, resume.ExitCode);
+
+        // WP-013 command surface: committed outputs re-verify long after
+        // apply; corrupting one is detected through the independent reopen.
+        Assert.Equal(0, Invoke(environment, "verify", jobId).ExitCode);
+        File.WriteAllBytes(Path.Combine(OutputRoot, "upside-down.jpg"), new byte[16]);
+        var reverify = Invoke(environment, "verify", jobId, "--json");
+        Assert.Equal((int)CliExitCode.VerificationFailed, reverify.ExitCode);
+        Assert.Contains("OUTPUT_WRONG_FORMAT", reverify.Stdout, StringComparison.Ordinal);
         using (var document = JsonDocument.Parse(resume.Stdout))
         {
             Assert.Equal(0, document.RootElement.GetProperty("counts").GetProperty("applied").GetInt64());
