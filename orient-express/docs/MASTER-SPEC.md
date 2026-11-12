@@ -81,7 +81,7 @@ CLI Host
   └─ JSON/JSONL events, summaries, diagnostics
 ```
 
-Detailed boundaries are in [system architecture](docs/04-architecture/system-architecture.md) and [component contracts](docs/04-architecture/component-contracts.md).
+Detailed boundaries are in [system architecture](04-architecture/system-architecture.md) and [component contracts](04-architecture/component-contracts.md).
 
 ## Decision classes
 
@@ -123,7 +123,7 @@ These are engineering targets to prove, not claims about an unbuilt product.
 - **M6:** signed distribution.
 - **M7:** release candidate with complete trace evidence.
 
-See [development plan](docs/06-delivery/development-plan.md).
+See [development plan](06-delivery/development-plan.md).
 
 ## Governance rule
 

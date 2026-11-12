@@ -2579,7 +2579,7 @@ That separation is what allows orient-express to remain current as image-to-vide
 
 > Completed the comprehensive system specification.
 
-[`orient-express-SYSTEM-SPEC.md`](../MASTER-SPEC.md) (originally exported as a sandbox download; superseded by the maintained [master specification](../MASTER-SPEC.md))
+[`orient-express-SYSTEM-SPEC.md`](../docs/MASTER-SPEC.md) (originally exported as a sandbox download; superseded by the maintained [master specification](../docs/MASTER-SPEC.md))
 
 The 7,300-word specification defines:
 

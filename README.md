@@ -20,13 +20,13 @@ This repository is the authoritative planning baseline for developing orient-exp
 
 ## Start here
 
-1. [Master specification](MASTER-SPEC.md) — concise integrated baseline and release gates.
-2. [Product charter](docs/01-product/product-charter.md) — problem, outcomes, principles, and non-goals.
-3. [Product requirements](docs/01-product/product-requirements.md) and [system requirements](docs/03-requirements/system-requirements.md).
-4. [System architecture](docs/04-architecture/system-architecture.md), [processing pipeline](docs/04-architecture/processing-pipeline.md), and [filesystem safety](docs/04-architecture/filesystem-safety.md).
-5. [ML orientation engine](docs/04-architecture/ml-orientation-engine.md) and [corpus/evaluation plan](docs/05-quality/corpus-and-evaluation-plan.md).
-6. [Development plan](docs/06-delivery/development-plan.md), [technical spikes](docs/06-delivery/technical-spikes.md), and [work breakdown](docs/06-delivery/work-breakdown-structure.md).
-7. [Traceability guide](docs/07-traceability/traceability-guide.md) and generated graphs.
+1. [Master specification](orient-express/docs/MASTER-SPEC.md) — concise integrated baseline and release gates.
+2. [Product charter](orient-express/docs/01-product/product-charter.md) — problem, outcomes, principles, and non-goals.
+3. [Product requirements](orient-express/docs/01-product/product-requirements.md) and [system requirements](orient-express/docs/03-requirements/system-requirements.md).
+4. [System architecture](orient-express/docs/04-architecture/system-architecture.md), [processing pipeline](orient-express/docs/04-architecture/processing-pipeline.md), and [filesystem safety](orient-express/docs/04-architecture/filesystem-safety.md).
+5. [ML orientation engine](orient-express/docs/04-architecture/ml-orientation-engine.md) and [corpus/evaluation plan](orient-express/docs/05-quality/corpus-and-evaluation-plan.md).
+6. [Development plan](orient-express/docs/06-delivery/development-plan.md), [technical spikes](orient-express/docs/06-delivery/technical-spikes.md), and [work breakdown](orient-express/docs/06-delivery/work-breakdown-structure.md).
+7. [Traceability guide](orient-express/docs/07-traceability/traceability-guide.md) and generated graphs.
 
 ## Baseline decisions
 
@@ -52,7 +52,7 @@ This repository is the authoritative planning baseline for developing orient-exp
 
 ## Machine-readable planning assets
 
-The [`planning/`](planning/) directory contains requirement, traceability, test, risk, milestone, decision, source, backlog, and dependency catalogs. The [`schemas/`](schemas/) directory contains draft external contracts. Run:
+The [`planning/`](orient-express/planning) directory contains requirement, traceability, test, risk, milestone, decision, source, backlog, and dependency catalogs. The [`schemas/`](orient-express/schemas) directory contains draft external contracts. Run:
 
 ```powershell
 pwsh ./tools/validate-docs.ps1
@@ -69,4 +69,4 @@ The validator rejects broken local links, unknown document dependencies, malform
 - **Implemented** — code exists and its mapped tests pass.
 - **Verified** — release evidence satisfies the documented gate.
 
-Current status is summarized in [STATUS.md](STATUS.md).
+Current status is summarized in [STATUS.md](orient-express/docs/STATUS.md).
